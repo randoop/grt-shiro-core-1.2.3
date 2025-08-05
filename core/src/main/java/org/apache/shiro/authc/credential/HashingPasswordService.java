@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authc.credential;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.crypto.hash.Hash;
 import org.apache.shiro.util.ByteSource;
 
@@ -65,6 +66,7 @@ public interface HashingPasswordService extends PasswordService {
      * @see ByteSource.Util#isCompatible(Object)
      * @see #encryptPassword(Object)
      */
+    @Impure
     Hash hashPassword(Object plaintext) throws IllegalArgumentException;
 
     /**
@@ -87,5 +89,6 @@ public interface HashingPasswordService extends PasswordService {
      * @return {@code true} if the {@code plaintext} password matches the existing {@code savedPasswordHash},
      *         {@code false} otherwise.
      */
+    @Impure
     boolean passwordsMatch(Object plaintext, Hash savedPasswordHash);
 }

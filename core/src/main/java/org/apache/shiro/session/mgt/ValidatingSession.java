@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.session.mgt;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
 
@@ -33,7 +35,10 @@ import org.apache.shiro.session.Session;
  */
 public interface ValidatingSession extends Session {
 
+    @Pure
+    @Impure
     boolean isValid();
 
+    @Impure
     void validate() throws InvalidSessionException;
 }

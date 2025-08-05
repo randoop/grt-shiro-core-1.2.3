@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.authc;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Thrown during the authentication process when the system determines the submitted credential(s)
@@ -34,6 +36,8 @@ public class ExpiredCredentialsException extends CredentialsException {
     /**
      * Creates a new ExpiredCredentialsException.
      */
+    @SideEffectFree
+    @Impure
     public ExpiredCredentialsException() {
         super();
     }
@@ -43,6 +47,8 @@ public class ExpiredCredentialsException extends CredentialsException {
      *
      * @param message the reason for the exception
      */
+    @SideEffectFree
+    @Impure
     public ExpiredCredentialsException(String message) {
         super(message);
     }
@@ -52,6 +58,8 @@ public class ExpiredCredentialsException extends CredentialsException {
      *
      * @param cause the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public ExpiredCredentialsException(Throwable cause) {
         super(cause);
     }
@@ -62,6 +70,8 @@ public class ExpiredCredentialsException extends CredentialsException {
      * @param message the reason for the exception
      * @param cause   the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public ExpiredCredentialsException(String message, Throwable cause) {
         super(message, cause);
     }

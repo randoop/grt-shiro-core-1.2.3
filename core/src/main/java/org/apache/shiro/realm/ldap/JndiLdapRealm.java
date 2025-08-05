@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.realm.ldap;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -108,6 +111,7 @@ public class JndiLdapRealm extends AuthorizingRealm {
      * Default no-argument constructor that defaults the internal {@link LdapContextFactory} instance to a
      * {@link JndiLdapContextFactory}.
      */
+    @Impure
     public JndiLdapRealm() {
         //Credentials Matching is not necessary - the LDAP directory will do it automatically:
         setCredentialsMatcher(new AllowAllCredentialsMatcher());
@@ -128,6 +132,7 @@ public class JndiLdapRealm extends AuthorizingRealm {
      * @return the the User DN prefix to use when building a runtime User DN value or {@code null} if no
      *         {@link #getUserDnTemplate() userDnTemplate} has been configured.
      */
+    @Pure
     protected String getUserDnPrefix() {
         return userDnPrefix;
     }
@@ -140,6 +145,7 @@ public class JndiLdapRealm extends AuthorizingRealm {
      * @return the User DN suffix to use when building a runtime User DN value or {@code null} if no
      *         {@link #getUserDnTemplate() userDnTemplate} has been configured.
      */
+    @Pure
     protected String getUserDnSuffix() {
         return userDnSuffix;
     }
@@ -178,6 +184,7 @@ public class JndiLdapRealm extends AuthorizingRealm {
      *                                  {@code {0}} substitution token.
      * @see LdapContextFactory#getLdapContext(Object,Object)
      */
+    @Impure
     public void setUserDnTemplate(String template) throws IllegalArgumentException {
         if (!StringUtils.hasText(template)) {
             String msg = "User DN template cannot be null or empty.";
@@ -205,6 +212,7 @@ public class JndiLdapRealm extends AuthorizingRealm {
      *
      * @return the User Distinguished Name (DN) template to use when creating User DNs at runtime.
      */
+    @Impure
     public String getUserDnTemplate() {
         return getUserDn(USERDN_SUBSTITUTION_TOKEN);
     }
@@ -224,6 +232,7 @@ public class JndiLdapRealm extends AuthorizingRealm {
      * @throws IllegalStateException    if the {@link #getUserDnTemplate userDnTemplate} has not been set.
      * @see LdapContextFactory#getLdapContext(Object, Object)
      */
+    @Impure
     protected String getUserDn(String principal) throws IllegalArgumentException, IllegalStateException {
         if (!StringUtils.hasText(principal)) {
             throw new IllegalArgumentException("User principal cannot be null or empty for User DN construction.");
@@ -258,6 +267,7 @@ public class JndiLdapRealm extends AuthorizingRealm {
      * @param contextFactory the LdapContextFactory instance used to acquire connections to the LDAP directory during
      *                       authentication attempts and authorization queries
      */
+    @Impure
     @SuppressWarnings({"UnusedDeclaration"})
     public void setContextFactory(LdapContextFactory contextFactory) {
         this.contextFactory = contextFactory;
@@ -271,6 +281,7 @@ public class JndiLdapRealm extends AuthorizingRealm {
      * @return the LdapContextFactory instance used to acquire connections to the LDAP directory during
      *         authentication attempts and authorization queries
      */
+    @Pure
     public LdapContextFactory getContextFactory() {
         return this.contextFactory;
     }
@@ -289,6 +300,7 @@ public class JndiLdapRealm extends AuthorizingRealm {
      * @throws AuthenticationException if the authentication attempt fails or if a
      *                                 {@link NamingException} occurs.
      */
+    @Impure
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         AuthenticationInfo info;
         try {
@@ -307,6 +319,8 @@ public class JndiLdapRealm extends AuthorizingRealm {
     }
 
 
+    @SideEffectFree
+    @Impure
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         AuthorizationInfo info;
         try {
@@ -335,6 +349,7 @@ public class JndiLdapRealm extends AuthorizingRealm {
      * @return the User DN or raw principal to use to acquire the LdapContext.
      * @see LdapContextFactory#getLdapContext(Object, Object)
      */
+    @Impure
     protected Object getLdapPrincipal(AuthenticationToken token) {
         Object principal = token.getPrincipal();
         if (principal instanceof String) {
@@ -359,6 +374,7 @@ public class JndiLdapRealm extends AuthorizingRealm {
      * @return an {@link AuthenticationInfo} instance representing the authenticated user's information.
      * @throws NamingException if any LDAP errors occur.
      */
+    @Impure
     protected AuthenticationInfo queryForAuthenticationInfo(AuthenticationToken token,
                                                             LdapContextFactory ldapContextFactory)
             throws NamingException {
@@ -405,6 +421,7 @@ public class JndiLdapRealm extends AuthorizingRealm {
      * @return the {@link AuthenticationInfo} resulting from a Subject's successful LDAP authentication attempt.
      * @throws NamingException if there was any problem using the {@code LdapContext}
      */
+    @Impure
     @SuppressWarnings({"UnusedDeclaration"})
     protected AuthenticationInfo createAuthenticationInfo(AuthenticationToken token, Object ldapPrincipal,
                                                           Object ldapCredentials, LdapContext ldapContext)
@@ -423,6 +440,7 @@ public class JndiLdapRealm extends AuthorizingRealm {
      * @return an {@link AuthorizationInfo} instance containing information retrieved from the LDAP server.
      * @throws NamingException if any LDAP errors occur during the search.
      */
+    @Pure
     protected AuthorizationInfo queryForAuthorizationInfo(PrincipalCollection principals,
                                                           LdapContextFactory ldapContextFactory) throws NamingException {
         return null;

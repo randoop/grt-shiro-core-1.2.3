@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.io;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.util.ClassUtils;
 import org.apache.shiro.util.UnknownClassException;
 
@@ -34,6 +35,7 @@ import java.io.ObjectStreamClass;
  */
 public class ClassResolvingObjectInputStream extends ObjectInputStream {
 
+    @Impure
     public ClassResolvingObjectInputStream(InputStream inputStream) throws IOException {
         super(inputStream);
     }
@@ -47,6 +49,7 @@ public class ClassResolvingObjectInputStream extends ObjectInputStream {
      * @throws IOException never - declaration retained for subclass consistency
      * @throws ClassNotFoundException if the class could not be found in any known ClassLoader
      */
+    @Impure
     @Override
     protected Class<?> resolveClass(ObjectStreamClass osc) throws IOException, ClassNotFoundException {
         try {

@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.mgt;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.Authorizer;
 import org.apache.shiro.realm.Realm;
@@ -79,6 +82,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
     /**
      * Default no-arg constructor.
      */
+    @Impure
     public DefaultSecurityManager() {
         super();
         this.subjectFactory = new DefaultSubjectFactory();
@@ -90,6 +94,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      *
      * @param singleRealm the single realm used by this SecurityManager.
      */
+    @Impure
     public DefaultSecurityManager(Realm singleRealm) {
         this();
         setRealm(singleRealm);
@@ -100,6 +105,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      *
      * @param realms the realm instances backing this SecurityManager.
      */
+    @Impure
     public DefaultSecurityManager(Collection<Realm> realms) {
         this();
         setRealms(realms);
@@ -110,6 +116,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      *
      * @return the {@code SubjectFactory} responsible for creating {@link Subject} instances exposed to the application.
      */
+    @Pure
     public SubjectFactory getSubjectFactory() {
         return subjectFactory;
     }
@@ -119,6 +126,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      *
      * @param subjectFactory the {@code SubjectFactory} responsible for creating {@link Subject} instances exposed to the application.
      */
+    @Impure
     public void setSubjectFactory(SubjectFactory subjectFactory) {
         this.subjectFactory = subjectFactory;
     }
@@ -133,6 +141,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      * @see DefaultSubjectDAO
      * @since 1.2
      */
+    @Pure
     public SubjectDAO getSubjectDAO() {
         return subjectDAO;
     }
@@ -147,18 +156,22 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      * @see DefaultSubjectDAO
      * @since 1.2
      */
+    @Impure
     public void setSubjectDAO(SubjectDAO subjectDAO) {
         this.subjectDAO = subjectDAO;
     }
 
+    @Pure
     public RememberMeManager getRememberMeManager() {
         return rememberMeManager;
     }
 
+    @Impure
     public void setRememberMeManager(RememberMeManager rememberMeManager) {
         this.rememberMeManager = rememberMeManager;
     }
 
+    @Impure
     protected SubjectContext createSubjectContext() {
         return new DefaultSubjectContext();
     }
@@ -172,6 +185,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      * @return the {@code Subject} instance that represents the context and session data for the newly
      *         authenticated subject.
      */
+    @Impure
     protected Subject createSubject(AuthenticationToken token, AuthenticationInfo info, Subject existing) {
         SubjectContext context = createSubjectContext();
         context.setAuthenticated(true);
@@ -194,11 +208,13 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      * @see #save(org.apache.shiro.subject.Subject)
      * @deprecated in favor of {@link #save(org.apache.shiro.subject.Subject) save(subject)}.
      */
+    @Impure
     @Deprecated
     protected void bind(Subject subject) {
         save(subject);
     }
 
+    @Impure
     protected void rememberMeSuccessfulLogin(AuthenticationToken token, AuthenticationInfo info, Subject subject) {
         RememberMeManager rmm = getRememberMeManager();
         if (rmm != null) {
@@ -221,6 +237,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
         }
     }
 
+    @Impure
     protected void rememberMeFailedLogin(AuthenticationToken token, AuthenticationException ex, Subject subject) {
         RememberMeManager rmm = getRememberMeManager();
         if (rmm != null) {
@@ -237,6 +254,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
         }
     }
 
+    @Impure
     protected void rememberMeLogout(Subject subject) {
         RememberMeManager rmm = getRememberMeManager();
         if (rmm != null) {
@@ -264,6 +282,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      * @return a Subject representing the authenticated user.
      * @throws AuthenticationException if there is a problem authenticating the specified {@code token}.
      */
+    @Impure
     public Subject login(Subject subject, AuthenticationToken token) throws AuthenticationException {
         AuthenticationInfo info;
         try {
@@ -287,18 +306,22 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
         return loggedIn;
     }
 
+    @Impure
     protected void onSuccessfulLogin(AuthenticationToken token, AuthenticationInfo info, Subject subject) {
         rememberMeSuccessfulLogin(token, info, subject);
     }
 
+    @Impure
     protected void onFailedLogin(AuthenticationToken token, AuthenticationException ae, Subject subject) {
         rememberMeFailedLogin(token, ae, subject);
     }
 
+    @Impure
     protected void beforeLogout(Subject subject) {
         rememberMeLogout(subject);
     }
 
+    @Impure
     protected SubjectContext copy(SubjectContext subjectContext) {
         return new DefaultSubjectContext(subjectContext);
     }
@@ -325,6 +348,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      * @see #save(org.apache.shiro.subject.Subject)
      * @since 1.0
      */
+    @Impure
     public Subject createSubject(SubjectContext subjectContext) {
         //create a copy so we don't modify the argument's backing map:
         SubjectContext context = copy(subjectContext);
@@ -365,6 +389,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      * @see SubjectFactory#createSubject(org.apache.shiro.subject.SubjectContext)
      * @since 1.2
      */
+    @Impure
     protected Subject doCreateSubject(SubjectContext context) {
         return getSubjectFactory().createSubject(context);
     }
@@ -379,6 +404,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      * @see SubjectDAO#save(org.apache.shiro.subject.Subject)
      * @since 1.2
      */
+    @Impure
     protected void save(Subject subject) {
         this.subjectDAO.save(subject);
     }
@@ -393,6 +419,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      * @see SubjectDAO#delete(org.apache.shiro.subject.Subject)
      * @since 1.2
      */
+    @Impure
     protected void delete(Subject subject) {
         this.subjectDAO.delete(subject);
     }
@@ -406,6 +433,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      * @return The SubjectContext to use to pass to a {@link SubjectFactory} for subject creation.
      * @since 1.0
      */
+    @Impure
     @SuppressWarnings({"unchecked"})
     protected SubjectContext ensureSecurityManager(SubjectContext context) {
         if (context.resolveSecurityManager() != null) {
@@ -430,6 +458,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      * @return The context to use to pass to a {@link SubjectFactory} for subject creation.
      * @since 1.0
      */
+    @Impure
     @SuppressWarnings({"unchecked"})
     protected SubjectContext resolveSession(SubjectContext context) {
         if (context.resolveSession() != null) {
@@ -450,6 +479,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
         return context;
     }
 
+    @Impure
     protected Session resolveContextSession(SubjectContext context) throws InvalidSessionException {
         SessionKey key = getSessionKey(context);
         if (key != null) {
@@ -458,6 +488,8 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
         return null;
     }
 
+    @SideEffectFree
+    @Impure
     protected SessionKey getSessionKey(SubjectContext context) {
         Serializable sessionId = context.getSessionId();
         if (sessionId != null) {
@@ -481,6 +513,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      * @return The Subject context to use to pass to a {@link SubjectFactory} for subject creation.
      * @since 1.0
      */
+    @Impure
     @SuppressWarnings({"unchecked"})
     protected SubjectContext resolvePrincipals(SubjectContext context) {
 
@@ -520,6 +553,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
         return context;
     }
 
+    @Impure
     protected SessionContext createSessionContext(SubjectContext subjectContext) {
         DefaultSessionContext sessionContext = new DefaultSessionContext();
         if (!CollectionUtils.isEmpty(subjectContext)) {
@@ -536,6 +570,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
         return sessionContext;
     }
 
+    @Impure
     public void logout(Subject subject) {
 
         if (subject == null) {
@@ -575,6 +610,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
         }
     }
 
+    @Impure
     protected void stopSession(Subject subject) {
         Session s = subject.getSession(false);
         if (s != null) {
@@ -591,12 +627,14 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      * @param subject the subject to unbind from the application as it will no longer be used.
      * @deprecated in Shiro 1.2 in favor of {@link #delete(org.apache.shiro.subject.Subject)}
      */
+    @Impure
     @Deprecated
     @SuppressWarnings({"UnusedDeclaration"})
     protected void unbind(Subject subject) {
         delete(subject);
     }
 
+    @Impure
     protected PrincipalCollection getRememberedIdentity(SubjectContext subjectContext) {
         RememberMeManager rmm = getRememberMeManager();
         if (rmm != null) {

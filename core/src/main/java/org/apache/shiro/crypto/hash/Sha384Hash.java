@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.crypto.hash;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.codec.Hex;
 
@@ -39,28 +40,34 @@ public class Sha384Hash extends SimpleHash {
 
     public static final String ALGORITHM_NAME = "SHA-384";
 
+    @Impure
     public Sha384Hash() {
         super(ALGORITHM_NAME);
     }
 
+    @Impure
     public Sha384Hash(Object source) {
         super(ALGORITHM_NAME, source);
     }
 
+    @Impure
     public Sha384Hash(Object source, Object salt) {
         super(ALGORITHM_NAME, source, salt);
     }
 
+    @Impure
     public Sha384Hash(Object source, Object salt, int hashIterations) {
         super(ALGORITHM_NAME, source, salt, hashIterations);
     }
 
+    @Impure
     public static Sha384Hash fromHexString(String hex) {
         Sha384Hash hash = new Sha384Hash();
         hash.setBytes(Hex.decode(hex));
         return hash;
     }
 
+    @Impure
     public static Sha384Hash fromBase64String(String base64) {
         Sha384Hash hash = new Sha384Hash();
         hash.setBytes(Base64.decode(base64));

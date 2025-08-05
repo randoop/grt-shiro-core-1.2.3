@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
@@ -33,9 +35,11 @@ import org.apache.shiro.subject.support.DelegatingSubject;
  */
 public class DefaultSubjectFactory implements SubjectFactory {
 
+    @SideEffectFree
     public DefaultSubjectFactory() {
     }
 
+    @Impure
     public Subject createSubject(SubjectContext context) {
         SecurityManager securityManager = context.resolveSecurityManager();
         Session session = context.resolveSession();
@@ -51,6 +55,8 @@ public class DefaultSubjectFactory implements SubjectFactory {
      * @deprecated since 1.2 - override {@link #createSubject(org.apache.shiro.subject.SubjectContext)} directly if you
      *             need to instantiate a custom {@link Subject} class.
      */
+    @SideEffectFree
+    @Impure
     @Deprecated
     protected Subject newSubjectInstance(PrincipalCollection principals, boolean authenticated, String host,
                                          Session session, SecurityManager securityManager) {

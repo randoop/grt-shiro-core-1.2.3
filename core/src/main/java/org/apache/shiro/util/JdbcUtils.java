@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.util;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -43,6 +45,7 @@ public class JdbcUtils {
     /**
      * Private constructor to prevent instantiation.
      */
+    @SideEffectFree
     private JdbcUtils() {
     }
 
@@ -52,6 +55,7 @@ public class JdbcUtils {
      *
      * @param connection the JDBC Connection to close (may be <tt>null</tt>)
      */
+    @Impure
     public static void closeConnection(Connection connection) {
         if (connection != null) {
             try {
@@ -74,6 +78,7 @@ public class JdbcUtils {
      *
      * @param statement the JDBC Statement to close (may be <tt>null</tt>)
      */
+    @Impure
     public static void closeStatement(Statement statement) {
         if (statement != null) {
             try {
@@ -96,6 +101,7 @@ public class JdbcUtils {
      *
      * @param rs the JDBC ResultSet to close (may be <tt>null</tt>)
      */
+    @Impure
     public static void closeResultSet(ResultSet rs) {
         if (rs != null) {
             try {

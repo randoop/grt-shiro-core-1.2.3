@@ -17,6 +17,9 @@
  * under the License.
  */
 package org.apache.shiro.util;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * <p>PathMatcher implementation for Ant-style path patterns.
@@ -73,23 +76,28 @@ public class AntPathMatcher implements PatternMatcher {
      * Set the path separator to use for pattern parsing.
      * Default is "/", as in Ant.
      */
+    @Impure
     public void setPathSeparator(String pathSeparator) {
         this.pathSeparator = (pathSeparator != null ? pathSeparator : DEFAULT_PATH_SEPARATOR);
     }
 
 
+    @Pure
     public boolean isPattern(String path) {
         return (path.indexOf('*') != -1 || path.indexOf('?') != -1);
     }
 
+    @Impure
     public boolean matches(String pattern, String source) {
         return match(pattern, source);
     }
 
+    @Impure
     public boolean match(String pattern, String path) {
         return doMatch(pattern, path, true);
     }
 
+    @Impure
     public boolean matchStart(String pattern, String path) {
         return doMatch(pattern, path, false);
     }
@@ -105,6 +113,7 @@ public class AntPathMatcher implements PatternMatcher {
      * @return <code>true</code> if the supplied <code>path</code> matched,
      *         <code>false</code> if it didn't
      */
+    @Impure
     protected boolean doMatch(String pattern, String path, boolean fullMatch) {
         if (path.startsWith(this.pathSeparator) != pattern.startsWith(this.pathSeparator)) {
             return false;
@@ -242,6 +251,7 @@ public class AntPathMatcher implements PatternMatcher {
      * @return <code>true</code> if the string matches against the
      *         pattern, or <code>false</code> otherwise.
      */
+    @SideEffectFree
     private boolean matchStrings(String pattern, String str) {
         char[] patArr = pattern.toCharArray();
         char[] strArr = str.toCharArray();
@@ -392,6 +402,7 @@ public class AntPathMatcher implements PatternMatcher {
      * <p>Assumes that {@link #match} returns <code>true</code> for '<code>pattern</code>'
      * and '<code>path</code>', but does <strong>not</strong> enforce this.
      */
+    @Impure
     public String extractPathWithinPattern(String pattern, String path) {
         String[] patternParts = StringUtils.tokenizeToStringArray(pattern, this.pathSeparator);
         String[] pathParts = StringUtils.tokenizeToStringArray(path, this.pathSeparator);

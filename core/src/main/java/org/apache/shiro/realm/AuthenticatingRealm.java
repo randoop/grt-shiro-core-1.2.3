@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.realm;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.AllowAllCredentialsMatcher;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
@@ -143,18 +145,22 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
     /*-------------------------------------------
     |         C O N S T R U C T O R S           |
     ============================================*/
+    @Impure
     public AuthenticatingRealm() {
         this(null, new SimpleCredentialsMatcher());
     }
 
+    @Impure
     public AuthenticatingRealm(CacheManager cacheManager) {
         this(cacheManager, new SimpleCredentialsMatcher());
     }
 
+    @Impure
     public AuthenticatingRealm(CredentialsMatcher matcher) {
         this(null, matcher);
     }
 
+    @Impure
     public AuthenticatingRealm(CacheManager cacheManager, CredentialsMatcher matcher) {
         authenticationTokenClass = UsernamePasswordToken.class;
 
@@ -190,6 +196,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      * @return the <code>CredentialsMatcher</code> used during an authentication attempt to verify submitted
      *         credentials with those stored in the system.
      */
+    @Pure
     public CredentialsMatcher getCredentialsMatcher() {
         return credentialsMatcher;
     }
@@ -204,6 +211,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      *
      * @param credentialsMatcher the matcher to use.
      */
+    @Impure
     public void setCredentialsMatcher(CredentialsMatcher credentialsMatcher) {
         this.credentialsMatcher = credentialsMatcher;
     }
@@ -222,6 +230,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      * @return the authenticationToken class supported by this realm.
      * @see #setAuthenticationTokenClass
      */
+    @Pure
     public Class getAuthenticationTokenClass() {
         return authenticationTokenClass;
     }
@@ -235,6 +244,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      * @param authenticationTokenClass the class of authentication token instances supported by this realm.
      * @see #getAuthenticationTokenClass getAuthenticationTokenClass() for more explanation.
      */
+    @Impure
     public void setAuthenticationTokenClass(Class<? extends AuthenticationToken> authenticationTokenClass) {
         this.authenticationTokenClass = authenticationTokenClass;
     }
@@ -252,6 +262,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      * @see #isAuthenticationCachingEnabled()
      * @since 1.2
      */
+    @Impure
     public void setAuthenticationCache(Cache<Object, AuthenticationInfo> authenticationCache) {
         this.authenticationCache = authenticationCache;
     }
@@ -266,6 +277,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      * @see #isAuthenticationCachingEnabled()
      * @since 1.2
      */
+    @Pure
     public Cache<Object, AuthenticationInfo> getAuthenticationCache() {
         return this.authenticationCache;
     }
@@ -285,6 +297,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      * @see #isAuthenticationCachingEnabled()
      * @since 1.2
      */
+    @Pure
     public String getAuthenticationCacheName() {
         return this.authenticationCacheName;
     }
@@ -302,6 +315,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      * @see #isAuthenticationCachingEnabled()
      * @since 1.2
      */
+    @Impure
     public void setAuthenticationCacheName(String authenticationCacheName) {
         this.authenticationCacheName = authenticationCacheName;
     }
@@ -314,6 +328,8 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      *
      * @return {@code true} if authentication caching should be utilized, {@code false} otherwise.
      */
+    @Pure
+    @Impure
     public boolean isAuthenticationCachingEnabled() {
         return this.authenticationCachingEnabled && isCachingEnabled();
     }
@@ -329,6 +345,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      *
      * @param authenticationCachingEnabled the value to set
      */
+    @Impure
     @SuppressWarnings({"UnusedDeclaration"})
     public void setAuthenticationCachingEnabled(boolean authenticationCachingEnabled) {
         this.authenticationCachingEnabled = authenticationCachingEnabled;
@@ -337,6 +354,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
         }
     }
 
+    @Impure
     public void setName(String name) {
         super.setName(name);
         String authcCacheName = this.authenticationCacheName;
@@ -362,6 +380,8 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      * @param token the token being submitted for authentication.
      * @return true if this authentication realm can process the submitted token instance of the class, false otherwise.
      */
+    @Pure
+    @Impure
     public boolean supports(AuthenticationToken token) {
         return token != null && getAuthenticationTokenClass().isAssignableFrom(token.getClass());
     }
@@ -389,6 +409,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      *
      * @since 1.2
      */
+    @Impure
     public final void init() {
         //trigger obtaining the authorization cache if possible
         getAvailableAuthenticationCache();
@@ -401,6 +422,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      *
      * @since 1.2
      */
+    @Impure
     protected void onInit() {
     }
 
@@ -409,6 +431,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      *
      * @since 1.2
      */
+    @Impure
     protected void afterCacheManagerSet() {
         //trigger obtaining the authorization cache if possible
         getAvailableAuthenticationCache();
@@ -431,6 +454,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      *
      * @return any available {@link Cache} instance to use for authentication caching.
      */
+    @Impure
     private Cache<Object, AuthenticationInfo> getAvailableAuthenticationCache() {
         Cache<Object, AuthenticationInfo> cache = getAuthenticationCache();
         boolean authcCachingEnabled = isAuthenticationCachingEnabled();
@@ -448,6 +472,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      * @return an available cache instance to be used for authentication caching or {@code null} if one is not available.
      * @since 1.2
      */
+    @Impure
     private Cache<Object, AuthenticationInfo> getAuthenticationCacheLazy() {
 
         if (this.authenticationCache == null) {
@@ -475,6 +500,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      *         isn't any cached data.
      * @since 1.2
      */
+    @Impure
     private AuthenticationInfo getCachedAuthenticationInfo(AuthenticationToken token) {
         AuthenticationInfo info = null;
 
@@ -502,6 +528,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      * @param info  the AuthenticationInfo to cache as a result of the successful authentication attempt.
      * @since 1.2
      */
+    @Impure
     private void cacheAuthenticationInfoIfPossible(AuthenticationToken token, AuthenticationInfo info) {
         if (!isAuthenticationCachingEnabled(token, info)) {
             log.debug("AuthenticationInfo caching is disabled for info [{}].  Submitted token: [{}].", info, token);
@@ -532,6 +559,8 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      *         {@link AuthenticationToken} and/or {@link AuthenticationInfo}, {@code false} otherwise.
      * @since 1.2
      */
+    @Pure
+    @Impure
     protected boolean isAuthenticationCachingEnabled(AuthenticationToken token, AuthenticationInfo info) {
         return isAuthenticationCachingEnabled();
     }
@@ -560,6 +589,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      *         AuthenticationInfo could be found.
      * @throws AuthenticationException if authentication failed.
      */
+    @Impure
     public final AuthenticationInfo getAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 
         AuthenticationInfo info = getCachedAuthenticationInfo(token);
@@ -591,6 +621,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      * @param info  the AuthenticationInfo corresponding to the given {@code token}
      * @throws AuthenticationException if the token's credentials do not match the stored account credentials.
      */
+    @Impure
     protected void assertCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) throws AuthenticationException {
         CredentialsMatcher cm = getCredentialsMatcher();
         if (cm != null) {
@@ -620,6 +651,8 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      * @return the cache key to use to cache the associated {@link AuthenticationInfo} after a successful authentication.
      * @since 1.2
      */
+    @Pure
+    @Impure
     protected Object getAuthenticationCacheKey(AuthenticationToken token) {
         return token != null ? token.getPrincipal() : null;
     }
@@ -638,6 +671,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      * @return the cache key to use when looking up cached {@link AuthenticationInfo} instances.
      * @since 1.2
      */
+    @Impure
     protected Object getAuthenticationCacheKey(PrincipalCollection principals) {
         return getAvailablePrincipal(principals);
     }
@@ -650,6 +684,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      * @param principals principals the principals of the account for which to clear any cached data.
      * @since 1.2
      */
+    @Impure
     @Override
     protected void doClearCache(PrincipalCollection principals) {
         super.doClearCache(principals);
@@ -676,6 +711,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      * @see #clearCache(org.apache.shiro.subject.PrincipalCollection)
      * @since 1.2
      */
+    @Impure
     protected void clearCachedAuthenticationInfo(PrincipalCollection principals) {
         if (!CollectionUtils.isEmpty(principals)) {
             Cache<Object, AuthenticationInfo> cache = getAvailableAuthenticationCache();
@@ -703,6 +739,7 @@ public abstract class AuthenticatingRealm extends CachingRealm implements Initia
      * @throws AuthenticationException if there is an error acquiring data or performing
      *                                 realm-specific authentication logic for the specified <tt>token</tt>
      */
+    @Impure
     protected abstract AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException;
 
 }

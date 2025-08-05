@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.dao;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.ShiroException;
 
 /**
@@ -35,6 +37,8 @@ public abstract class DataAccessException extends ShiroException {
      *
      * @param message the message explaining the cause of the exception
      */
+    @SideEffectFree
+    @Impure
     public DataAccessException(String message) {
         super(message);
     }
@@ -45,6 +49,8 @@ public abstract class DataAccessException extends ShiroException {
      * @param message the explanation
      * @param cause   the root cause of the exception, typically an API-specific exception
      */
+    @SideEffectFree
+    @Impure
     public DataAccessException(String message, Throwable cause) {
         super(message, cause);
     }

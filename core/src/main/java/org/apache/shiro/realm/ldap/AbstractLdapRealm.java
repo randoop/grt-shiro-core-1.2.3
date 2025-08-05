@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.realm.ldap;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -95,6 +96,7 @@ public abstract class AbstractLdapRealm extends AuthorizingRealm {
      * @param principalSuffix the suffix.
      * @see DefaultLdapContextFactory#setPrincipalSuffix(String)
      */
+    @Impure
     public void setPrincipalSuffix(String principalSuffix) {
         this.principalSuffix = principalSuffix;
     }
@@ -106,6 +108,7 @@ public abstract class AbstractLdapRealm extends AuthorizingRealm {
      * @param searchBase the search base.
      * @see DefaultLdapContextFactory#setSearchBase(String)
      */
+    @Impure
     public void setSearchBase(String searchBase) {
         this.searchBase = searchBase;
     }
@@ -117,6 +120,7 @@ public abstract class AbstractLdapRealm extends AuthorizingRealm {
      * @param url the LDAP url.
      * @see DefaultLdapContextFactory#setUrl(String)
      */
+    @Impure
     public void setUrl(String url) {
         this.url = url;
     }
@@ -128,6 +132,7 @@ public abstract class AbstractLdapRealm extends AuthorizingRealm {
      * @param systemUsername the username to use when logging into the LDAP server for authorization.
      * @see DefaultLdapContextFactory#setSystemUsername(String)
      */
+    @Impure
     public void setSystemUsername(String systemUsername) {
         this.systemUsername = systemUsername;
     }
@@ -140,6 +145,7 @@ public abstract class AbstractLdapRealm extends AuthorizingRealm {
      * @param systemPassword the password to use when logging into the LDAP server for authorization.
      * @see DefaultLdapContextFactory#setSystemPassword(String)
      */
+    @Impure
     public void setSystemPassword(String systemPassword) {
         this.systemPassword = systemPassword;
     }
@@ -153,6 +159,7 @@ public abstract class AbstractLdapRealm extends AuthorizingRealm {
      *
      * @param ldapContextFactory the factory to use - if not specified, a default factory will be created automatically.
      */
+    @Impure
     public void setLdapContextFactory(LdapContextFactory ldapContextFactory) {
         this.ldapContextFactory = ldapContextFactory;
     }
@@ -161,11 +168,13 @@ public abstract class AbstractLdapRealm extends AuthorizingRealm {
     |               M E T H O D S                |
     ============================================*/
 
+    @Impure
     protected void onInit() {
         super.onInit();
         ensureContextFactory();
     }
 
+    @Impure
     private LdapContextFactory ensureContextFactory() {
         if (this.ldapContextFactory == null) {
 
@@ -186,6 +195,7 @@ public abstract class AbstractLdapRealm extends AuthorizingRealm {
     }
 
 
+    @Impure
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         AuthenticationInfo info;
         try {
@@ -201,6 +211,7 @@ public abstract class AbstractLdapRealm extends AuthorizingRealm {
     }
 
 
+    @Impure
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         AuthorizationInfo info;
         try {
@@ -224,6 +235,7 @@ public abstract class AbstractLdapRealm extends AuthorizingRealm {
      * @return an {@link AuthenticationInfo} instance containing information retrieved from the LDAP server.
      * @throws NamingException if any LDAP errors occur during the search.
      */
+    @Impure
     protected abstract AuthenticationInfo queryForAuthenticationInfo(AuthenticationToken token, LdapContextFactory ldapContextFactory) throws NamingException;
 
 
@@ -237,6 +249,7 @@ public abstract class AbstractLdapRealm extends AuthorizingRealm {
      * @return an {@link AuthorizationInfo} instance containing information retrieved from the LDAP server.
      * @throws NamingException if any LDAP errors occur during the search.
      */
+    @Impure
     protected abstract AuthorizationInfo queryForAuthorizationInfo(PrincipalCollection principal, LdapContextFactory ldapContextFactory) throws NamingException;
 
 }

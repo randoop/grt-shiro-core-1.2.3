@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.session.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.session.*;
 import org.apache.shiro.util.CollectionUtils;
@@ -42,19 +45,24 @@ public abstract class AbstractNativeSessionManager extends AbstractSessionManage
 
     private Collection<SessionListener> listeners;
 
+    @SideEffectFree
+    @Impure
     public AbstractNativeSessionManager() {
         this.listeners = new ArrayList<SessionListener>();
     }
 
+    @Impure
     public void setSessionListeners(Collection<SessionListener> listeners) {
         this.listeners = listeners != null ? listeners : new ArrayList<SessionListener>();
     }
 
+    @Pure
     @SuppressWarnings({"UnusedDeclaration"})
     public Collection<SessionListener> getSessionListeners() {
         return this.listeners;
     }
 
+    @Impure
     public Session start(SessionContext context) {
         Session session = createSession(context);
         applyGlobalSessionTimeout(session);
@@ -78,8 +86,10 @@ public abstract class AbstractNativeSessionManager extends AbstractSessionManage
      * @throws AuthorizationException if the system access control policy does not allow the currently executing
      *                                caller to start sessions.
      */
+    @Impure
     protected abstract Session createSession(SessionContext context) throws AuthorizationException;
 
+    @Impure
     protected void applyGlobalSessionTimeout(Session session) {
         session.setTimeout(getGlobalSessionTimeout());
         onChange(session);
@@ -93,14 +103,17 @@ public abstract class AbstractNativeSessionManager extends AbstractSessionManage
      * @param session the session that was just {@link #createSession created}.
      * @param context the {@link SessionContext SessionContext} that was used to start the session.
      */
+    @SideEffectFree
     protected void onStart(Session session, SessionContext context) {
     }
 
+    @Impure
     public Session getSession(SessionKey key) throws SessionException {
         Session session = lookupSession(key);
         return session != null ? createExposedSession(session, key) : null;
     }
 
+    @Impure
     private Session lookupSession(SessionKey key) throws SessionException {
         if (key == null) {
             throw new NullPointerException("SessionKey argument cannot be null.");
@@ -108,6 +121,7 @@ public abstract class AbstractNativeSessionManager extends AbstractSessionManage
         return doGetSession(key);
     }
 
+    @Impure
     private Session lookupRequiredSession(SessionKey key) throws SessionException {
         Session session = lookupSession(key);
         if (session == null) {
@@ -117,12 +131,15 @@ public abstract class AbstractNativeSessionManager extends AbstractSessionManage
         return session;
     }
 
+    @Impure
     protected abstract Session doGetSession(SessionKey key) throws InvalidSessionException;
 
+    @Impure
     protected Session createExposedSession(Session session, SessionContext context) {
         return new DelegatingSession(this, new DefaultSessionKey(session.getId()));
     }
 
+    @Impure
     protected Session createExposedSession(Session session, SessionKey key) {
         return new DelegatingSession(this, new DefaultSessionKey(session.getId()));
     }
@@ -137,6 +154,8 @@ public abstract class AbstractNativeSessionManager extends AbstractSessionManage
      * @param session the {@code Session} object being invalidated.
      * @return the {@code Session} instance to use to pass to registered {@code SessionListener}s for notification.
      */
+    @SideEffectFree
+    @Impure
     protected Session beforeInvalidNotification(Session session) {
         return new ImmutableProxiedSession(session);
     }
@@ -149,12 +168,16 @@ public abstract class AbstractNativeSessionManager extends AbstractSessionManage
      *                {@link #setSessionListeners(java.util.Collection) registered} session listeners.
      * @see SessionListener#onStart(org.apache.shiro.session.Session)
      */
+    @SideEffectFree
+    @Impure
     protected void notifyStart(Session session) {
         for (SessionListener listener : this.listeners) {
             listener.onStart(session);
         }
     }
 
+    @SideEffectFree
+    @Impure
     protected void notifyStop(Session session) {
         Session forNotification = beforeInvalidNotification(session);
         for (SessionListener listener : this.listeners) {
@@ -162,6 +185,8 @@ public abstract class AbstractNativeSessionManager extends AbstractSessionManage
         }
     }
 
+    @SideEffectFree
+    @Impure
     protected void notifyExpiration(Session session) {
         Session forNotification = beforeInvalidNotification(session);
         for (SessionListener listener : this.listeners) {
@@ -169,34 +194,41 @@ public abstract class AbstractNativeSessionManager extends AbstractSessionManage
         }
     }
 
+    @Impure
     public Date getStartTimestamp(SessionKey key) {
         return lookupRequiredSession(key).getStartTimestamp();
     }
 
+    @Impure
     public Date getLastAccessTime(SessionKey key) {
         return lookupRequiredSession(key).getLastAccessTime();
     }
 
+    @Impure
     public long getTimeout(SessionKey key) throws InvalidSessionException {
         return lookupRequiredSession(key).getTimeout();
     }
 
+    @Impure
     public void setTimeout(SessionKey key, long maxIdleTimeInMillis) throws InvalidSessionException {
         Session s = lookupRequiredSession(key);
         s.setTimeout(maxIdleTimeInMillis);
         onChange(s);
     }
 
+    @Impure
     public void touch(SessionKey key) throws InvalidSessionException {
         Session s = lookupRequiredSession(key);
         s.touch();
         onChange(s);
     }
 
+    @Impure
     public String getHost(SessionKey key) {
         return lookupRequiredSession(key).getHost();
     }
 
+    @Impure
     public Collection<Object> getAttributeKeys(SessionKey key) {
         Collection<Object> c = lookupRequiredSession(key).getAttributeKeys();
         if (!CollectionUtils.isEmpty(c)) {
@@ -205,10 +237,12 @@ public abstract class AbstractNativeSessionManager extends AbstractSessionManage
         return Collections.emptySet();
     }
 
+    @Impure
     public Object getAttribute(SessionKey sessionKey, Object attributeKey) throws InvalidSessionException {
         return lookupRequiredSession(sessionKey).getAttribute(attributeKey);
     }
 
+    @Impure
     public void setAttribute(SessionKey sessionKey, Object attributeKey, Object value) throws InvalidSessionException {
         if (value == null) {
             removeAttribute(sessionKey, attributeKey);
@@ -219,6 +253,7 @@ public abstract class AbstractNativeSessionManager extends AbstractSessionManage
         }
     }
 
+    @Impure
     public Object removeAttribute(SessionKey sessionKey, Object attributeKey) throws InvalidSessionException {
         Session s = lookupRequiredSession(sessionKey);
         Object removed = s.removeAttribute(attributeKey);
@@ -228,6 +263,7 @@ public abstract class AbstractNativeSessionManager extends AbstractSessionManage
         return removed;
     }
 
+    @Impure
     public boolean isValid(SessionKey key) {
         try {
             checkValid(key);
@@ -237,6 +273,7 @@ public abstract class AbstractNativeSessionManager extends AbstractSessionManage
         }
     }
 
+    @Impure
     public void stop(SessionKey key) throws InvalidSessionException {
         Session session = lookupRequiredSession(key);
         try {
@@ -251,22 +288,27 @@ public abstract class AbstractNativeSessionManager extends AbstractSessionManage
         }
     }
 
+    @Impure
     protected void onStop(Session session, SessionKey key) {
         onStop(session);
     }
 
+    @Impure
     protected void onStop(Session session) {
         onChange(session);
     }
 
+    @Impure
     protected void afterStopped(Session session) {
     }
 
+    @Impure
     public void checkValid(SessionKey key) throws InvalidSessionException {
         //just try to acquire it.  If there is a problem, an exception will be thrown:
         lookupRequiredSession(key);
     }
 
+    @Impure
     protected void onChange(Session s) {
     }
 }

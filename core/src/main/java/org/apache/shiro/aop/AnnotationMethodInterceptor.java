@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.aop;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.lang.annotation.Annotation;
 
 /**
@@ -48,6 +50,7 @@ public abstract class AnnotationMethodInterceptor extends MethodInterceptorSuppo
      *
      * @param handler the handler to delegate to for processing the annotation.
      */
+    @Impure
     public AnnotationMethodInterceptor(AnnotationHandler handler) {
         this(handler, new DefaultAnnotationResolver());
     }
@@ -62,6 +65,7 @@ public abstract class AnnotationMethodInterceptor extends MethodInterceptorSuppo
      * @param resolver the resolver to use to locate/acquire the annotation
      * @since 1.1
      */
+    @Impure
     public AnnotationMethodInterceptor(AnnotationHandler handler, AnnotationResolver resolver) {
         if (handler == null) {
             throw new IllegalArgumentException("AnnotationHandler argument cannot be null.");
@@ -77,6 +81,7 @@ public abstract class AnnotationMethodInterceptor extends MethodInterceptorSuppo
      * @return the {@code AnnotationHandler} used to perform authorization behavior based on
      *         an annotation discovered at runtime.
      */
+    @Pure
     public AnnotationHandler getHandler() {
         return handler;
     }
@@ -88,6 +93,7 @@ public abstract class AnnotationMethodInterceptor extends MethodInterceptorSuppo
      * @param handler the {@code AnnotationHandler} used to perform authorization behavior based on
      *                an annotation discovered at runtime.
      */
+    @Impure
     public void setHandler(AnnotationHandler handler) {
         this.handler = handler;
     }
@@ -101,6 +107,7 @@ public abstract class AnnotationMethodInterceptor extends MethodInterceptorSuppo
      *         methods at runtime.
      * @since 1.1
      */
+    @Pure
     public AnnotationResolver getResolver() {
         return resolver;
     }
@@ -114,6 +121,7 @@ public abstract class AnnotationMethodInterceptor extends MethodInterceptorSuppo
      *                 methods at runtime.
      * @since 1.1
      */
+    @Impure
     public void setResolver(AnnotationResolver resolver) {
         this.resolver = resolver;
     }
@@ -130,6 +138,7 @@ public abstract class AnnotationMethodInterceptor extends MethodInterceptorSuppo
      * @return <code>true</code> if this interceptor supports, that is, should inspect, the specified
      *         <code>MethodInvocation</code>, <code>false</code> otherwise.
      */
+    @Impure
     public boolean supports(MethodInvocation mi) {
         return getAnnotation(mi) != null;
     }
@@ -144,6 +153,7 @@ public abstract class AnnotationMethodInterceptor extends MethodInterceptorSuppo
      * @param mi the MethodInvocation wrapping the Method from which the Annotation will be acquired.
      * @return the Annotation that this interceptor will process for the specified method invocation.
      */
+    @Impure
     protected Annotation getAnnotation(MethodInvocation mi) {
         return getResolver().getAnnotation(mi, getHandler().getAnnotationClass());
     }

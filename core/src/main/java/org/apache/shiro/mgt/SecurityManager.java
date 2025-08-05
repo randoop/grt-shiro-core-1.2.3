@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.Authenticator;
@@ -74,6 +75,7 @@ public interface SecurityManager extends Authenticator, Authorizer, SessionManag
      * @throws AuthenticationException if the login attempt failed.
      * @since 1.0
      */
+    @Impure
     Subject login(Subject subject, AuthenticationToken authenticationToken) throws AuthenticationException;
 
     /**
@@ -89,6 +91,7 @@ public interface SecurityManager extends Authenticator, Authorizer, SessionManag
      * @param subject the subject to log out.
      * @since 1.0
      */
+    @Impure
     void logout(Subject subject);
 
     /**
@@ -109,6 +112,7 @@ public interface SecurityManager extends Authenticator, Authorizer, SessionManag
      * @see Subject.Builder
      * @since 1.0
      */
+    @Impure
     Subject createSubject(SubjectContext context);
 
 }

@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.concurrent;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
@@ -60,9 +63,11 @@ public class SubjectAwareExecutor implements Executor {
      */
     private Executor targetExecutor;
 
+    @SideEffectFree
     public SubjectAwareExecutor() {
     }
 
+    @SideEffectFree
     public SubjectAwareExecutor(Executor targetExecutor) {
         if (targetExecutor == null) {
             throw new NullPointerException("target Executor instance cannot be null.");
@@ -75,6 +80,7 @@ public class SubjectAwareExecutor implements Executor {
      *
      * @return target Executor instance that will actually execute the subject-associated Runnable instances.
      */
+    @Pure
     public Executor getTargetExecutor() {
         return targetExecutor;
     }
@@ -85,6 +91,7 @@ public class SubjectAwareExecutor implements Executor {
      * @param targetExecutor the target Executor instance that will actually execute the subject-associated Runnable
      *                       instances.
      */
+    @Impure
     public void setTargetExecutor(Executor targetExecutor) {
         this.targetExecutor = targetExecutor;
     }
@@ -97,6 +104,7 @@ public class SubjectAwareExecutor implements Executor {
      * @return the currently Subject instance that should be associated with Runnable or Callable instances before
      *         being dispatched to the target {@code Executor} instance.
      */
+    @Impure
     protected Subject getSubject() {
         return SecurityUtils.getSubject();
     }
@@ -112,6 +120,7 @@ public class SubjectAwareExecutor implements Executor {
      * @param r the argument runnable to be associated with the current subject
      * @return the associated runnable instance reflecting the current subject
      */
+    @Impure
     protected Runnable associateWithSubject(Runnable r) {
         Subject subject = getSubject();
         return subject.associateWith(r);
@@ -124,6 +133,7 @@ public class SubjectAwareExecutor implements Executor {
      * @param command the runnable to associate with the currently executing subject and then to execute via the target
      *                {@code Executor} instance.
      */
+    @Impure
     public void execute(Runnable command) {
         Runnable associated = associateWithSubject(command);
         getTargetExecutor().execute(associated);

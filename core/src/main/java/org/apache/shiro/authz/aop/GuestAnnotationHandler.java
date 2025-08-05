@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authz.aop;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.lang.annotation.Annotation;
 
 import org.apache.shiro.authz.AuthorizationException;
@@ -42,6 +43,7 @@ public class GuestAnnotationHandler extends AuthorizingAnnotationHandler {
      * {@link org.apache.shiro.authz.annotation.RequiresGuest RequiresGuest} annotations in a method
      * declaration.
      */
+    @Impure
     public GuestAnnotationHandler() {
         super(RequiresGuest.class);
     }
@@ -56,6 +58,7 @@ public class GuestAnnotationHandler extends AuthorizingAnnotationHandler {
      * @throws org.apache.shiro.authz.AuthorizationException
      *          if the calling <code>Subject</code> is not a &quot;guest&quot;.
      */
+    @Impure
     public void assertAuthorized(Annotation a) throws AuthorizationException {
         if (a instanceof RequiresGuest && getSubject().getPrincipal() != null) {
             throw new UnauthenticatedException("Attempting to perform a guest-only operation.  The current Subject is " +

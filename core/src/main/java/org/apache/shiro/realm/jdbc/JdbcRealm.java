@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.realm.jdbc;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -121,6 +123,7 @@ public class JdbcRealm extends AuthorizingRealm {
      *
      * @param dataSource the SQL data source.
      */
+    @Impure
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -135,6 +138,7 @@ public class JdbcRealm extends AuthorizingRealm {
      * @param authenticationQuery the query to use for authentication.
      * @see #DEFAULT_AUTHENTICATION_QUERY
      */
+    @Impure
     public void setAuthenticationQuery(String authenticationQuery) {
         this.authenticationQuery = authenticationQuery;
     }
@@ -149,6 +153,7 @@ public class JdbcRealm extends AuthorizingRealm {
      * @param userRolesQuery the query to use for retrieving a user's roles.
      * @see #DEFAULT_USER_ROLES_QUERY
      */
+    @Impure
     public void setUserRolesQuery(String userRolesQuery) {
         this.userRolesQuery = userRolesQuery;
     }
@@ -168,6 +173,7 @@ public class JdbcRealm extends AuthorizingRealm {
      * @see #DEFAULT_PERMISSIONS_QUERY
      * @see #setPermissionsLookupEnabled(boolean)
      */
+    @Impure
     public void setPermissionsQuery(String permissionsQuery) {
         this.permissionsQuery = permissionsQuery;
     }
@@ -179,6 +185,7 @@ public class JdbcRealm extends AuthorizingRealm {
      * @param permissionsLookupEnabled true if permissions should be looked up during authorization, or false if only
      *                                 roles should be looked up.
      */
+    @Impure
     public void setPermissionsLookupEnabled(boolean permissionsLookupEnabled) {
         this.permissionsLookupEnabled = permissionsLookupEnabled;
     }
@@ -188,6 +195,7 @@ public class JdbcRealm extends AuthorizingRealm {
      * 
      * @param saltStyle new SaltStyle to set.
      */
+    @Impure
     public void setSaltStyle(SaltStyle saltStyle) {
         this.saltStyle = saltStyle;
         if (saltStyle == SaltStyle.COLUMN && authenticationQuery.equals(DEFAULT_AUTHENTICATION_QUERY)) {
@@ -199,6 +207,7 @@ public class JdbcRealm extends AuthorizingRealm {
     |               M E T H O D S               |
     ============================================*/
 
+    @Impure
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 
         UsernamePasswordToken upToken = (UsernamePasswordToken) token;
@@ -259,6 +268,7 @@ public class JdbcRealm extends AuthorizingRealm {
         return info;
     }
 
+    @Impure
     private String[] getPasswordForUser(Connection conn, String username) throws SQLException {
 
         String[] result;
@@ -313,6 +323,7 @@ public class JdbcRealm extends AuthorizingRealm {
      *
      * @see #getAuthorizationInfo(org.apache.shiro.subject.PrincipalCollection)
      */
+    @Impure
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 
@@ -353,6 +364,7 @@ public class JdbcRealm extends AuthorizingRealm {
 
     }
 
+    @Impure
     protected Set<String> getRoleNamesForUser(Connection conn, String username) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -385,6 +397,7 @@ public class JdbcRealm extends AuthorizingRealm {
         return roleNames;
     }
 
+    @Impure
     protected Set<String> getPermissions(Connection conn, String username, Collection<String> roleNames) throws SQLException {
         PreparedStatement ps = null;
         Set<String> permissions = new LinkedHashSet<String>();
@@ -420,6 +433,7 @@ public class JdbcRealm extends AuthorizingRealm {
         return permissions;
     }
     
+    @Pure
     protected String getSaltForUser(String username) {
         return username;
     }

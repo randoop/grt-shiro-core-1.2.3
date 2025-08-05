@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.crypto.hash.format;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.crypto.hash.Hash;
 
 /**
@@ -39,5 +40,6 @@ public interface ParsableHashFormat extends HashFormat {
      * @param formatted the formatted string representing a Hash.
      * @return the corresponding Hash instance.
      */
+    @Impure
     Hash parse(String formatted);
 }

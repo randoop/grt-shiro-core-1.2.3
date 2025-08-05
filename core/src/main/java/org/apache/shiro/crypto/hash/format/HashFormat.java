@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.crypto.hash.format;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.crypto.hash.Hash;
 
 /**
@@ -41,5 +42,6 @@ public interface HashFormat {
      * @param hash the hash instance to format into a String.
      * @return a formatted string representing the specified Hash instance.
      */
+    @Impure
     String format(Hash hash);
 }

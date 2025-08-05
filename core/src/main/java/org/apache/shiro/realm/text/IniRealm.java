@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.realm.text;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.util.CollectionUtils;
 import org.apache.shiro.util.StringUtils;
@@ -52,6 +54,7 @@ public class IniRealm extends TextConfigurationRealm {
     private String resourcePath;
     private Ini ini; //reference added in 1.2 for SHIRO-322
 
+    @Impure
     public IniRealm() {
         super();
     }
@@ -69,6 +72,7 @@ public class IniRealm extends TextConfigurationRealm {
      *
      * @param ini the Ini instance which will be inspected to create accounts, groups and permissions for this realm.
      */
+    @Impure
     public IniRealm(Ini ini) {
         this();
         processDefinitions(ini);
@@ -88,6 +92,7 @@ public class IniRealm extends TextConfigurationRealm {
      * @param resourcePath the resource path of the Ini config which will be inspected to create accounts, groups and
      *                     permissions for this realm.
      */
+    @Impure
     public IniRealm(String resourcePath) {
         this();
         Ini ini = Ini.fromResourcePath(resourcePath);
@@ -96,10 +101,12 @@ public class IniRealm extends TextConfigurationRealm {
         processDefinitions(ini);
     }
 
+    @Pure
     public String getResourcePath() {
         return resourcePath;
     }
 
+    @Impure
     public void setResourcePath(String resourcePath) {
         this.resourcePath = resourcePath;
     }
@@ -110,6 +117,7 @@ public class IniRealm extends TextConfigurationRealm {
      * 
      * @return the Ini instance which will be inspected to create accounts, groups and permissions for this realm.
      */
+    @Pure
     public Ini getIni() {
         return ini;
     }
@@ -120,10 +128,12 @@ public class IniRealm extends TextConfigurationRealm {
      * 
      * @param ini the Ini instance which will be inspected to create accounts, groups and permissions for this realm.
      */
+    @Impure
     public void setIni(Ini ini) {
         this.ini = ini;
     }
 
+    @Impure
     @Override
     protected void onInit() {
         super.onInit();
@@ -168,6 +178,7 @@ public class IniRealm extends TextConfigurationRealm {
         processDefinitions(ini);
     }
 
+    @Impure
     private void processDefinitions(Ini ini) {
         if (CollectionUtils.isEmpty(ini)) {
             log.warn("{} defined, but the ini instance is null or empty.", getClass().getSimpleName());

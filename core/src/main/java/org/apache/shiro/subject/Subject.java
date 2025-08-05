@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.subject;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -89,6 +91,7 @@ public interface Subject {
      * @return this Subject's application-specific unique identity.
      * @see org.apache.shiro.subject.PrincipalCollection#getPrimaryPrincipal()
      */
+    @Impure
     Object getPrincipal();
 
     /**
@@ -104,6 +107,7 @@ public interface Subject {
      * @see #getPrincipal()
      * @see org.apache.shiro.subject.PrincipalCollection#getPrimaryPrincipal()
      */
+    @Impure
     PrincipalCollection getPrincipals();
 
     /**
@@ -118,6 +122,7 @@ public interface Subject {
      * @see #isPermitted(Permission permission)
      * @since 0.9
      */
+    @Impure
     boolean isPermitted(String permission);
 
     /**
@@ -130,6 +135,7 @@ public interface Subject {
      * @param permission the permission that is being checked.
      * @return true if this Subject is permitted, false otherwise.
      */
+    @Impure
     boolean isPermitted(Permission permission);
 
     /**
@@ -146,6 +152,7 @@ public interface Subject {
      *         indicates otherwise.
      * @since 0.9
      */
+    @Impure
     boolean[] isPermitted(String... permissions);
 
     /**
@@ -165,6 +172,7 @@ public interface Subject {
      *         for the associated {@code Permission} object in the list.  A false value at an index
      *         indicates otherwise.
      */
+    @Impure
     boolean[] isPermitted(List<Permission> permissions);
 
     /**
@@ -178,6 +186,7 @@ public interface Subject {
      * @see #isPermittedAll(Collection)
      * @since 0.9
      */
+    @Impure
     boolean isPermittedAll(String... permissions);
 
     /**
@@ -189,6 +198,7 @@ public interface Subject {
      * @param permissions the permissions to check.
      * @return true if this Subject has all of the specified permissions, false otherwise.
      */
+    @Impure
     boolean isPermittedAll(Collection<Permission> permissions);
 
     /**
@@ -205,6 +215,7 @@ public interface Subject {
      *          if the user does not have the permission.
      * @since 0.9
      */
+    @Impure
     void checkPermission(String permission) throws AuthorizationException;
 
     /**
@@ -217,6 +228,7 @@ public interface Subject {
      * @throws org.apache.shiro.authz.AuthorizationException
      *          if this Subject does not have the permission.
      */
+    @Impure
     void checkPermission(Permission permission) throws AuthorizationException;
 
     /**
@@ -235,6 +247,7 @@ public interface Subject {
      * @throws AuthorizationException if this Subject does not have all of the given permissions.
      * @since 0.9
      */
+    @Impure
     void checkPermissions(String... permissions) throws AuthorizationException;
 
     /**
@@ -249,6 +262,7 @@ public interface Subject {
      * @param permissions the Permissions to check.
      * @throws AuthorizationException if this Subject does not have all of the given permissions.
      */
+    @Impure
     void checkPermissions(Collection<Permission> permissions) throws AuthorizationException;
 
     /**
@@ -257,6 +271,7 @@ public interface Subject {
      * @param roleIdentifier the application-specific role identifier (usually a role id or role name).
      * @return {@code true} if this Subject has the specified role, {@code false} otherwise.
      */
+    @Impure
     boolean hasRole(String roleIdentifier);
 
     /**
@@ -271,6 +286,7 @@ public interface Subject {
      *         roles in the given identifiers.  A true value indicates this Subject has the
      *         role at that index.  False indicates this Subject does not have the role at that index.
      */
+    @Impure
     boolean[] hasRoles(List<String> roleIdentifiers);
 
     /**
@@ -279,6 +295,7 @@ public interface Subject {
      * @param roleIdentifiers the application-specific role identifiers to check (usually role ids or role names).
      * @return true if this Subject has all the roles, false otherwise.
      */
+    @Impure
     boolean hasAllRoles(Collection<String> roleIdentifiers);
 
     /**
@@ -289,6 +306,7 @@ public interface Subject {
      * @throws org.apache.shiro.authz.AuthorizationException
      *          if this Subject does not have the role.
      */
+    @Impure
     void checkRole(String roleIdentifier) throws AuthorizationException;
 
     /**
@@ -299,6 +317,7 @@ public interface Subject {
      * @throws org.apache.shiro.authz.AuthorizationException
      *          if this Subject does not have all of the specified roles.
      */
+    @Impure
     void checkRoles(Collection<String> roleIdentifiers) throws AuthorizationException;
 
     /**
@@ -312,6 +331,7 @@ public interface Subject {
      *          if this Subject does not have all of the specified roles.
      * @since 1.1.0
      */
+    @Impure
     void checkRoles(String... roleIdentifiers) throws AuthorizationException;
 
     /**
@@ -330,6 +350,7 @@ public interface Subject {
      *          if the authentication attempt fails.
      * @since 0.9
      */
+    @Impure
     void login(AuthenticationToken token) throws AuthenticationException;
 
     /**
@@ -344,6 +365,7 @@ public interface Subject {
      *         by providing valid credentials matching those known to the system, {@code false} otherwise.
      * @since 0.9
      */
+    @Pure
     boolean isAuthenticated();
 
 
@@ -396,6 +418,7 @@ public interface Subject {
      *         remembered from a successful authentication during a previous session, {@code false} otherwise.
      * @since 1.0
      */
+    @Impure
     boolean isRemembered();
 
     /**
@@ -406,6 +429,7 @@ public interface Subject {
      * @see #getSession(boolean)
      * @since 0.2
      */
+    @Impure
     Session getSession();
 
     /**
@@ -424,6 +448,7 @@ public interface Subject {
      *         on the above described logic.
      * @since 0.2
      */
+    @Impure
     Session getSession(boolean create);
 
     /**
@@ -442,6 +467,7 @@ public interface Subject {
      * <p/>
      * Non-HTTP environments may of course use a logged-out subject for login again if desired.
      */
+    @Impure
     void logout();
 
     /**
@@ -455,6 +481,7 @@ public interface Subject {
      * @throws ExecutionException if the {@code Callable}'s {@link Callable#call call} method throws an exception.
      * @since 1.0
      */
+    @Impure
     <V> V execute(Callable<V> callable) throws ExecutionException;
 
     /**
@@ -469,6 +496,7 @@ public interface Subject {
      * @param runnable the {@code Runnable} to associate with this {@code Subject} and then execute.
      * @since 1.0
      */
+    @Impure
     void execute(Runnable runnable);
 
     /**
@@ -485,6 +513,7 @@ public interface Subject {
      * @return a {@code Callable} that can be run as this {@code Subject}.
      * @since 1.0
      */
+    @Impure
     <V> Callable<V> associateWith(Callable<V> callable);
 
     /**
@@ -505,6 +534,7 @@ public interface Subject {
      * @see #associateWith (java.util.concurrent.Callable)
      * @since 1.0
      */
+    @Impure
     Runnable associateWith(Runnable runnable);
 
     /**
@@ -527,6 +557,7 @@ public interface Subject {
      * @throws IllegalStateException if this {@code Subject} does not yet have an identity of its own.
      * @since 1.0
      */
+    @Impure
     void runAs(PrincipalCollection principals) throws NullPointerException, IllegalStateException;
 
     /**
@@ -539,6 +570,7 @@ public interface Subject {
      * @see #runAs
      * @since 1.0
      */
+    @Impure
     boolean isRunAs();
 
     /**
@@ -552,6 +584,7 @@ public interface Subject {
      * @see #runAs
      * @since 1.0
      */
+    @Impure
     PrincipalCollection getPreviousPrincipals();
 
     /**
@@ -566,6 +599,7 @@ public interface Subject {
      * @see #runAs
      * @since 1.0
      */
+    @Impure
     PrincipalCollection releaseRunAs();
 
     /**
@@ -623,6 +657,7 @@ public interface Subject {
          * to the calling code as determined by a call to {@link org.apache.shiro.SecurityUtils#getSecurityManager()}
          * to build the {@code Subject} instance.
          */
+        @Impure
         public Builder() {
             this(SecurityUtils.getSecurityManager());
         }
@@ -633,6 +668,7 @@ public interface Subject {
          *
          * @param securityManager the {@code SecurityManager} to use when building the {@code Subject} instance.
          */
+        @Impure
         public Builder(SecurityManager securityManager) {
             if (securityManager == null) {
                 throw new NullPointerException("SecurityManager method argument cannot be null.");
@@ -652,6 +688,7 @@ public interface Subject {
          *
          * @return a new {@code SubjectContext} instance
          */
+        @Impure
         protected SubjectContext newSubjectContextInstance() {
             return new DefaultSubjectContext();
         }
@@ -662,6 +699,7 @@ public interface Subject {
          *
          * @return the backing context used to build the {@code Subject} instance, available to subclasses.
          */
+        @Pure
         protected SubjectContext getSubjectContext() {
             return this.subjectContext;
         }
@@ -693,6 +731,7 @@ public interface Subject {
          * @param sessionId the id of the session that backs the desired Subject being acquired.
          * @return this {@code Builder} instance for method chaining.
          */
+        @Impure
         public Builder sessionId(Serializable sessionId) {
             if (sessionId != null) {
                 this.subjectContext.setSessionId(sessionId);
@@ -707,6 +746,7 @@ public interface Subject {
          * @param host the host name or IP address to use as the {@code Subject}'s originating location.
          * @return this {@code Builder} instance for method chaining.
          */
+        @Impure
         public Builder host(String host) {
             if (StringUtils.hasText(host)) {
                 this.subjectContext.setHost(host);
@@ -722,6 +762,7 @@ public interface Subject {
          * @param session the session to use as the {@code Subject}'s {@link Session}
          * @return this {@code Builder} instance for method chaining.
          */
+        @Impure
         public Builder session(Session session) {
             if (session != null) {
                 this.subjectContext.setSession(session);
@@ -753,6 +794,7 @@ public interface Subject {
          * @param principals the principals to use as the {@code Subject}'s identity.
          * @return this {@code Builder} instance for method chaining.
          */
+        @Impure
         public Builder principals(PrincipalCollection principals) {
             if (!CollectionUtils.isEmpty(principals)) {
                 this.subjectContext.setPrincipals(principals);
@@ -772,6 +814,7 @@ public interface Subject {
          * @return this {@code Builder} instance for method chaining.
          * @since 1.2
          */
+        @Impure
         public Builder sessionCreationEnabled(boolean enabled) {
             this.subjectContext.setSessionCreationEnabled(enabled);
             return this;
@@ -788,6 +831,7 @@ public interface Subject {
          * @return this {@code Builder} instance for method chaining.
          * @see org.apache.shiro.subject.Subject#isAuthenticated()
          */
+        @Impure
         public Builder authenticated(boolean authenticated) {
             this.subjectContext.setAuthenticated(authenticated);
             return this;
@@ -811,6 +855,7 @@ public interface Subject {
          * @throws IllegalArgumentException if the {@code attributeKey} is {@code null}.
          * @see SubjectFactory#createSubject(SubjectContext)
          */
+        @Impure
         public Builder contextAttribute(String attributeKey, Object attributeValue) {
             if (attributeKey == null) {
                 String msg = "Subject context map key cannot be null.";
@@ -842,6 +887,7 @@ public interface Subject {
          * @return a new {@code Subject} instance reflecting the cumulative state acquired by the
          *         other methods in this class.
          */
+        @Impure
         public Subject buildSubject() {
             return this.securityManager.createSubject(this.subjectContext);
         }

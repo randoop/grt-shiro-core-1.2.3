@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.authc;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +69,7 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
      * Default no-argument constructor. Ensures the internal
      * {@link AuthenticationListener AuthenticationListener} collection is a non-null {@code ArrayList}.
      */
+    @SideEffectFree
     public AbstractAuthenticator() {
         listeners = new ArrayList<AuthenticationListener>();
     }
@@ -81,6 +85,7 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
      * @param listeners one or more {@code AuthenticationListener}s that should be notified due to an
      *                  authentication attempt.
      */
+    @Impure
     @SuppressWarnings({"UnusedDeclaration"})
     public void setAuthenticationListeners(Collection<AuthenticationListener> listeners) {
         if (listeners == null) {
@@ -97,6 +102,7 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
      * @return the {@link AuthenticationListener AuthenticationListener}s that should be notified during authentication
      *         attempts.
      */
+    @Pure
     @SuppressWarnings({"UnusedDeclaration"})
     public Collection<AuthenticationListener> getAuthenticationListeners() {
         return this.listeners;
@@ -116,6 +122,8 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
      * @param token the submitted {@code AuthenticationToken} that resulted in a successful authentication.
      * @param info  the returned {@code AuthenticationInfo} resulting from the successful authentication.
      */
+    @SideEffectFree
+    @Impure
     protected void notifySuccess(AuthenticationToken token, AuthenticationInfo info) {
         for (AuthenticationListener listener : this.listeners) {
             listener.onSuccess(token, info);
@@ -133,6 +141,8 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
      * @param token the submitted {@code AuthenticationToken} that resulted in a failed authentication.
      * @param ae    the resulting {@code AuthenticationException} that caused the authentication to fail.
      */
+    @SideEffectFree
+    @Impure
     protected void notifyFailure(AuthenticationToken token, AuthenticationException ae) {
         for (AuthenticationListener listener : this.listeners) {
             listener.onFailure(token, ae);
@@ -148,6 +158,8 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
      *
      * @param principals the identifying principals of the {@code Subject}/account logging out.
      */
+    @SideEffectFree
+    @Impure
     protected void notifyLogout(PrincipalCollection principals) {
         for (AuthenticationListener listener : this.listeners) {
             listener.onLogout(principals);
@@ -161,6 +173,7 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
      *
      * @param principals the identifying principals of the {@code Subject}/account logging out.
      */
+    @Impure
     public void onLogout(PrincipalCollection principals) {
         notifyLogout(principals);
     }
@@ -185,6 +198,7 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
      * @throws AuthenticationException if there is any problem during the authentication process - see the
      *                                 interface's JavaDoc for a more detailed explanation.
      */
+    @Impure
     public final AuthenticationInfo authenticate(AuthenticationToken token) throws AuthenticationException {
 
         if (token == null) {
@@ -252,6 +266,7 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
      *         important to Shiro.
      * @throws AuthenticationException if there is a problem logging in the user.
      */
+    @Impure
     protected abstract AuthenticationInfo doAuthenticate(AuthenticationToken token)
             throws AuthenticationException;
 

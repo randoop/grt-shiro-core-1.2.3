@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.crypto.hash;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * A {@code HashService} hashes input sources utilizing a particular hashing strategy.
@@ -73,5 +74,6 @@ public interface HashService {
      * @return the hashed data
      * @see Hash#getSalt()
      */
+    @Impure
     Hash computeHash(HashRequest request);
 }

@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.session.mgt;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.ProxiedSession;
 import org.apache.shiro.session.Session;
@@ -47,6 +49,8 @@ public class ImmutableProxiedSession extends ProxiedSession {
      *
      * @param target the target <code>Session</code> to proxy.
      */
+    @SideEffectFree
+    @Impure
     public ImmutableProxiedSession(Session target) {
         super(target);
     }
@@ -57,6 +61,8 @@ public class ImmutableProxiedSession extends ProxiedSession {
      *
      * @throws InvalidSessionException in all cases - used by the Session 'write' method implementations.
      */
+    @SideEffectFree
+    @Impure
     protected void throwImmutableException() throws InvalidSessionException {
         String msg = "This session is immutable and read-only - it cannot be altered.  This is usually because " +
                 "the session has been stopped or expired already.";
@@ -67,6 +73,8 @@ public class ImmutableProxiedSession extends ProxiedSession {
      * Immediately {@link #throwImmutableException() throws} an <code>InvalidSessionException</code> in all
      * cases because this proxy is immutable.
      */
+    @SideEffectFree
+    @Impure
     public void setTimeout(long maxIdleTimeInMillis) throws InvalidSessionException {
         throwImmutableException();
     }
@@ -75,6 +83,8 @@ public class ImmutableProxiedSession extends ProxiedSession {
      * Immediately {@link #throwImmutableException() throws} an <code>InvalidSessionException</code> in all
      * cases because this proxy is immutable.
      */
+    @SideEffectFree
+    @Impure
     public void touch() throws InvalidSessionException {
         throwImmutableException();
     }
@@ -83,6 +93,8 @@ public class ImmutableProxiedSession extends ProxiedSession {
      * Immediately {@link #throwImmutableException() throws} an <code>InvalidSessionException</code> in all
      * cases because this proxy is immutable.
      */
+    @SideEffectFree
+    @Impure
     public void stop() throws InvalidSessionException {
         throwImmutableException();
     }
@@ -91,6 +103,8 @@ public class ImmutableProxiedSession extends ProxiedSession {
      * Immediately {@link #throwImmutableException() throws} an <code>InvalidSessionException</code> in all
      * cases because this proxy is immutable.
      */
+    @SideEffectFree
+    @Impure
     public void setAttribute(Object key, Object value) throws InvalidSessionException {
         throwImmutableException();
     }
@@ -99,6 +113,8 @@ public class ImmutableProxiedSession extends ProxiedSession {
      * Immediately {@link #throwImmutableException() throws} an <code>InvalidSessionException</code> in all
      * cases because this proxy is immutable.
      */
+    @SideEffectFree
+    @Impure
     public Object removeAttribute(Object key) throws InvalidSessionException {
         throwImmutableException();
         //we should never ever reach this point due to the exception being thrown.

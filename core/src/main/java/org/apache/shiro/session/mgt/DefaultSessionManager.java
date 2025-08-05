@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.session.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.CacheManagerAware;
 import org.apache.shiro.session.Session;
@@ -52,17 +54,20 @@ public class DefaultSessionManager extends AbstractValidatingSessionManager impl
 
     private boolean deleteInvalidSessions;
 
+    @Impure
     public DefaultSessionManager() {
         this.deleteInvalidSessions = true;
         this.sessionFactory = new SimpleSessionFactory();
         this.sessionDAO = new MemorySessionDAO();
     }
 
+    @Impure
     public void setSessionDAO(SessionDAO sessionDAO) {
         this.sessionDAO = sessionDAO;
         applyCacheManagerToSessionDAO();
     }
 
+    @Pure
     public SessionDAO getSessionDAO() {
         return this.sessionDAO;
     }
@@ -74,6 +79,7 @@ public class DefaultSessionManager extends AbstractValidatingSessionManager impl
      * @return the {@code SessionFactory} used to generate new {@link Session} instances.
      * @since 1.0
      */
+    @Pure
     public SessionFactory getSessionFactory() {
         return sessionFactory;
     }
@@ -85,6 +91,7 @@ public class DefaultSessionManager extends AbstractValidatingSessionManager impl
      * @param sessionFactory the {@code SessionFactory} used to generate new {@link Session} instances.
      * @since 1.0
      */
+    @Impure
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
@@ -107,6 +114,7 @@ public class DefaultSessionManager extends AbstractValidatingSessionManager impl
      *         {@code false} if invalid sessions will be manually deleted by some process external to Shiro's control.
      * @since 1.0
      */
+    @Pure
     public boolean isDeleteInvalidSessions() {
         return deleteInvalidSessions;
     }
@@ -123,11 +131,13 @@ public class DefaultSessionManager extends AbstractValidatingSessionManager impl
      *                              to be invalid.
      * @since 1.0
      */
+    @Impure
     @SuppressWarnings({"UnusedDeclaration"})
     public void setDeleteInvalidSessions(boolean deleteInvalidSessions) {
         this.deleteInvalidSessions = deleteInvalidSessions;
     }
 
+    @Impure
     public void setCacheManager(CacheManager cacheManager) {
         this.cacheManager = cacheManager;
         applyCacheManagerToSessionDAO();
@@ -144,12 +154,14 @@ public class DefaultSessionManager extends AbstractValidatingSessionManager impl
      *
      * @since 1.0
      */
+    @Impure
     private void applyCacheManagerToSessionDAO() {
         if (this.cacheManager != null && this.sessionDAO != null && this.sessionDAO instanceof CacheManagerAware) {
             ((CacheManagerAware) this.sessionDAO).setCacheManager(this.cacheManager);
         }
     }
 
+    @Impure
     protected Session doCreateSession(SessionContext context) {
         Session s = newSessionInstance(context);
         if (log.isTraceEnabled()) {
@@ -159,6 +171,7 @@ public class DefaultSessionManager extends AbstractValidatingSessionManager impl
         return s;
     }
 
+    @Impure
     protected Session newSessionInstance(SessionContext context) {
         return getSessionFactory().createSession(context);
     }
@@ -170,6 +183,7 @@ public class DefaultSessionManager extends AbstractValidatingSessionManager impl
      *
      * @param session the Session instance to persist to the underlying EIS.
      */
+    @Impure
     protected void create(Session session) {
         if (log.isDebugEnabled()) {
             log.debug("Creating new EIS record for new session instance [" + session + "]");
@@ -177,6 +191,7 @@ public class DefaultSessionManager extends AbstractValidatingSessionManager impl
         sessionDAO.create(session);
     }
 
+    @Impure
     @Override
     protected void onStop(Session session) {
         if (session instanceof SimpleSession) {
@@ -187,6 +202,7 @@ public class DefaultSessionManager extends AbstractValidatingSessionManager impl
         onChange(session);
     }
 
+    @Impure
     @Override
     protected void afterStopped(Session session) {
         if (isDeleteInvalidSessions()) {
@@ -194,6 +210,7 @@ public class DefaultSessionManager extends AbstractValidatingSessionManager impl
         }
     }
 
+    @Impure
     protected void onExpiration(Session session) {
         if (session instanceof SimpleSession) {
             ((SimpleSession) session).setExpired(true);
@@ -201,6 +218,7 @@ public class DefaultSessionManager extends AbstractValidatingSessionManager impl
         onChange(session);
     }
 
+    @Impure
     @Override
     protected void afterExpired(Session session) {
         if (isDeleteInvalidSessions()) {
@@ -208,10 +226,12 @@ public class DefaultSessionManager extends AbstractValidatingSessionManager impl
         }
     }
 
+    @Impure
     protected void onChange(Session session) {
         sessionDAO.update(session);
     }
 
+    @Impure
     protected Session retrieveSession(SessionKey sessionKey) throws UnknownSessionException {
         Serializable sessionId = getSessionId(sessionKey);
         if (sessionId == null) {
@@ -228,18 +248,23 @@ public class DefaultSessionManager extends AbstractValidatingSessionManager impl
         return s;
     }
 
+    @Pure
+    @Impure
     protected Serializable getSessionId(SessionKey sessionKey) {
         return sessionKey.getSessionId();
     }
 
+    @Impure
     protected Session retrieveSessionFromDataSource(Serializable sessionId) throws UnknownSessionException {
         return sessionDAO.readSession(sessionId);
     }
 
+    @Impure
     protected void delete(Session session) {
         sessionDAO.delete(session);
     }
 
+    @Impure
     protected Collection<Session> getActiveSessions() {
         Collection<Session> active = sessionDAO.getActiveSessions();
         return active != null ? active : Collections.<Session>emptySet();

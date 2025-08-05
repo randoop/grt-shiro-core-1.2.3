@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.crypto.hash;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.codec.CodecException;
 import org.apache.shiro.codec.CodecSupport;
@@ -69,6 +71,7 @@ public abstract class AbstractHash extends CodecSupport implements Hash, Seriali
      * this default, no-arg constructor, you can then immediately call {@link #setBytes setBytes} to have a
      * fully-initialized instance.
      */
+    @Impure
     public AbstractHash() {
     }
 
@@ -85,6 +88,7 @@ public abstract class AbstractHash extends CodecSupport implements Hash, Seriali
      * @param source the object to be hashed.
      * @throws CodecException if the specified {@code source} cannot be converted into a byte array (byte[]).
      */
+    @Impure
     public AbstractHash(Object source) throws CodecException {
         this(source, null, 1);
     }
@@ -103,6 +107,7 @@ public abstract class AbstractHash extends CodecSupport implements Hash, Seriali
      * @param salt   the salt to use for the hash
      * @throws CodecException if either constructor argument cannot be converted into a byte array.
      */
+    @Impure
     public AbstractHash(Object source, Object salt) throws CodecException {
         this(source, salt, 1);
     }
@@ -126,6 +131,7 @@ public abstract class AbstractHash extends CodecSupport implements Hash, Seriali
      * @param hashIterations the number of times the {@code source} argument hashed for attack resiliency.
      * @throws CodecException if either Object constructor argument cannot be converted into a byte array.
      */
+    @Impure
     public AbstractHash(Object source, Object salt, int hashIterations) throws CodecException {
         byte[] sourceBytes = toBytes(source);
         byte[] saltBytes = null;
@@ -142,8 +148,10 @@ public abstract class AbstractHash extends CodecSupport implements Hash, Seriali
      *
      * @return the {@link MessageDigest MessageDigest} algorithm name to use when performing the hash.
      */
+    @Pure
     public abstract String getAlgorithmName();
 
+    @Pure
     public byte[] getBytes() {
         return this.bytes;
     }
@@ -156,6 +164,7 @@ public abstract class AbstractHash extends CodecSupport implements Hash, Seriali
      *
      * @param alreadyHashedBytes the raw already-hashed bytes to store in this instance.
      */
+    @Impure
     public void setBytes(byte[] alreadyHashedBytes) {
         this.bytes = alreadyHashedBytes;
         this.hexEncoded = null;
@@ -169,6 +178,7 @@ public abstract class AbstractHash extends CodecSupport implements Hash, Seriali
      * @return the MessageDigest object for the specified {@code algorithm}.
      * @throws UnknownAlgorithmException if the specified algorithm name is not available.
      */
+    @Impure
     protected MessageDigest getDigest(String algorithmName) throws UnknownAlgorithmException {
         try {
             return MessageDigest.getInstance(algorithmName);
@@ -184,6 +194,7 @@ public abstract class AbstractHash extends CodecSupport implements Hash, Seriali
      * @param bytes the bytes to hash.
      * @return the hashed bytes.
      */
+    @Impure
     protected byte[] hash(byte[] bytes) {
         return hash(bytes, null, 1);
     }
@@ -195,6 +206,7 @@ public abstract class AbstractHash extends CodecSupport implements Hash, Seriali
      * @param salt  the salt to use for the initial hash
      * @return the hashed bytes
      */
+    @Impure
     protected byte[] hash(byte[] bytes, byte[] salt) {
         return hash(bytes, salt, 1);
     }
@@ -208,6 +220,7 @@ public abstract class AbstractHash extends CodecSupport implements Hash, Seriali
      * @return the hashed bytes.
      * @throws UnknownAlgorithmException if the {@link #getAlgorithmName() algorithmName} is not available.
      */
+    @Impure
     protected byte[] hash(byte[] bytes, byte[] salt, int hashIterations) throws UnknownAlgorithmException {
         MessageDigest digest = getDigest(getAlgorithmName());
         if (salt != null) {
@@ -233,6 +246,7 @@ public abstract class AbstractHash extends CodecSupport implements Hash, Seriali
      *
      * @return a hex-encoded string of the underlying {@link #getBytes byte array}.
      */
+    @Impure
     public String toHex() {
         if (this.hexEncoded == null) {
             this.hexEncoded = Hex.encodeToString(getBytes());
@@ -249,6 +263,7 @@ public abstract class AbstractHash extends CodecSupport implements Hash, Seriali
      *
      * @return a Base64-encoded string of the underlying {@link #getBytes byte array}.
      */
+    @Impure
     public String toBase64() {
         if (this.base64Encoded == null) {
             //cache result in case this method is called multiple times.
@@ -262,6 +277,7 @@ public abstract class AbstractHash extends CodecSupport implements Hash, Seriali
      *
      * @return the {@link #toHex() toHex()} value.
      */
+    @Impure
     public String toString() {
         return toHex();
     }
@@ -274,6 +290,8 @@ public abstract class AbstractHash extends CodecSupport implements Hash, Seriali
      * @return {@code true} if the specified object is a Hash and its {@link #getBytes byte array} is identical to
      *         this Hash's byte array, {@code false} otherwise.
      */
+    @Pure
+    @Impure
     public boolean equals(Object o) {
         if (o instanceof Hash) {
             Hash other = (Hash) o;
@@ -287,6 +305,7 @@ public abstract class AbstractHash extends CodecSupport implements Hash, Seriali
      *
      * @return toHex().hashCode()
      */
+    @Pure
     public int hashCode() {
         if (this.bytes == null || this.bytes.length == 0) {
             return 0;
@@ -294,6 +313,7 @@ public abstract class AbstractHash extends CodecSupport implements Hash, Seriali
         return Arrays.hashCode(this.bytes);
     }
 
+    @Impure
     private static void printMainUsage(Class<? extends AbstractHash> clazz, String type) {
         System.out.println("Prints an " + type + " hash value.");
         System.out.println("Usage: java " + clazz.getName() + " [-base64] [-salt <saltValue>] [-times <N>] <valueToHash>");
@@ -303,10 +323,12 @@ public abstract class AbstractHash extends CodecSupport implements Hash, Seriali
         System.out.println("\t-times\t\tHashes the input <N> number of times");
     }
 
+    @Pure
     private static boolean isReserved(String arg) {
         return "-base64".equals(arg) || "-times".equals(arg) || "-salt".equals(arg);
     }
 
+    @Impure
     static int doMain(Class<? extends AbstractHash> clazz, String[] args) {
         String simple = clazz.getSimpleName();
         int index = simple.indexOf("Hash");

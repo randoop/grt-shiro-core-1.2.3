@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.authz.aop;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -51,6 +53,7 @@ public abstract class AnnotationsAuthorizingMethodInterceptor extends Authorizin
      * {@link PermissionAnnotationMethodInterceptor PermissionAnnotationMethodInterceptor} to
      * support role and permission annotations.
      */
+    @Impure
     public AnnotationsAuthorizingMethodInterceptor() {
         methodInterceptors = new ArrayList<AuthorizingAnnotationMethodInterceptor>(5);
         methodInterceptors.add(new RoleAnnotationMethodInterceptor());
@@ -70,6 +73,7 @@ public abstract class AnnotationsAuthorizingMethodInterceptor extends Authorizin
      * support role and permission annotations automatically.
      * @return the method interceptors to execute for the annotated method.
      */
+    @Pure
     public Collection<AuthorizingAnnotationMethodInterceptor> getMethodInterceptors() {
         return methodInterceptors;
     }
@@ -79,6 +83,7 @@ public abstract class AnnotationsAuthorizingMethodInterceptor extends Authorizin
      * @param methodInterceptors the method interceptors to execute for the annotated method.
      * @see #getMethodInterceptors()
      */
+    @Impure
     public void setMethodInterceptors(Collection<AuthorizingAnnotationMethodInterceptor> methodInterceptors) {
         this.methodInterceptors = methodInterceptors;
     }
@@ -91,6 +96,7 @@ public abstract class AnnotationsAuthorizingMethodInterceptor extends Authorizin
      * {@link AuthorizingAnnotationMethodInterceptor#assertAuthorized(org.apache.shiro.aop.MethodInvocation) asserts}
      * that the invocation is authorized to proceed.
      */
+    @Impure
     protected void assertAuthorized(MethodInvocation methodInvocation) throws AuthorizationException {
         //default implementation just ensures no deny votes are cast:
         Collection<AuthorizingAnnotationMethodInterceptor> aamis = getMethodInterceptors();

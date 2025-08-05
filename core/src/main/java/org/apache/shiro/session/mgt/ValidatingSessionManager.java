@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.session.mgt;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * A ValidatingSessionManager is a SessionManager that can proactively validate any or all sessions
@@ -68,5 +69,6 @@ public interface ValidatingSessionManager extends SessionManager {
      * needing session validation will create and use one by default if one is not provided by the
      * application configuration.
      */
+    @Impure
     void validateSessions();
 }

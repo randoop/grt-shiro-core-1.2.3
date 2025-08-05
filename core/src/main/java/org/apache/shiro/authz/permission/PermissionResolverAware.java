@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.authz.permission;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Interface implemented by a component that wishes to use any application-configured <tt>PermissionResolver</tt> that
@@ -36,5 +37,6 @@ public interface PermissionResolverAware {
      *
      * @param pr the <tt>PermissionResolver</tt> being set.
      */
+    @Impure
     public void setPermissionResolver(PermissionResolver pr);
 }

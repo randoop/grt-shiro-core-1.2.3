@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.crypto.hash.format;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.util.ClassUtils;
 import org.apache.shiro.util.StringUtils;
 import org.apache.shiro.util.UnknownClassException;
@@ -40,6 +43,7 @@ public class DefaultHashFormatFactory implements HashFormatFactory {
 
     private Set<String> searchPackages; //packages to search for HashFormat implementations
 
+    @Impure
     public DefaultHashFormatFactory() {
         this.searchPackages = new HashSet<String>();
         this.formatClassNames = new HashMap<String, String>();
@@ -62,6 +66,7 @@ public class DefaultHashFormatFactory implements HashFormatFactory {
      *
      * @return a {@code hashFormatAlias}-to-<code>fullyQualifiedHashFormatClassNameImplementation</code> map.
      */
+    @Pure
     public Map<String, String> getFormatClassNames() {
         return formatClassNames;
     }
@@ -78,6 +83,7 @@ public class DefaultHashFormatFactory implements HashFormatFactory {
      * @param formatClassNames the {@code hash-format-alias}-to-{@code fullyQualifiedHashFormatClassNameImplementation}
      *                         map to be used in the {@link #getInstance(String)} implementation.
      */
+    @Impure
     public void setFormatClassNames(Map<String, String> formatClassNames) {
         this.formatClassNames = formatClassNames;
     }
@@ -93,6 +99,7 @@ public class DefaultHashFormatFactory implements HashFormatFactory {
      * @return a set of package names that can be searched for {@link HashFormat} implementations
      * @see #getHashFormatClass(String, String)
      */
+    @Pure
     public Set<String> getSearchPackages() {
         return searchPackages;
     }
@@ -107,10 +114,12 @@ public class DefaultHashFormatFactory implements HashFormatFactory {
      *
      * @param searchPackages a set of package names that can be searched for {@link HashFormat} implementations
      */
+    @Impure
     public void setSearchPackages(Set<String> searchPackages) {
         this.searchPackages = searchPackages;
     }
 
+    @Impure
     public HashFormat getInstance(String in) {
         if (in == null) {
             return null;
@@ -179,6 +188,7 @@ public class DefaultHashFormatFactory implements HashFormatFactory {
      * @param token the string token from which a class name will be heuristically determined.
      * @return the discovered HashFormat class implementation or {@code null} if no class could be heuristically determined.
      */
+    @Impure
     protected Class getHashFormatClass(String token) {
 
         Class clazz = null;
@@ -278,6 +288,7 @@ public class DefaultHashFormatFactory implements HashFormatFactory {
      * @param token       the string token from which a class name will be heuristically determined.
      * @return the discovered HashFormat class implementation or {@code null} if no class could be heuristically determined.
      */
+    @Impure
     protected Class getHashFormatClass(String packageName, String token) {
         String test = token;
         Class clazz = null;
@@ -330,6 +341,7 @@ public class DefaultHashFormatFactory implements HashFormatFactory {
         return clazz;
     }
 
+    @Impure
     protected Class lookupHashFormatClass(String name) {
         try {
             return ClassUtils.forName(name);
@@ -339,6 +351,7 @@ public class DefaultHashFormatFactory implements HashFormatFactory {
         return null;
     }
 
+    @SideEffectFree
     protected final void assertHashFormatImpl(Class clazz) {
         if (!HashFormat.class.isAssignableFrom(clazz) || clazz.isInterface()) {
             throw new IllegalArgumentException("Discovered class [" + clazz.getName() + "] is not a " +
@@ -347,6 +360,7 @@ public class DefaultHashFormatFactory implements HashFormatFactory {
 
     }
 
+    @Impure
     protected final HashFormat newHashFormatInstance(Class clazz) {
         assertHashFormatImpl(clazz);
         return (HashFormat) ClassUtils.newInstance(clazz);

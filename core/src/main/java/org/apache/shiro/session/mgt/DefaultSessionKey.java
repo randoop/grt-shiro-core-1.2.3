@@ -15,6 +15,9 @@
  */
 package org.apache.shiro.session.mgt;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.io.Serializable;
 
 /**
@@ -28,17 +31,21 @@ public class DefaultSessionKey implements SessionKey, Serializable {
 
     private Serializable sessionId;
 
+    @SideEffectFree
     public DefaultSessionKey() {
     }
 
+    @SideEffectFree
     public DefaultSessionKey(Serializable sessionId) {
         this.sessionId = sessionId;
     }
 
+    @Impure
     public void setSessionId(Serializable sessionId) {
         this.sessionId = sessionId;
     }
 
+    @Pure
     public Serializable getSessionId() {
         return this.sessionId;
     }

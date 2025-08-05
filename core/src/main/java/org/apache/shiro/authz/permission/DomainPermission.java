@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.authz.permission;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.util.StringUtils;
 
 import java.util.Set;
@@ -41,17 +43,20 @@ public class DomainPermission extends WildcardPermission {
     /**
      * Creates a domain permission with *all* actions for *all* targets;
      */
+    @Impure
     public DomainPermission() {
         this.domain = getDomain(getClass());
         setParts(getDomain(getClass()));
     }
 
+    @Impure
     public DomainPermission(String actions) {
         domain = getDomain(getClass());
         this.actions = StringUtils.splitToSet(actions, SUBPART_DIVIDER_TOKEN);
         encodeParts(domain, actions, null);
     }
 
+    @Impure
     public DomainPermission(String actions, String targets) {
         this.domain = getDomain(getClass());
         this.actions = StringUtils.splitToSet(actions, SUBPART_DIVIDER_TOKEN);
@@ -59,11 +64,13 @@ public class DomainPermission extends WildcardPermission {
         encodeParts(this.domain, actions, targets);
     }
 
+    @Impure
     protected DomainPermission(Set<String> actions, Set<String> targets) {
         this.domain = getDomain(getClass());
         setParts(domain, actions, targets);
     }
 
+    @Impure
     private void encodeParts(String domain, String actions, String targets) {
         if (!StringUtils.hasText(domain)) {
             throw new IllegalArgumentException("domain argument cannot be null or empty.");
@@ -83,6 +90,7 @@ public class DomainPermission extends WildcardPermission {
         setParts(sb.toString());
     }
 
+    @Impure
     protected void setParts(String domain, Set<String> actions, Set<String> targets) {
         String actionsString = StringUtils.toDelimitedString(actions, SUBPART_DIVIDER_TOKEN);
         String targetsString = StringUtils.toDelimitedString(targets, SUBPART_DIVIDER_TOKEN);
@@ -92,6 +100,7 @@ public class DomainPermission extends WildcardPermission {
         this.targets = targets;
     }
 
+    @Impure
     protected String getDomain(Class<? extends DomainPermission> clazz) {
         String domain = clazz.getSimpleName().toLowerCase();
         //strip any trailing 'permission' text from the name (as all subclasses should have been named):
@@ -102,10 +111,12 @@ public class DomainPermission extends WildcardPermission {
         return domain;
     }
 
+    @Pure
     public String getDomain() {
         return domain;
     }
 
+    @Impure
     protected void setDomain(String domain) {
         if (this.domain != null && this.domain.equals(domain)) {
             return;
@@ -114,10 +125,12 @@ public class DomainPermission extends WildcardPermission {
         setParts(domain, actions, targets);
     }
 
+    @Pure
     public Set<String> getActions() {
         return actions;
     }
 
+    @Impure
     protected void setActions(Set<String> actions) {
         if (this.actions != null && this.actions.equals(actions)) {
             return;
@@ -126,10 +139,12 @@ public class DomainPermission extends WildcardPermission {
         setParts(domain, actions, targets);
     }
 
+    @Pure
     public Set<String> getTargets() {
         return targets;
     }
 
+    @Impure
     protected void setTargets(Set<String> targets) {
         this.targets = targets;
         if (this.targets != null && this.targets.equals(targets)) {

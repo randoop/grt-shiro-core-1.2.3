@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.subject.Subject;
 
 /**
@@ -46,6 +47,7 @@ public interface SubjectDAO {
      * @return the Subject instance to use after persistence is complete.  This can be the same as the method argument
      * if the underlying implementation does not need to make any Subject changes.
      */
+    @Impure
     Subject save(Subject subject);
 
     /**
@@ -54,5 +56,6 @@ public interface SubjectDAO {
      *
      * @param subject the Subject instance for which any persistent state should be deleted.
      */
+    @Impure
     void delete(Subject subject);
 }

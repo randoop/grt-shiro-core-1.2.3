@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.session.mgt.eis;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.session.Session;
 
 import java.io.Serializable;
@@ -46,6 +47,7 @@ public interface SessionIdGenerator {
      * @param session the {@link Session} instance to which the ID will be applied.
      * @return the id to assign to the specified {@link Session} instance before adding a record to the EIS data store.
      */
+    @Impure
     Serializable generateId(Session session);
 
 }

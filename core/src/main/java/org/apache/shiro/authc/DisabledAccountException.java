@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.authc;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Thrown when attempting to authenticate and the corresponding account has been disabled for
@@ -30,6 +32,8 @@ public class DisabledAccountException extends AccountException {
     /**
      * Creates a new DisabledAccountException.
      */
+    @SideEffectFree
+    @Impure
     public DisabledAccountException() {
         super();
     }
@@ -39,6 +43,8 @@ public class DisabledAccountException extends AccountException {
      *
      * @param message the reason for the exception
      */
+    @SideEffectFree
+    @Impure
     public DisabledAccountException(String message) {
         super(message);
     }
@@ -48,6 +54,8 @@ public class DisabledAccountException extends AccountException {
      *
      * @param cause the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public DisabledAccountException(Throwable cause) {
         super(cause);
     }
@@ -58,6 +66,8 @@ public class DisabledAccountException extends AccountException {
      * @param message the reason for the exception
      * @param cause   the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public DisabledAccountException(String message, Throwable cause) {
         super(message, cause);
     }

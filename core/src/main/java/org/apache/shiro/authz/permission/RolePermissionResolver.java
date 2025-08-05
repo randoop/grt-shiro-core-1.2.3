@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authz.permission;
 
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.authz.Permission;
 
 import java.util.Collection;
@@ -38,6 +39,7 @@ public interface RolePermissionResolver {
      * @param roleString the String representation of a role name to resolve.
      * @return a Collection of Permissions based on the given String representation.
      */
+    @Pure
     Collection<Permission> resolvePermissionsInRole(String roleString);
 
 }

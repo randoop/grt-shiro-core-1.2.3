@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.authz;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -62,6 +64,8 @@ public interface AuthorizationInfo extends Serializable {
      *
      * @return the names of all roles assigned to a corresponding Subject.
      */
+    @Pure
+    @Impure
     Collection<String> getRoles();
 
     /**
@@ -79,6 +83,8 @@ public interface AuthorizationInfo extends Serializable {
      *
      * @return all string-based permissions assigned to the corresponding Subject.
      */
+    @Pure
+    @Impure
     Collection<String> getStringPermissions();
 
     /**
@@ -88,5 +94,7 @@ public interface AuthorizationInfo extends Serializable {
      *
      * @return all type-safe {@link Permission Permission}s assigned to the corresponding Subject.
      */
+    @Pure
+    @Impure
     Collection<Permission> getObjectPermissions();
 }

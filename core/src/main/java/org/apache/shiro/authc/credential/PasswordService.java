@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authc.credential;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.util.ByteSource;
 
 /**
@@ -112,6 +113,7 @@ public interface PasswordService {
      *                                  {@link ByteSource.Util#isCompatible(Object)}.
      * @see ByteSource.Util#isCompatible(Object)
      */
+    @Impure
     String encryptPassword(Object plaintextPassword) throws IllegalArgumentException;
 
     /**
@@ -143,5 +145,6 @@ public interface PasswordService {
      *         {@code false} otherwise.
      * @see ByteSource.Util#isCompatible(Object)
      */
+    @Impure
     boolean passwordsMatch(Object submittedPlaintext, String encrypted);
 }

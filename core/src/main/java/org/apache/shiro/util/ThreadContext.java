@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.util;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -57,6 +59,7 @@ public abstract class ThreadContext {
     /**
      * Default no-argument constructor.
      */
+    @SideEffectFree
     protected ThreadContext() {
     }
 
@@ -66,6 +69,7 @@ public abstract class ThreadContext {
      *
      * @return the map of bound resources
      */
+    @Impure
     public static Map<Object, Object> getResources() {
         return resources != null ? new HashMap<Object, Object>(resources.get()) : null;
     }
@@ -78,6 +82,7 @@ public abstract class ThreadContext {
      * @param newResources the resources to replace the existing {@link #getResources() resources}.
      * @since 1.0
      */
+    @Impure
     public static void setResources(Map<Object, Object> newResources) {
         if (CollectionUtils.isEmpty(newResources)) {
             return;
@@ -95,6 +100,7 @@ public abstract class ThreadContext {
      *         is no value for that {@code key}.
      * @since 1.0
      */
+    @Impure
     private static Object getValue(Object key) {
         return resources.get().get(key);
     }
@@ -107,6 +113,7 @@ public abstract class ThreadContext {
      * @return the object keyed by <code>key</code> or <code>null</code> if
      *         no value exists for the specified <code>key</code>
      */
+    @Impure
     public static Object get(Object key) {
         if (log.isTraceEnabled()) {
             String msg = "get() - in thread [" + Thread.currentThread().getName() + "]";
@@ -137,6 +144,7 @@ public abstract class ThreadContext {
      * @param value The value to bind to the thread.
      * @throws IllegalArgumentException if the <code>key</code> argument is <tt>null</tt>.
      */
+    @Impure
     public static void put(Object key, Object value) {
         if (key == null) {
             throw new IllegalArgumentException("key cannot be null");
@@ -164,6 +172,7 @@ public abstract class ThreadContext {
      * @return the object unbound or <tt>null</tt> if there was nothing bound
      *         under the specified <tt>key</tt> name.
      */
+    @Impure
     public static Object remove(Object key) {
         Object value = resources.get().remove(key);
 
@@ -184,6 +193,7 @@ public abstract class ThreadContext {
      *
      * @since 1.0
      */
+    @Impure
     public static void remove() {
         resources.remove();
     }
@@ -203,6 +213,7 @@ public abstract class ThreadContext {
      * @return the Subject object bound to the thread, or <tt>null</tt> if there isn't one bound.
      * @since 0.9
      */
+    @Impure
     public static SecurityManager getSecurityManager() {
         return (SecurityManager) get(SECURITY_MANAGER_KEY);
     }
@@ -224,6 +235,7 @@ public abstract class ThreadContext {
      *                        null, nothing will be done.
      * @since 0.9
      */
+    @Impure
     public static void bind(SecurityManager securityManager) {
         if (securityManager != null) {
             put(SECURITY_MANAGER_KEY, securityManager);
@@ -245,6 +257,7 @@ public abstract class ThreadContext {
      *         was none bound.
      * @since 0.9
      */
+    @Impure
     public static SecurityManager unbindSecurityManager() {
         return (SecurityManager) remove(SECURITY_MANAGER_KEY);
     }
@@ -262,6 +275,7 @@ public abstract class ThreadContext {
      * @return the Subject object bound to the thread, or <tt>null</tt> if there isn't one bound.
      * @since 0.2
      */
+    @Impure
     public static Subject getSubject() {
         return (Subject) get(SUBJECT_KEY);
     }
@@ -282,6 +296,7 @@ public abstract class ThreadContext {
      * @param subject the Subject object to bind to the thread.  If the argument is null, nothing will be done.
      * @since 0.2
      */
+    @Impure
     public static void bind(Subject subject) {
         if (subject != null) {
             put(SUBJECT_KEY, subject);
@@ -302,11 +317,13 @@ public abstract class ThreadContext {
      * @return the Subject object previously bound to the thread, or <tt>null</tt> if there was none bound.
      * @since 0.2
      */
+    @Impure
     public static Subject unbindSubject() {
         return (Subject) remove(SUBJECT_KEY);
     }
     
     private static final class InheritableThreadLocalMap<T extends Map<Object, Object>> extends InheritableThreadLocal<Map<Object, Object>> {
+        @Impure
         protected Map<Object, Object> initialValue() {
             return new HashMap<Object, Object>();
         }
@@ -318,6 +335,7 @@ public abstract class ThreadContext {
          * @param parentValue the parent value, a HashMap as defined in the {@link #initialValue()} method.
          * @return the HashMap to be used by any parent-spawned child threads (a clone of the parent HashMap).
          */
+        @SideEffectFree
         @SuppressWarnings({"unchecked"})
         protected Map<Object, Object> childValue(Map<Object, Object> parentValue) {
             if (parentValue != null) {

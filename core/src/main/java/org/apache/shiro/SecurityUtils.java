@@ -18,6 +18,7 @@
  */
 package org.apache.shiro;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ThreadContext;
@@ -50,6 +51,7 @@ public abstract class SecurityUtils {
      *                               a {@code Subject}, which which is considered an invalid application configuration
      *                               - a Subject should <em>always</em> be available to the caller.
      */
+    @Impure
     public static Subject getSubject() {
         Subject subject = ThreadContext.getSubject();
         if (subject == null) {
@@ -91,6 +93,7 @@ public abstract class SecurityUtils {
      *
      * @param securityManager the securityManager instance to set as a VM static singleton.
      */
+    @Impure
     public static void setSecurityManager(SecurityManager securityManager) {
         SecurityUtils.securityManager = securityManager;
     }
@@ -111,6 +114,7 @@ public abstract class SecurityUtils {
      *          if there is no {@code SecurityManager} instance available to the
      *          calling code, which typically indicates an invalid application configuration.
      */
+    @Impure
     public static SecurityManager getSecurityManager() throws UnavailableSecurityManagerException {
         SecurityManager securityManager = ThreadContext.getSecurityManager();
         if (securityManager == null) {

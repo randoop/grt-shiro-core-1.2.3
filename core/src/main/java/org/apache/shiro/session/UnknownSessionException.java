@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.session;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Exception thrown when attempting to interact with the system under the pretense of a
@@ -30,6 +32,8 @@ public class UnknownSessionException extends InvalidSessionException {
     /**
      * Creates a new UnknownSessionException.
      */
+    @SideEffectFree
+    @Impure
     public UnknownSessionException() {
         super();
     }
@@ -39,6 +43,8 @@ public class UnknownSessionException extends InvalidSessionException {
      *
      * @param message the reason for the exception
      */
+    @SideEffectFree
+    @Impure
     public UnknownSessionException(String message) {
         super(message);
     }
@@ -48,6 +54,8 @@ public class UnknownSessionException extends InvalidSessionException {
      *
      * @param cause the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public UnknownSessionException(Throwable cause) {
         super(cause);
     }
@@ -58,6 +66,8 @@ public class UnknownSessionException extends InvalidSessionException {
      * @param message the reason for the exception
      * @param cause   the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public UnknownSessionException(String message, Throwable cause) {
         super(message, cause);
     }

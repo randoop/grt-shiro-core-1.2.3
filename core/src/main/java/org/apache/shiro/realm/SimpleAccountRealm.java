@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.realm;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleRole;
@@ -51,6 +52,7 @@ public class SimpleAccountRealm extends AuthorizingRealm {
     protected final ReadWriteLock USERS_LOCK;
     protected final ReadWriteLock ROLES_LOCK;
 
+    @Impure
     public SimpleAccountRealm() {
         this.users = new LinkedHashMap<String, SimpleAccount>();
         this.roles = new LinkedHashMap<String, SimpleRole>();
@@ -61,11 +63,13 @@ public class SimpleAccountRealm extends AuthorizingRealm {
         setCachingEnabled(false);
     }
 
+    @Impure
     public SimpleAccountRealm(String name) {
         this();
         setName(name);
     }
 
+    @Impure
     protected SimpleAccount getUser(String username) {
         USERS_LOCK.readLock().lock();
         try {
@@ -75,28 +79,34 @@ public class SimpleAccountRealm extends AuthorizingRealm {
         }
     }
 
+    @Impure
     public boolean accountExists(String username) {
         return getUser(username) != null;
     }
 
+    @Impure
     public void addAccount(String username, String password) {
         addAccount(username, password, (String[]) null);
     }
 
+    @Impure
     public void addAccount(String username, String password, String... roles) {
         Set<String> roleNames = CollectionUtils.asSet(roles);
         SimpleAccount account = new SimpleAccount(username, password, getName(), roleNames, null);
         add(account);
     }
 
+    @Impure
     protected String getUsername(SimpleAccount account) {
         return getUsername(account.getPrincipals());
     }
 
+    @Impure
     protected String getUsername(PrincipalCollection principals) {
         return getAvailablePrincipal(principals).toString();
     }
 
+    @Impure
     protected void add(SimpleAccount account) {
         String username = getUsername(account);
         USERS_LOCK.writeLock().lock();
@@ -107,6 +117,7 @@ public class SimpleAccountRealm extends AuthorizingRealm {
         }
     }
 
+    @Impure
     protected SimpleRole getRole(String rolename) {
         ROLES_LOCK.readLock().lock();
         try {
@@ -116,14 +127,17 @@ public class SimpleAccountRealm extends AuthorizingRealm {
         }
     }
 
+    @Impure
     public boolean roleExists(String name) {
         return getRole(name) != null;
     }
 
+    @Impure
     public void addRole(String name) {
         add(new SimpleRole(name));
     }
 
+    @Impure
     protected void add(SimpleRole role) {
         ROLES_LOCK.writeLock().lock();
         try {
@@ -133,6 +147,7 @@ public class SimpleAccountRealm extends AuthorizingRealm {
         }
     }
 
+    @Impure
     protected static Set<String> toSet(String delimited, String delimiter) {
         if (delimited == null || delimited.trim().equals("")) {
             return null;
@@ -150,6 +165,7 @@ public class SimpleAccountRealm extends AuthorizingRealm {
         return values;
     }
 
+    @Impure
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         UsernamePasswordToken upToken = (UsernamePasswordToken) token;
         SimpleAccount account = getUser(upToken.getUsername());
@@ -169,6 +185,7 @@ public class SimpleAccountRealm extends AuthorizingRealm {
         return account;
     }
 
+    @Impure
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String username = getUsername(principals);
         USERS_LOCK.readLock().lock();

@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.session;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Interface to be implemented by components that wish to be notified of events that occur during a
@@ -31,6 +32,7 @@ public interface SessionListener {
      *
      * @param session the session that has started.
      */
+    @SideEffectFree
     void onStart(Session session);
 
     /**
@@ -39,6 +41,7 @@ public interface SessionListener {
      *
      * @param session the session that has stopped.
      */
+    @SideEffectFree
     void onStop(Session session);
 
     /**
@@ -55,5 +58,6 @@ public interface SessionListener {
      *
      * @param session the session that has expired.
      */
+    @SideEffectFree
     void onExpiration(Session session);
 }

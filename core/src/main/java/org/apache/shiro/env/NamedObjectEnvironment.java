@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.env;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Deterministic;
 
 /**
  * An environment that supports object lookup by name.
@@ -36,5 +38,7 @@ public interface NamedObjectEnvironment extends Environment {
      * @return the object in Shiro's environment with the specified name (of the specified type) or {@code null} if
      * no object with that name was found.
      */
+    @Pure
+    @Deterministic
     <T> T getObject(String name, Class<T> requiredType) throws RequiredTypeException;
 }

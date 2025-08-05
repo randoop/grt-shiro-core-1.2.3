@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.subject;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.util.Map;
 
 /**
@@ -50,14 +52,19 @@ import java.util.Map;
  */
 public interface PrincipalMap extends PrincipalCollection, Map<String,Object> {
 
+    @Impure
     Map<String,Object> getRealmPrincipals(String realmName);
 
+    @Impure
     Map<String,Object> setRealmPrincipals(String realmName, Map<String,Object> principals);
 
+    @Impure
     Object setRealmPrincipal(String realmName, String principalName, Object principal);
 
+    @Pure
     Object getRealmPrincipal(String realmName, String realmPrincipal);
 
+    @Impure
     Object removeRealmPrincipal(String realmName, String principalName);
 
 }

@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.subject.support;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.CollectionUtils;
@@ -52,6 +54,7 @@ public class SubjectThreadState implements ThreadState {
      *
      * @param subject the {@code Subject} instance to bind and unbind from the {@link ThreadContext}.
      */
+    @Impure
     public SubjectThreadState(Subject subject) {
         if (subject == null) {
             throw new IllegalArgumentException("Subject argument cannot be null.");
@@ -73,6 +76,7 @@ public class SubjectThreadState implements ThreadState {
      *
      * @return the {@code Subject} instance managed by this {@code ThreadState} implementation.
      */
+    @Pure
     protected Subject getSubject() {
         return this.subject;
     }
@@ -86,6 +90,7 @@ public class SubjectThreadState implements ThreadState {
      * Prior to binding, the {@code ThreadContext}'s existing {@link ThreadContext#getResources() resources} are
      * retained so they can be restored later via the {@link #restore restore} call.
      */
+    @Impure
     public void bind() {
         SecurityManager securityManager = this.securityManager;
         if ( securityManager == null ) {
@@ -106,6 +111,7 @@ public class SubjectThreadState implements ThreadState {
      * thread-bound resources existed prior to the {@link #bind bind} call, they are restored back to the
      * {@code ThreadContext} to ensure the thread state is exactly as it was before binding.
      */
+    @Impure
     public void restore() {
         ThreadContext.remove();
         if (!CollectionUtils.isEmpty(this.originalResources)) {
@@ -118,6 +124,7 @@ public class SubjectThreadState implements ThreadState {
      * only be called in special cases - it is more 'correct' to {@link #restore restore} a thread to its previous
      * state than to clear it entirely.
      */
+    @Impure
     public void clear() {
         ThreadContext.remove();
     }

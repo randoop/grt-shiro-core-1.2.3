@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.cache;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.util.Destroyable;
 import org.apache.shiro.util.LifecycleUtils;
 import org.apache.shiro.util.StringUtils;
@@ -43,6 +44,7 @@ public abstract class AbstractCacheManager implements CacheManager, Destroyable 
     /**
      * Default no-arg constructor that instantiates an internal name-to-cache {@code ConcurrentMap}.
      */
+    @Impure
     public AbstractCacheManager() {
         this.caches = new ConcurrentHashMap<String, Cache>();
     }
@@ -56,6 +58,7 @@ public abstract class AbstractCacheManager implements CacheManager, Destroyable 
      * @throws IllegalArgumentException if the {@code name} argument is {@code null} or does not contain text.
      * @throws CacheException           if there is a problem lazily creating a {@code Cache} instance.
      */
+    @Impure
     public <K, V> Cache<K, V> getCache(String name) throws IllegalArgumentException, CacheException {
         if (!StringUtils.hasText(name)) {
             throw new IllegalArgumentException("Cache name cannot be null or empty.");
@@ -83,6 +86,7 @@ public abstract class AbstractCacheManager implements CacheManager, Destroyable 
      * @return a new {@code Cache} instance associated with the specified {@code name}.
      * @throws CacheException if the {@code Cache} instance cannot be created.
      */
+    @Impure
     protected abstract Cache createCache(String name) throws CacheException;
 
     /**
@@ -91,6 +95,7 @@ public abstract class AbstractCacheManager implements CacheManager, Destroyable 
      *
      * @throws Exception if any of the managed caches can't destroy properly.
      */
+    @Impure
     public void destroy() throws Exception {
         while (!caches.isEmpty()) {
             for (Cache cache : caches.values()) {
@@ -100,6 +105,7 @@ public abstract class AbstractCacheManager implements CacheManager, Destroyable 
         }
     }
 
+    @Impure
     public String toString() {
         Collection<Cache> values = caches.values();
         StringBuilder sb = new StringBuilder(getClass().getSimpleName())

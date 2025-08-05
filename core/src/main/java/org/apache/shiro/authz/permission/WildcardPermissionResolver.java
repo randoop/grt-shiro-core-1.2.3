@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authz.permission;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.authz.Permission;
 
 
@@ -37,6 +38,7 @@ public class WildcardPermissionResolver implements PermissionResolver {
      * @return a new {@link WildcardPermission WildcardPermission} instance constructed based on the specified
      *         <tt>permissionString</tt>
      */
+    @Impure
     public Permission resolvePermission(String permissionString) {
         return new WildcardPermission(permissionString);
     }

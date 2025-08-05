@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.authz.permission;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.ShiroException;
 
 
@@ -38,6 +41,8 @@ public class InvalidPermissionStringException extends ShiroException
      * @param message          the exception message.
      * @param permissionString the invalid permission string.
      */
+    @SideEffectFree
+    @Impure
     public InvalidPermissionStringException(String message, String permissionString) {
         super(message);
         this.permissionString = permissionString;
@@ -49,6 +54,7 @@ public class InvalidPermissionStringException extends ShiroException
      *
      * @return the permission string.
      */
+    @Pure
     public String getPermissionString() {
         return this.permissionString;
     }

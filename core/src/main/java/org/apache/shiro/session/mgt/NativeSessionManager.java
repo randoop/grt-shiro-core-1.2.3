@@ -15,6 +15,7 @@
  */
 package org.apache.shiro.session.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.session.InvalidSessionException;
 
 import java.util.Collection;
@@ -36,6 +37,7 @@ public interface NativeSessionManager extends SessionManager {
      * @return the time the specified {@code Session} started (was created).
      * @see org.apache.shiro.session.Session#getStartTimestamp()
      */
+    @Impure
     Date getStartTimestamp(SessionKey key);
 
     /**
@@ -46,6 +48,7 @@ public interface NativeSessionManager extends SessionManager {
      * @see org.apache.shiro.session.Session#getLastAccessTime()
      * @see org.apache.shiro.session.Session#touch()
      */
+    @Impure
     Date getLastAccessTime(SessionKey key);
 
     /**
@@ -55,6 +58,7 @@ public interface NativeSessionManager extends SessionManager {
      * @param key the session key to use to look up the target session.
      * @return {@code true} if the session is valid (exists and is not stopped or expired), {@code false} otherwise.
      */
+    @Impure
     boolean isValid(SessionKey key);
 
     /**
@@ -67,6 +71,7 @@ public interface NativeSessionManager extends SessionManager {
      * @throws org.apache.shiro.session.InvalidSessionException
      *          if the session id is invalid (it does not exist or it is stopped or expired).
      */
+    @Impure
     void checkValid(SessionKey key) throws InvalidSessionException;
 
     /**
@@ -82,6 +87,7 @@ public interface NativeSessionManager extends SessionManager {
      * @throws org.apache.shiro.session.InvalidSessionException
      *          if the session has been stopped or expired prior to calling this method.
      */
+    @Impure
     long getTimeout(SessionKey key) throws InvalidSessionException;
 
     /**
@@ -97,6 +103,7 @@ public interface NativeSessionManager extends SessionManager {
      * @throws org.apache.shiro.session.InvalidSessionException
      *          if the session has been stopped or expired prior to calling this method.
      */
+    @Impure
     void setTimeout(SessionKey key, long maxIdleTimeInMillis) throws InvalidSessionException;
 
     /**
@@ -108,6 +115,7 @@ public interface NativeSessionManager extends SessionManager {
      *          if the session has been stopped or expired prior to calling this method.
      * @see org.apache.shiro.session.Session#touch
      */
+    @Impure
     void touch(SessionKey key) throws InvalidSessionException;
 
     /**
@@ -118,6 +126,7 @@ public interface NativeSessionManager extends SessionManager {
      * @return the host name or ip address of the host where the session originated, if known.  If unknown,
      *         this method returns {@code null}.
      */
+    @Impure
     String getHost(SessionKey key);
 
     /**
@@ -127,6 +136,7 @@ public interface NativeSessionManager extends SessionManager {
      * @throws InvalidSessionException if the session has stopped or expired prior to calling this method.
      * @see org.apache.shiro.session.Session#stop
      */
+    @Impure
     void stop(SessionKey key) throws InvalidSessionException;
 
     /**
@@ -137,6 +147,7 @@ public interface NativeSessionManager extends SessionManager {
      * @throws InvalidSessionException if the associated session has stopped or expired prior to calling this method.
      * @see org.apache.shiro.session.Session#getAttributeKeys()
      */
+    @Impure
     Collection<Object> getAttributeKeys(SessionKey sessionKey);
 
     /**
@@ -149,6 +160,7 @@ public interface NativeSessionManager extends SessionManager {
      * @throws InvalidSessionException if the specified session has stopped or expired prior to calling this method.
      * @see org.apache.shiro.session.Session#getAttribute(Object key)
      */
+    @Impure
     Object getAttribute(SessionKey sessionKey, Object attributeKey) throws InvalidSessionException;
 
     /**
@@ -165,6 +177,7 @@ public interface NativeSessionManager extends SessionManager {
      * @throws InvalidSessionException if the specified session has stopped or expired prior to calling this method.
      * @see org.apache.shiro.session.Session#setAttribute(Object key, Object value)
      */
+    @Impure
     void setAttribute(SessionKey sessionKey, Object attributeKey, Object value) throws InvalidSessionException;
 
     /**
@@ -176,6 +189,7 @@ public interface NativeSessionManager extends SessionManager {
      * @throws InvalidSessionException if the specified session has stopped or expired prior to calling this method.
      * @see org.apache.shiro.session.Session#removeAttribute(Object key)
      */
+    @Impure
     Object removeAttribute(SessionKey sessionKey, Object attributeKey) throws InvalidSessionException;
 
 }

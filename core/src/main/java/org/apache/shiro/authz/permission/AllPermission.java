@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authz.permission;
 
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.Serializable;
 
 import org.apache.shiro.authz.Permission;
@@ -41,6 +42,7 @@ public class AllPermission implements Permission, Serializable {
      * @param p the Permission to check for implies logic.
      * @return <tt>true</tt> always, indicating any Subject grated this permission can do anything.
      */
+    @Pure
     public boolean implies(Permission p) {
         return true;
     }

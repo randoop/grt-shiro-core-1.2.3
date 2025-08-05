@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.util;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * Internal helper class used to find the Java/JDK version
@@ -98,6 +100,7 @@ public abstract class JavaEnvironment {
      * @return the full Java version string
      * @see System#getProperty(String)
      */
+    @Pure
     public static String getVersion() {
         return version;
     }
@@ -113,6 +116,7 @@ public abstract class JavaEnvironment {
      * @see #JAVA_16
      * @see #JAVA_17
      */
+    @Pure
     public static int getMajorVersion() {
         return majorVersion;
     }
@@ -127,6 +131,8 @@ public abstract class JavaEnvironment {
      * @see #JAVA_16
      * @see #JAVA_17
      */
+    @Pure
+    @Impure
     public static boolean isAtLeastVersion14() {
         return getMajorVersion() >= JAVA_14;
     }
@@ -141,6 +147,8 @@ public abstract class JavaEnvironment {
      * @see #JAVA_16
      * @see #JAVA_17
      */
+    @Pure
+    @Impure
     public static boolean isAtLeastVersion15() {
         return getMajorVersion() >= JAVA_15;
     }
@@ -157,6 +165,8 @@ public abstract class JavaEnvironment {
      *
      * @since 1.2
      */
+    @Pure
+    @Impure
     public static boolean isAtLeastVersion16() {
         return getMajorVersion() >= JAVA_16;
     }

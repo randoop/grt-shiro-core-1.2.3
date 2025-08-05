@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.crypto.hash;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.util.ByteSource;
 
@@ -34,6 +35,7 @@ public interface ConfigurableHashService extends HashService {
      * @param privateSalt the 'private' internal salt to be paired with a 'public' (random or supplied) salt during
      *                    hash computation.
      */
+    @Impure
     void setPrivateSalt(ByteSource privateSalt);
 
     /**
@@ -41,6 +43,7 @@ public interface ConfigurableHashService extends HashService {
      *
      * @param iterations the number of hash iterations that will be performed during hash computation.
      */
+    @Impure
     void setHashIterations(int iterations);
 
     /**
@@ -50,6 +53,7 @@ public interface ConfigurableHashService extends HashService {
      * @param name the name of the {@link java.security.MessageDigest MessageDigest} algorithm that will be used to
      *             compute hashes.
      */
+    @Impure
     void setHashAlgorithmName(String name);
 
     /**
@@ -57,5 +61,6 @@ public interface ConfigurableHashService extends HashService {
      *
      * @param rng a source of randomness used to generate public salts that will in turn be used during hash computation.
      */
+    @Impure
     void setRandomNumberGenerator(RandomNumberGenerator rng);
 }

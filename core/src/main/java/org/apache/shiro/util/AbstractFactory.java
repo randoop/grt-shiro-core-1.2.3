@@ -17,6 +17,9 @@
  * under the License.
  */
 package org.apache.shiro.util;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * TODO - Class JavaDoc
@@ -28,18 +31,22 @@ public abstract class AbstractFactory<T> implements Factory<T> {
     private boolean singleton;
     private T singletonInstance;
 
+    @SideEffectFree
     public AbstractFactory() {
         this.singleton = true;
     }
 
+    @Pure
     public boolean isSingleton() {
         return singleton;
     }
 
+    @Impure
     public void setSingleton(boolean singleton) {
         this.singleton = singleton;
     }
 
+    @Impure
     public T getInstance() {
         T instance;
         if (isSingleton()) {
@@ -57,5 +64,6 @@ public abstract class AbstractFactory<T> implements Factory<T> {
         return instance;
     }
 
+    @Impure
     protected abstract T createInstance();
 }

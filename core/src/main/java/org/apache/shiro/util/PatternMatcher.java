@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.util;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Interface for components that can match source strings against a specified pattern string.
@@ -38,5 +39,6 @@ public interface PatternMatcher {
      * @return <code>true</code> if the given <code>source</code> matches the specified <code>pattern</code>,
      *         <code>false</code> otherwise.
      */
+    @Impure
     boolean matches(String pattern, String source);
 }

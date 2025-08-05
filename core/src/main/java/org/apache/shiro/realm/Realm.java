@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.realm;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -68,6 +70,7 @@ public interface Realm {
      *
      * @return the (application-unique) name assigned to this <code>Realm</code>.
      */
+    @Pure
     String getName();
 
     /**
@@ -82,6 +85,8 @@ public interface Realm {
      * @return <tt>true</tt> if this realm can/will authenticate Subjects represented by specified token,
      *         <tt>false</tt> otherwise.
      */
+    @Pure
+    @Impure
     boolean supports(AuthenticationToken token);
 
     /**
@@ -100,6 +105,7 @@ public interface Realm {
      *          if there is an error obtaining or constructing an AuthenticationInfo object based on the
      *          specified <tt>token</tt> or implementation-specifc login behavior fails.
      */
+    @Impure
     AuthenticationInfo getAuthenticationInfo(AuthenticationToken token) throws AuthenticationException;
 
 }

@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.realm.ldap;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,6 +112,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      * {@code com.sun.jndi.ldap.LdapCtxFactory} (the Sun/Oracle default) and the default
      * {@link #setReferral(String) referral} behavior to {@code follow}.
      */
+    @Impure
     public JndiLdapContextFactory() {
         this.environment = new HashMap<String, Object>();
         setContextFactoryClassName(DEFAULT_CONTEXT_FACTORY_CLASS_NAME);
@@ -136,6 +139,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      * @see <a href="http://download-llnw.oracle.com/javase/tutorial/jndi/ldap/auth_mechs.html">
      *      http://download-llnw.oracle.com/javase/tutorial/jndi/ldap/auth_mechs.html</a>
      */
+    @Impure
     public void setAuthenticationMechanism(String authenticationMechanism) {
         setEnvironmentProperty(Context.SECURITY_AUTHENTICATION, authenticationMechanism);
     }
@@ -156,6 +160,8 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      * @see <a href="http://download-llnw.oracle.com/javase/tutorial/jndi/ldap/auth_mechs.html">
      *      http://download-llnw.oracle.com/javase/tutorial/jndi/ldap/auth_mechs.html</a>
      */
+    @Pure
+    @Impure
     public String getAuthenticationMechanism() {
         return (String) getEnvironmentProperty(Context.SECURITY_AUTHENTICATION);
     }
@@ -168,6 +174,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      *
      * @param contextFactoryClassName the context factory that should be used.
      */
+    @Impure
     public void setContextFactoryClassName(String contextFactoryClassName) {
         setEnvironmentProperty(Context.INITIAL_CONTEXT_FACTORY, contextFactoryClassName);
     }
@@ -180,6 +187,8 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      *
      * @return the name of the ContextFactory class to use.
      */
+    @Pure
+    @Impure
     public String getContextFactoryClassName() {
         return (String) getEnvironmentProperty(Context.INITIAL_CONTEXT_FACTORY);
     }
@@ -197,6 +206,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      *
      * @return the base JNDI environment template to use when acquiring an LDAP connection (an {@link LdapContext})
      */
+    @Pure
     public Map getEnvironment() {
         return this.environment;
     }
@@ -213,6 +223,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      *
      * @param env the base JNDI environment template to use when acquiring LDAP connections.
      */
+    @Impure
     @SuppressWarnings({"unchecked"})
     public void setEnvironment(Map env) {
         this.environment = env;
@@ -224,6 +235,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      * @param name the name of the environment property
      * @return the property value or {@code null} if the value has not been set.
      */
+    @Pure
     private Object getEnvironmentProperty(String name) {
         return this.environment.get(name);
     }
@@ -235,6 +247,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      * @param name  the environment property key
      * @param value the environment property value.  A null/empty value will trigger removal.
      */
+    @Impure
     private void setEnvironmentProperty(String name, String value) {
         if (StringUtils.hasText(value)) {
             this.environment.put(name, value);
@@ -262,6 +275,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      *
      * @return whether or not connection pooling should be used when possible and appropriate
      */
+    @Pure
     public boolean isPoolingEnabled() {
         return poolingEnabled;
     }
@@ -285,6 +299,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      *
      * @param poolingEnabled whether or not connection pooling should be used when possible and appropriate
      */
+    @Impure
     public void setPoolingEnabled(boolean poolingEnabled) {
         this.poolingEnabled = poolingEnabled;
     }
@@ -296,6 +311,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      * @param referral the referral property.
      * @see <a href="http://java.sun.com/products/jndi/tutorial/ldap/referral/jndi.html">Referrals in JNDI</a>
      */
+    @Impure
     public void setReferral(String referral) {
         setEnvironmentProperty(Context.REFERRAL, referral);
     }
@@ -308,6 +324,8 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      * @return the LDAP referral behavior when creating a connection.
      * @see <a href="http://java.sun.com/products/jndi/tutorial/ldap/referral/jndi.html">Referrals in JNDI</a>
      */
+    @Pure
+    @Impure
     public String getReferral() {
         return (String) getEnvironmentProperty(Context.REFERRAL);
     }
@@ -317,6 +335,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      *
      * @param url the LDAP url to connect to. (e.g. ldap://&lt;ldapDirectoryHostname&gt;:&lt;port&gt;)
      */
+    @Impure
     public void setUrl(String url) {
         setEnvironmentProperty(Context.PROVIDER_URL, url);
     }
@@ -327,6 +346,8 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      *
      * @return the LDAP url to connect to. (e.g. ldap://&lt;ldapDirectoryHostname&gt;:&lt;port&gt;)
      */
+    @Pure
+    @Impure
     public String getUrl() {
         return (String) getEnvironmentProperty(Context.PROVIDER_URL);
     }
@@ -341,6 +362,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      * @param systemPassword the password of the {@link #setSystemUsername(String) systemUsername} that will be used
      *                       when creating an LDAP connection used for authorization queries.
      */
+    @Impure
     public void setSystemPassword(String systemPassword) {
         this.systemPassword = systemPassword;
     }
@@ -355,6 +377,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      * @return the password of the {@link #setSystemUsername(String) systemUsername} that will be used when creating an
      *         LDAP connection used for authorization queries.
      */
+    @Pure
     public String getSystemPassword() {
         return this.systemPassword;
     }
@@ -369,6 +392,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      * @param systemUsername the system username that will be used when creating an LDAP connection used for
      *                       authorization queries.
      */
+    @Impure
     public void setSystemUsername(String systemUsername) {
         this.systemUsername = systemUsername;
     }
@@ -382,6 +406,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      *
      * @return the system username that will be used when creating an LDAP connection used for authorization queries.
      */
+    @Pure
     public String getSystemUsername() {
         return systemUsername;
     }
@@ -398,6 +423,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      * @return the system LdapContext
      * @throws NamingException if there is a problem connecting to the LDAP directory
      */
+    @Impure
     public LdapContext getSystemLdapContext() throws NamingException {
         return getLdapContext((Object)getSystemUsername(), getSystemPassword());
     }
@@ -413,6 +439,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      *             String principals and credentials can be used.  Shiro no longer calls this method - it will be
      *             removed before the 2.0 release.
      */
+    @Impure
     @Deprecated
     public LdapContext getLdapContext(String username, String password) throws NamingException {
         return getLdapContext((Object) username, password);
@@ -431,6 +458,8 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      * @return {@code true} if LDAP connection pooling should be used when acquiring a connection based on the specified
      *         account principal, {@code false} otherwise.
      */
+    @Pure
+    @Impure
     protected boolean isPoolingConnections(Object principal) {
         return isPoolingEnabled() && principal != null && principal.equals(getSystemUsername());
     }
@@ -451,6 +480,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      * @throws NamingException
      * @throws IllegalStateException
      */
+    @Impure
     public LdapContext getLdapContext(Object principal, Object credentials) throws NamingException,
             IllegalStateException {
 
@@ -504,6 +534,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      * @return an LdapConnection
      * @throws NamingException if a problem occurs creating the connection
      */
+    @Impure
     protected LdapContext createLdapContext(Hashtable env) throws NamingException {
         return new InitialLdapContext(env, null);
     }
@@ -520,6 +551,7 @@ public class JndiLdapContextFactory implements LdapContextFactory {
      * @param environment the JNDI environment settings to be validated
      * @throws AuthenticationException if a configuration problem is detected
      */
+    @Impure
     protected void validateAuthenticationInfo(Hashtable<String, Object> environment)
         throws AuthenticationException
     {

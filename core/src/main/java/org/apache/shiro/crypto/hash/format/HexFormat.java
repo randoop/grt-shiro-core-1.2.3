@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.crypto.hash.format;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.crypto.hash.Hash;
 
 /**
@@ -35,6 +36,7 @@ public class HexFormat implements HashFormat {
      * @param hash the hash instance to format into a String.
      * @return {@code hash != null ? hash.toHex() : null}.
      */
+    @Impure
     public String format(Hash hash) {
         return hash != null ? hash.toHex() : null;
     }

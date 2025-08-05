@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Exception thrown when attempting to acquire the application's {@code SecurityManager} instance, but Shiro's
@@ -26,10 +28,14 @@ package org.apache.shiro;
  */
 public class UnavailableSecurityManagerException extends ShiroException {
 
+    @SideEffectFree
+    @Impure
     public UnavailableSecurityManagerException(String message) {
         super(message);
     }
 
+    @SideEffectFree
+    @Impure
     public UnavailableSecurityManagerException(String message, Throwable cause) {
         super(message, cause);
     }

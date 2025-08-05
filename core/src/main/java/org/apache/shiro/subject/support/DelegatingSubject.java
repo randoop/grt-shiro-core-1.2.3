@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.subject.support;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.HostAuthenticationToken;
@@ -86,16 +89,22 @@ public class DelegatingSubject implements Subject {
 
     protected transient SecurityManager securityManager;
 
+    @SideEffectFree
+    @Impure
     public DelegatingSubject(SecurityManager securityManager) {
         this(null, false, null, null, securityManager);
     }
 
+    @SideEffectFree
+    @Impure
     public DelegatingSubject(PrincipalCollection principals, boolean authenticated, String host,
                              Session session, SecurityManager securityManager) {
         this(principals, authenticated, host, session, true, securityManager);
     }
 
     //since 1.2
+    @SideEffectFree
+    @Impure
     public DelegatingSubject(PrincipalCollection principals, boolean authenticated, String host,
                              Session session, boolean sessionCreationEnabled, SecurityManager securityManager) {
         if (securityManager == null) {
@@ -111,6 +120,8 @@ public class DelegatingSubject implements Subject {
         this.sessionCreationEnabled = sessionCreationEnabled;
     }
 
+    @SideEffectFree
+    @Impure
     protected Session decorate(Session session) {
         if (session == null) {
             throw new IllegalArgumentException("session cannot be null");
@@ -118,10 +129,12 @@ public class DelegatingSubject implements Subject {
         return new StoppingAwareProxiedSession(session, this);
     }
 
+    @Pure
     public SecurityManager getSecurityManager() {
         return securityManager;
     }
 
+    @Impure
     protected boolean hasPrincipals() {
         return !CollectionUtils.isEmpty(getPrincipals());
     }
@@ -131,10 +144,12 @@ public class DelegatingSubject implements Subject {
      *
      * @return the host name or IP associated with the client who created/is interacting with this Subject.
      */
+    @Pure
     public String getHost() {
         return this.host;
     }
 
+    @Impure
     private Object getPrimaryPrincipal(PrincipalCollection principals) {
         if (!CollectionUtils.isEmpty(principals)) {
             return principals.getPrimaryPrincipal();
@@ -145,23 +160,28 @@ public class DelegatingSubject implements Subject {
     /**
      * @see Subject#getPrincipal()
      */
+    @Impure
     public Object getPrincipal() {
         return getPrimaryPrincipal(getPrincipals());
     }
 
+    @Impure
     public PrincipalCollection getPrincipals() {
         List<PrincipalCollection> runAsPrincipals = getRunAsPrincipalsStack();
         return CollectionUtils.isEmpty(runAsPrincipals) ? this.principals : runAsPrincipals.get(0);
     }
 
+    @Impure
     public boolean isPermitted(String permission) {
         return hasPrincipals() && securityManager.isPermitted(getPrincipals(), permission);
     }
 
+    @Impure
     public boolean isPermitted(Permission permission) {
         return hasPrincipals() && securityManager.isPermitted(getPrincipals(), permission);
     }
 
+    @Impure
     public boolean[] isPermitted(String... permissions) {
         if (hasPrincipals()) {
             return securityManager.isPermitted(getPrincipals(), permissions);
@@ -170,6 +190,7 @@ public class DelegatingSubject implements Subject {
         }
     }
 
+    @Impure
     public boolean[] isPermitted(List<Permission> permissions) {
         if (hasPrincipals()) {
             return securityManager.isPermitted(getPrincipals(), permissions);
@@ -178,14 +199,17 @@ public class DelegatingSubject implements Subject {
         }
     }
 
+    @Impure
     public boolean isPermittedAll(String... permissions) {
         return hasPrincipals() && securityManager.isPermittedAll(getPrincipals(), permissions);
     }
 
+    @Impure
     public boolean isPermittedAll(Collection<Permission> permissions) {
         return hasPrincipals() && securityManager.isPermittedAll(getPrincipals(), permissions);
     }
 
+    @Impure
     protected void assertAuthzCheckPossible() throws AuthorizationException {
         if (!hasPrincipals()) {
             String msg = "This subject is anonymous - it does not have any identifying principals and " +
@@ -200,30 +224,36 @@ public class DelegatingSubject implements Subject {
         }
     }
 
+    @Impure
     public void checkPermission(String permission) throws AuthorizationException {
         assertAuthzCheckPossible();
         securityManager.checkPermission(getPrincipals(), permission);
     }
 
+    @Impure
     public void checkPermission(Permission permission) throws AuthorizationException {
         assertAuthzCheckPossible();
         securityManager.checkPermission(getPrincipals(), permission);
     }
 
+    @Impure
     public void checkPermissions(String... permissions) throws AuthorizationException {
         assertAuthzCheckPossible();
         securityManager.checkPermissions(getPrincipals(), permissions);
     }
 
+    @Impure
     public void checkPermissions(Collection<Permission> permissions) throws AuthorizationException {
         assertAuthzCheckPossible();
         securityManager.checkPermissions(getPrincipals(), permissions);
     }
 
+    @Impure
     public boolean hasRole(String roleIdentifier) {
         return hasPrincipals() && securityManager.hasRole(getPrincipals(), roleIdentifier);
     }
 
+    @Impure
     public boolean[] hasRoles(List<String> roleIdentifiers) {
         if (hasPrincipals()) {
             return securityManager.hasRoles(getPrincipals(), roleIdentifiers);
@@ -232,25 +262,30 @@ public class DelegatingSubject implements Subject {
         }
     }
 
+    @Impure
     public boolean hasAllRoles(Collection<String> roleIdentifiers) {
         return hasPrincipals() && securityManager.hasAllRoles(getPrincipals(), roleIdentifiers);
     }
 
+    @Impure
     public void checkRole(String role) throws AuthorizationException {
         assertAuthzCheckPossible();
         securityManager.checkRole(getPrincipals(), role);
     }
 
+    @Impure
     public void checkRoles(String... roleIdentifiers) throws AuthorizationException {
         assertAuthzCheckPossible();
         securityManager.checkRoles(getPrincipals(), roleIdentifiers);
     }
 
+    @Impure
     public void checkRoles(Collection<String> roles) throws AuthorizationException {
         assertAuthzCheckPossible();
         securityManager.checkRoles(getPrincipals(), roles);
     }
 
+    @Impure
     public void login(AuthenticationToken token) throws AuthenticationException {
         clearRunAsIdentitiesInternal();
         Subject subject = securityManager.login(this, token);
@@ -289,10 +324,12 @@ public class DelegatingSubject implements Subject {
         }
     }
 
+    @Pure
     public boolean isAuthenticated() {
         return authenticated;
     }
 
+    @Impure
     public boolean isRemembered() {
         PrincipalCollection principals = getPrincipals();
         return principals != null && !principals.isEmpty() && !isAuthenticated();
@@ -304,14 +341,17 @@ public class DelegatingSubject implements Subject {
      * @return {@code true} if this Subject is allowed to create sessions, {@code false} otherwise.
      * @since 1.2
      */
+    @Pure
     protected boolean isSessionCreationEnabled() {
         return this.sessionCreationEnabled;
     }
 
+    @Impure
     public Session getSession() {
         return getSession(true);
     }
 
+    @Impure
     public Session getSession(boolean create) {
         if (log.isTraceEnabled()) {
             log.trace("attempting to get session; create = " + create +
@@ -339,6 +379,7 @@ public class DelegatingSubject implements Subject {
         return this.session;
     }
 
+    @Impure
     protected SessionContext createSessionContext() {
         SessionContext sessionContext = new DefaultSessionContext();
         if (StringUtils.hasText(host)) {
@@ -347,6 +388,7 @@ public class DelegatingSubject implements Subject {
         return sessionContext;
     }
 
+    @Impure
     private void clearRunAsIdentitiesInternal() {
         //try/catch added for SHIRO-298
         try {
@@ -357,6 +399,7 @@ public class DelegatingSubject implements Subject {
         }
     }
 
+    @Impure
     public void logout() {
         try {
             clearRunAsIdentitiesInternal();
@@ -373,10 +416,12 @@ public class DelegatingSubject implements Subject {
         }
     }
 
+    @Impure
     private void sessionStopped() {
         this.session = null;
     }
 
+    @Impure
     public <V> V execute(Callable<V> callable) throws ExecutionException {
         Callable<V> associated = associateWith(callable);
         try {
@@ -386,15 +431,18 @@ public class DelegatingSubject implements Subject {
         }
     }
 
+    @Impure
     public void execute(Runnable runnable) {
         Runnable associated = associateWith(runnable);
         associated.run();
     }
 
+    @Impure
     public <V> Callable<V> associateWith(Callable<V> callable) {
         return new SubjectCallable<V>(this, callable);
     }
 
+    @Impure
     public Runnable associateWith(Runnable runnable) {
         if (runnable instanceof Thread) {
             String msg = "This implementation does not support Thread arguments because of JDK ThreadLocal " +
@@ -410,11 +458,14 @@ public class DelegatingSubject implements Subject {
 
         private final DelegatingSubject owner;
 
+        @SideEffectFree
+        @Impure
         private StoppingAwareProxiedSession(Session target, DelegatingSubject owningSubject) {
             super(target);
             owner = owningSubject;
         }
 
+        @Impure
         public void stop() throws InvalidSessionException {
             super.stop();
             owner.sessionStopped();
@@ -426,6 +477,7 @@ public class DelegatingSubject implements Subject {
     // 'Run As' support implementations
     // ======================================
 
+    @Impure
     public void runAs(PrincipalCollection principals) {
         if (!hasPrincipals()) {
             String msg = "This subject does not yet have an identity.  Assuming the identity of another " +
@@ -437,11 +489,13 @@ public class DelegatingSubject implements Subject {
         pushIdentity(principals);
     }
 
+    @Impure
     public boolean isRunAs() {
         List<PrincipalCollection> stack = getRunAsPrincipalsStack();
         return !CollectionUtils.isEmpty(stack);
     }
 
+    @Impure
     public PrincipalCollection getPreviousPrincipals() {
         PrincipalCollection previousPrincipals = null;
         List<PrincipalCollection> stack = getRunAsPrincipalsStack();
@@ -458,10 +512,12 @@ public class DelegatingSubject implements Subject {
         return previousPrincipals;
     }
 
+    @Impure
     public PrincipalCollection releaseRunAs() {
         return popIdentity();
     }
 
+    @Impure
     @SuppressWarnings("unchecked")
     private List<PrincipalCollection> getRunAsPrincipalsStack() {
         Session session = getSession(false);
@@ -471,6 +527,7 @@ public class DelegatingSubject implements Subject {
         return null;
     }
 
+    @Impure
     private void clearRunAsIdentities() {
         Session session = getSession(false);
         if (session != null) {
@@ -478,6 +535,7 @@ public class DelegatingSubject implements Subject {
         }
     }
 
+    @Impure
     private void pushIdentity(PrincipalCollection principals) throws NullPointerException {
         if (CollectionUtils.isEmpty(principals)) {
             String msg = "Specified Subject principals cannot be null or empty for 'run as' functionality.";
@@ -492,6 +550,7 @@ public class DelegatingSubject implements Subject {
         session.setAttribute(RUN_AS_PRINCIPALS_SESSION_KEY, stack);
     }
 
+    @Impure
     private PrincipalCollection popIdentity() {
         PrincipalCollection popped = null;
 

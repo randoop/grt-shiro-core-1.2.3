@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authz.aop;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.aop.MethodInterceptorSupport;
 import org.apache.shiro.aop.MethodInvocation;
 import org.apache.shiro.authz.AuthorizationException;
@@ -34,6 +35,7 @@ public abstract class AuthorizingMethodInterceptor extends MethodInterceptorSupp
      * if authorization is allowed by first
      * calling {@link #assertAuthorized(org.apache.shiro.aop.MethodInvocation) assertAuthorized}.
      */
+    @Impure
     public Object invoke(MethodInvocation methodInvocation) throws Throwable {
         assertAuthorized(methodInvocation);
         return methodInvocation.proceed();
@@ -45,6 +47,7 @@ public abstract class AuthorizingMethodInterceptor extends MethodInterceptorSupp
      * @param methodInvocation the <code>MethodInvocation</code> to invoke.
      * @throws AuthorizationException if the <code>methodInvocation</code> should not be allowed to continue/execute.
      */
+    @Impure
     protected abstract void assertAuthorized(MethodInvocation methodInvocation) throws AuthorizationException;
 
 }

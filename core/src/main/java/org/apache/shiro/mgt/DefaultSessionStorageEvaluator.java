@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.subject.Subject;
 
 /**
@@ -59,6 +61,7 @@ public class DefaultSessionStorageEvaluator implements SessionStorageEvaluator {
      * @param subject the {@code Subject} for which session state persistence may be enabled
      * @return the value of {@link #isSessionStorageEnabled()} and ignores the {@code Subject} argument.
      */
+    @Impure
     public boolean isSessionStorageEnabled(Subject subject) {
         return (subject != null && subject.getSession(false) != null) || isSessionStorageEnabled();
     }
@@ -75,6 +78,7 @@ public class DefaultSessionStorageEvaluator implements SessionStorageEvaluator {
      * @return {@code true} if any Subject's {@code Session} may be used to persist that {@code Subject}'s state,
      *         {@code false} otherwise.
      */
+    @Pure
     public boolean isSessionStorageEnabled() {
         return sessionStorageEnabled;
     }
@@ -90,6 +94,7 @@ public class DefaultSessionStorageEvaluator implements SessionStorageEvaluator {
      *
      * @param sessionStorageEnabled if any Subject's {@code Session} may be used to persist that {@code Subject}'s state.
      */
+    @Impure
     public void setSessionStorageEnabled(boolean sessionStorageEnabled) {
         this.sessionStorageEnabled = sessionStorageEnabled;
     }

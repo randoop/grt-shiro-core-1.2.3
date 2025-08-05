@@ -18,6 +18,10 @@
  */
 package org.apache.shiro.codec;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Deterministic;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.util.ByteSource;
 
 import java.io.*;
@@ -45,6 +49,8 @@ public abstract class CodecSupport {
      * @param chars the character array to be converted to a byte array.
      * @return the byte array of the UTF-8 encoded character array.
      */
+    @SideEffectFree
+    @Impure
     public static byte[] toBytes(char[] chars) {
         return toBytes(new String(chars), PREFERRED_ENCODING);
     }
@@ -62,6 +68,8 @@ public abstract class CodecSupport {
      * @return the bytes of the specified character array under the specified encoding.
      * @throws CodecException if the JVM does not support the specified encoding.
      */
+    @SideEffectFree
+    @Impure
     public static byte[] toBytes(char[] chars, String encoding) throws CodecException {
         return toBytes(new String(chars), encoding);
     }
@@ -74,6 +82,8 @@ public abstract class CodecSupport {
      * @return the bytes representing the specified string under the {@link CodecSupport#PREFERRED_ENCODING PREFERRED_ENCODING}.
      * @see #toBytes(String, String)
      */
+    @SideEffectFree
+    @Impure
     public static byte[] toBytes(String source) {
         return toBytes(source, PREFERRED_ENCODING);
     }
@@ -87,6 +97,8 @@ public abstract class CodecSupport {
      * @return the byte array of the specified source with the given encoding.
      * @throws CodecException if the JVM does not support the specified encoding.
      */
+    @SideEffectFree
+    @Impure
     public static byte[] toBytes(String source, String encoding) throws CodecException {
         try {
             return source.getBytes(encoding);
@@ -104,6 +116,8 @@ public abstract class CodecSupport {
      * @return the specified byte array as an encoded String ({@link CodecSupport#PREFERRED_ENCODING PREFERRED_ENCODING}).
      * @see #toString(byte[], String)
      */
+    @SideEffectFree
+    @Impure
     public static String toString(byte[] bytes) {
         return toString(bytes, PREFERRED_ENCODING);
     }
@@ -119,6 +133,8 @@ public abstract class CodecSupport {
      * @return the specified byte array as an encoded String
      * @throws CodecException if the JVM does not support the specified encoding.
      */
+    @SideEffectFree
+    @Impure
     public static String toString(byte[] bytes, String encoding) throws CodecException {
         try {
             return new String(bytes, encoding);
@@ -136,6 +152,8 @@ public abstract class CodecSupport {
      * @return the specified byte array encoded as a character array ({@link CodecSupport#PREFERRED_ENCODING PREFERRED_ENCODING}).
      * @see #toChars(byte[], String)
      */
+    @SideEffectFree
+    @Impure
     public static char[] toChars(byte[] bytes) {
         return toChars(bytes, PREFERRED_ENCODING);
     }
@@ -150,6 +168,8 @@ public abstract class CodecSupport {
      * @return the specified byte array as an encoded char array
      * @throws CodecException if the JVM does not support the specified encoding.
      */
+    @SideEffectFree
+    @Impure
     public static char[] toChars(byte[] bytes, String encoding) throws CodecException {
         return toString(bytes, encoding).toCharArray();
     }
@@ -174,6 +194,7 @@ public abstract class CodecSupport {
      *         {@code false} otherwise.
      * @since 1.0
      */
+    @Pure
     protected boolean isByteSource(Object o) {
         return o instanceof byte[] || o instanceof char[] || o instanceof String ||
                 o instanceof ByteSource || o instanceof File || o instanceof InputStream;
@@ -191,6 +212,7 @@ public abstract class CodecSupport {
      * @param o the Object to convert into a byte array
      * @return a byte array representation of the Object argument.
      */
+    @Impure
     protected byte[] toBytes(Object o) {
         if (o == null) {
             String msg = "Argument for byte conversion cannot be null.";
@@ -225,6 +247,8 @@ public abstract class CodecSupport {
      * @param o the Object to convert into a byte array
      * @return a byte array representation of the Object argument.
      */
+    @SideEffectFree
+    @Impure
     protected String toString(Object o) {
         if (o == null) {
             String msg = "Argument for String conversion cannot be null.";
@@ -241,6 +265,7 @@ public abstract class CodecSupport {
         }
     }
 
+    @Impure
     protected byte[] toBytes(File file) {
         if (file == null) {
             throw new IllegalArgumentException("File argument cannot be null.");
@@ -262,6 +287,7 @@ public abstract class CodecSupport {
      * @throws CodecException           if there is any problem reading from the {@link InputStream}.
      * @since 1.0
      */
+    @Impure
     protected byte[] toBytes(InputStream in) {
         if (in == null) {
             throw new IllegalArgumentException("InputStream argument cannot be null.");
@@ -297,6 +323,8 @@ public abstract class CodecSupport {
      * @param o the Object to convert to a byte array.
      * @return a byte array representation of the Object argument.
      */
+    @Pure
+    @Deterministic
     protected byte[] objectToBytes(Object o) {
         String msg = "The " + getClass().getName() + " implementation only supports conversion to " +
                 "byte[] if the source is of type byte[], char[], String, " + ByteSource.class.getName() +
@@ -315,6 +343,7 @@ public abstract class CodecSupport {
      * @param o the Object to convert to a byte array.
      * @return a String representation of the Object argument.
      */
+    @SideEffectFree
     protected String objectToString(Object o) {
         return o.toString();
     }

@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authz.aop;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.lang.annotation.Annotation;
 
 import org.apache.shiro.authz.AuthorizationException;
@@ -42,6 +43,7 @@ public class UserAnnotationHandler extends AuthorizingAnnotationHandler {
      *
      * {@link org.apache.shiro.authz.annotation.RequiresUser RequiresUser} annotations.
      */
+    @Impure
     public UserAnnotationHandler() {
         super(RequiresUser.class);
     }
@@ -56,6 +58,7 @@ public class UserAnnotationHandler extends AuthorizingAnnotationHandler {
      * @throws org.apache.shiro.authz.AuthorizationException
      *         if the calling <code>Subject</code> is not authenticated or remembered via rememberMe services.
      */
+    @Impure
     public void assertAuthorized(Annotation a) throws AuthorizationException {
         if (a instanceof RequiresUser && getSubject().getPrincipal() == null) {
             throw new UnauthenticatedException("Attempting to perform a user-only operation.  The current Subject is " +

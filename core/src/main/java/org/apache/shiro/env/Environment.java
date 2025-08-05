@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.env;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Deterministic;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.mgt.SecurityManager;
 
 /**
@@ -40,5 +43,8 @@ public interface Environment {
      *
      * @return the application's {@code SecurityManager} instance.
      */
+    @Pure
+    @Deterministic
+    @Impure
     SecurityManager getSecurityManager();
 }

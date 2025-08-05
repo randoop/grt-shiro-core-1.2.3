@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.session.mgt;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.util.MapContext;
 import org.apache.shiro.util.StringUtils;
 
@@ -37,28 +39,36 @@ public class DefaultSessionContext extends MapContext implements SessionContext 
     private static final String HOST = DefaultSessionContext.class.getName() + ".HOST";
     private static final String SESSION_ID = DefaultSessionContext.class.getName() + ".SESSION_ID";
 
+    @Impure
     public DefaultSessionContext() {
         super();
     }
 
+    @Impure
     public DefaultSessionContext(Map<String, Object> map) {
         super(map);
     }
 
+    @Pure
+    @Impure
     public String getHost() {
         return getTypedValue(HOST, String.class);
     }
 
+    @Impure
     public void setHost(String host) {
         if (StringUtils.hasText(host)) {
             put(HOST, host);
         }
     }
 
+    @Pure
+    @Impure
     public Serializable getSessionId() {
         return getTypedValue(SESSION_ID, Serializable.class);
     }
 
+    @Impure
     public void setSessionId(Serializable sessionId) {
         nullSafePut(SESSION_ID, sessionId);
     }

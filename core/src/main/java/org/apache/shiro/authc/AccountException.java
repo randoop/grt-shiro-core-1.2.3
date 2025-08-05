@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.authc;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Exception thrown due to a problem with the account
@@ -29,6 +31,8 @@ public class AccountException extends AuthenticationException {
     /**
      * Creates a new AccountException.
      */
+    @SideEffectFree
+    @Impure
     public AccountException() {
         super();
     }
@@ -38,6 +42,8 @@ public class AccountException extends AuthenticationException {
      *
      * @param message the reason for the exception
      */
+    @SideEffectFree
+    @Impure
     public AccountException(String message) {
         super(message);
     }
@@ -47,6 +53,8 @@ public class AccountException extends AuthenticationException {
      *
      * @param cause the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public AccountException(Throwable cause) {
         super(cause);
     }
@@ -57,6 +65,8 @@ public class AccountException extends AuthenticationException {
      * @param message the reason for the exception
      * @param cause   the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public AccountException(String message, Throwable cause) {
         super(message, cause);
     }

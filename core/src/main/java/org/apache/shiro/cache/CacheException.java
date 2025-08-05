@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.cache;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.ShiroException;
 
 
@@ -32,6 +34,8 @@ public class CacheException extends ShiroException
     /**
      * Creates a new <code>CacheException</code>.
      */
+    @SideEffectFree
+    @Impure
     public CacheException() {
         super();
     }
@@ -41,6 +45,8 @@ public class CacheException extends ShiroException
      *
      * @param message the reason for the exception.
      */
+    @SideEffectFree
+    @Impure
     public CacheException(String message) {
         super(message);
     }
@@ -50,6 +56,8 @@ public class CacheException extends ShiroException
      *
      * @param cause the underlying cause of the exception.
      */
+    @SideEffectFree
+    @Impure
     public CacheException(Throwable cause) {
         super(cause);
     }
@@ -60,6 +68,8 @@ public class CacheException extends ShiroException
      * @param message the reason for the exception.
      * @param cause   the underlying cause of the exception.
      */
+    @SideEffectFree
+    @Impure
     public CacheException(String message, Throwable cause) {
         super(message, cause);
     }

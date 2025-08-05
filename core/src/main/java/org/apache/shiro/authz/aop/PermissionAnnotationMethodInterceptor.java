@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authz.aop;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.aop.AnnotationResolver;
 
 /**
@@ -36,6 +37,7 @@ public class PermissionAnnotationMethodInterceptor extends AuthorizingAnnotation
      * Default no-argument constructor that ensures this interceptor looks for
      * {@link org.apache.shiro.authz.annotation.RequiresPermissions RequiresPermissions} annotations in a method declaration.
      */
+    @Impure
     public PermissionAnnotationMethodInterceptor() {
         super( new PermissionAnnotationHandler() );
     }
@@ -44,6 +46,7 @@ public class PermissionAnnotationMethodInterceptor extends AuthorizingAnnotation
      * @param resolver
      * @since 1.1
      */
+    @Impure
     public PermissionAnnotationMethodInterceptor(AnnotationResolver resolver) {
         super( new PermissionAnnotationHandler(), resolver);
     }

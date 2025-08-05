@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.session.mgt.eis;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.util.CollectionUtils;
@@ -59,10 +62,12 @@ public class MemorySessionDAO extends AbstractSessionDAO {
 
     private ConcurrentMap<Serializable, Session> sessions;
 
+    @Impure
     public MemorySessionDAO() {
         this.sessions = new ConcurrentHashMap<Serializable, Session>();
     }
 
+    @Impure
     protected Serializable doCreate(Session session) {
         Serializable sessionId = generateSessionId(session);
         assignSessionId(session, sessionId);
@@ -70,6 +75,7 @@ public class MemorySessionDAO extends AbstractSessionDAO {
         return sessionId;
     }
 
+    @Impure
     protected Session storeSession(Serializable id, Session session) {
         if (id == null) {
             throw new NullPointerException("id argument cannot be null.");
@@ -77,14 +83,17 @@ public class MemorySessionDAO extends AbstractSessionDAO {
         return sessions.putIfAbsent(id, session);
     }
 
+    @Pure
     protected Session doReadSession(Serializable sessionId) {
         return sessions.get(sessionId);
     }
 
+    @Impure
     public void update(Session session) throws UnknownSessionException {
         storeSession(session.getId(), session);
     }
 
+    @Impure
     public void delete(Session session) {
         if (session == null) {
             throw new NullPointerException("session argument cannot be null.");
@@ -95,6 +104,8 @@ public class MemorySessionDAO extends AbstractSessionDAO {
         }
     }
 
+    @SideEffectFree
+    @Impure
     public Collection<Session> getActiveSessions() {
         Collection<Session> values = sessions.values();
         if (CollectionUtils.isEmpty(values)) {

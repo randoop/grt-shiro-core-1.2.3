@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.codec;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * <a href="http://en.wikipedia.org/wiki/Hexadecimal">Hexadecimal</a> encoder and decoder.
@@ -48,6 +50,7 @@ public class Hex {
      * @param bytes the byte array to Hex-encode.
      * @return A String representation of the resultant hex-encoded char array.
      */
+    @Impure
     public static String encodeToString(byte[] bytes) {
         char[] encodedChars = encode(bytes);
         return new String(encodedChars);
@@ -61,6 +64,7 @@ public class Hex {
      * @param data byte[] to convert to Hex characters
      * @return A char[] containing hexidecimal characters
      */
+    @Impure
     public static char[] encode(byte[] data) {
 
         int l = data.length;
@@ -90,6 +94,7 @@ public class Hex {
      *                                  to this function
      * @see #decode(char[])
      */
+    @Impure
     public static byte[] decode(byte[] array) throws IllegalArgumentException {
         String s = CodecSupport.toString(array);
         return decode(s);
@@ -103,6 +108,7 @@ public class Hex {
      * @param hex a Hex-encoded String.
      * @return A byte array containing binary data decoded from the supplied String's char array.
      */
+    @Impure
     public static byte[] decode(String hex) {
         return decode(hex.toCharArray());
     }
@@ -120,6 +126,7 @@ public class Hex {
      * @throws IllegalArgumentException if an odd number or illegal of characters
      *                                  is supplied
      */
+    @Impure
     public static byte[] decode(char[] data) throws IllegalArgumentException {
 
         int len = data.length;
@@ -150,6 +157,7 @@ public class Hex {
      * @return An integer
      * @throws IllegalArgumentException if ch is an illegal hex character
      */
+    @Pure
     protected static int toDigit(char ch, int index) throws IllegalArgumentException {
         int digit = Character.digit(ch, 16);
         if (digit == -1) {

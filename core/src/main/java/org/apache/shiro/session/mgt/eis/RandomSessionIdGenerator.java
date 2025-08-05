@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.session.mgt.eis;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +40,7 @@ public class RandomSessionIdGenerator implements SessionIdGenerator {
     private static final String RANDOM_NUM_GENERATOR_ALGORITHM_NAME = "SHA1PRNG";
     private Random random;
 
+    @Impure
     public RandomSessionIdGenerator() {
         try {
             this.random = java.security.SecureRandom.getInstance(RANDOM_NUM_GENERATOR_ALGORITHM_NAME);
@@ -48,10 +51,12 @@ public class RandomSessionIdGenerator implements SessionIdGenerator {
         }
     }
 
+    @Pure
     public Random getRandom() {
         return this.random;
     }
 
+    @Impure
     public void setRandom(Random random) {
         this.random = random;
     }
@@ -62,6 +67,7 @@ public class RandomSessionIdGenerator implements SessionIdGenerator {
      * @param session the {@link Session} instance to which the ID will be applied.
      * @return the String value of the configured {@link Random}'s {@link Random#nextLong()} invocation.
      */
+    @Impure
     public Serializable generateId(Session session) {
         //ignore the argument - just call the Random:
         return Long.toString(getRandom().nextLong());

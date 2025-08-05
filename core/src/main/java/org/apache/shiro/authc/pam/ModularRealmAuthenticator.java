@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.authc.pam;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -91,6 +94,7 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
      * {@link #setAuthenticationStrategy(AuthenticationStrategy) enables}  an
      * {@link org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy} by default.
      */
+    @Impure
     public ModularRealmAuthenticator() {
         this.authenticationStrategy = new AtLeastOneSuccessfulStrategy();
     }
@@ -104,6 +108,7 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
      *
      * @param realms the realms to consult during authentication attempts.
      */
+    @Impure
     public void setRealms(Collection<Realm> realms) {
         this.realms = realms;
     }
@@ -113,6 +118,7 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
      *
      * @return the realm(s) used by this {@code Authenticator} during an authentication attempt.
      */
+    @Pure
     protected Collection<Realm> getRealms() {
         return this.realms;
     }
@@ -128,6 +134,7 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
      * @return the {@code AuthenticationStrategy} utilized by this modular authenticator during a log-in attempt.
      * @since 0.2
      */
+    @Pure
     public AuthenticationStrategy getAuthenticationStrategy() {
         return authenticationStrategy;
     }
@@ -139,6 +146,7 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
      * @param authenticationStrategy the strategy implementation to use during log-in attempts.
      * @since 0.2
      */
+    @Impure
     public void setAuthenticationStrategy(AuthenticationStrategy authenticationStrategy) {
         this.authenticationStrategy = authenticationStrategy;
     }
@@ -153,6 +161,8 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
      * @throws IllegalStateException if the {@code realms} property is configured incorrectly.
      */
 
+    @SideEffectFree
+    @Impure
     protected void assertRealmsConfigured() throws IllegalStateException {
         Collection<Realm> realms = getRealms();
         if (CollectionUtils.isEmpty(realms)) {
@@ -170,6 +180,7 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
      * @param token the submitted AuthenticationToken representing the subject's (user's) log-in principals and credentials.
      * @return the AuthenticationInfo associated with the user account corresponding to the specified {@code token}
      */
+    @Impure
     protected AuthenticationInfo doSingleRealmAuthentication(Realm realm, AuthenticationToken token) {
         if (!realm.supports(token)) {
             String msg = "Realm [" + realm + "] does not support authentication token [" +
@@ -195,6 +206,7 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
      * @return an aggregated AuthenticationInfo instance representing account data across all the successfully
      *         consulted realms.
      */
+    @Impure
     protected AuthenticationInfo doMultiRealmAuthentication(Collection<Realm> realms, AuthenticationToken token) {
 
         AuthenticationStrategy strategy = getAuthenticationStrategy();
@@ -260,6 +272,7 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
      * @throws AuthenticationException if the user could not be authenticated or the user is denied authentication
      *                                 for the given principal and credentials.
      */
+    @Impure
     protected AuthenticationInfo doAuthenticate(AuthenticationToken authenticationToken) throws AuthenticationException {
         assertRealmsConfigured();
         Collection<Realm> realms = getRealms();
@@ -281,6 +294,7 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
      *
      * @param principals the application-specific Subject/user identifier.
      */
+    @Impure
     public void onLogout(PrincipalCollection principals) {
         super.onLogout(principals);
         Collection<Realm> realms = getRealms();

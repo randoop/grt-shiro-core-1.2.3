@@ -17,11 +17,13 @@
  * under the License.
  */
 package org.apache.shiro.crypto.hash.format;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * @since 1.2
  */
 public interface HashFormatFactory {
 
+    @Impure
     HashFormat getInstance(String token);
 }

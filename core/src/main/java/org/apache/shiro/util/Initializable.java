@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.util;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.ShiroException;
 
 /**
@@ -33,6 +34,7 @@ public interface Initializable {
      * @throws org.apache.shiro.ShiroException
      *          if an exception occurs during initialization.
      */
+    @Impure
     void init() throws ShiroException;
 
 }

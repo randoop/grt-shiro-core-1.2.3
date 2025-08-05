@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authc.credential;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.crypto.hash.AbstractHash;
 import org.apache.shiro.crypto.hash.Hash;
 import org.apache.shiro.crypto.hash.Sha512Hash;
@@ -33,6 +34,7 @@ import org.apache.shiro.crypto.hash.Sha512Hash;
  */
 public class Sha512CredentialsMatcher extends HashedCredentialsMatcher {
 
+    @Impure
     public Sha512CredentialsMatcher() {
         super();
         setHashAlgorithmName(Sha512Hash.ALGORITHM_NAME);

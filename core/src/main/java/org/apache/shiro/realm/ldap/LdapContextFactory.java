@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.realm.ldap;
 
+import org.checkerframework.dataflow.qual.Impure;
 import javax.naming.NamingException;
 import javax.naming.ldap.LdapContext;
 
@@ -37,6 +38,7 @@ public interface LdapContextFactory {
      *         is configured.
      * @throws javax.naming.NamingException if there is an error creating the context.
      */
+    @Impure
     LdapContext getSystemLdapContext() throws NamingException;
 
     /**
@@ -50,6 +52,7 @@ public interface LdapContextFactory {
      * @deprecated the {@link #getLdapContext(Object, Object)} method should be used in all cases to ensure more than
      * String principals and credentials can be used.
      */
+    @Impure
     @Deprecated
     LdapContext getLdapContext(String username, String password) throws NamingException;
 
@@ -72,6 +75,7 @@ public interface LdapContextFactory {
      * @throws NamingException if unable to acquire a connection.
      * @since 1.1
      */
+    @Impure
     LdapContext getLdapContext(Object principal, Object credentials) throws NamingException;
     
 }

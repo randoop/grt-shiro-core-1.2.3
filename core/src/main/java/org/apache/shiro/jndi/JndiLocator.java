@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.jndi;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.util.Properties;
 import javax.naming.NamingException;
 
@@ -62,6 +64,7 @@ public class JndiLocator {
      *
      * @see #setJndiEnvironment
      */
+    @Impure
     public void setJndiTemplate(JndiTemplate jndiTemplate) {
         this.jndiTemplate = (jndiTemplate != null ? jndiTemplate : new JndiTemplate());
     }
@@ -69,6 +72,7 @@ public class JndiLocator {
     /**
      * Return the JNDI template to use for JNDI lookups.
      */
+    @Pure
     public JndiTemplate getJndiTemplate() {
         return this.jndiTemplate;
     }
@@ -79,6 +83,7 @@ public class JndiLocator {
      *
      * @see #setJndiTemplate
      */
+    @Impure
     public void setJndiEnvironment(Properties jndiEnvironment) {
         this.jndiTemplate = new JndiTemplate(jndiEnvironment);
     }
@@ -86,6 +91,8 @@ public class JndiLocator {
     /**
      * Return the JNDI environment to use for JNDI lookups.
      */
+    @Pure
+    @Impure
     public Properties getJndiEnvironment() {
         return this.jndiTemplate.getEnvironment();
     }
@@ -96,6 +103,7 @@ public class JndiLocator {
      * contain it. Default is "false".
      * <p>Note: Will only get applied if no other scheme (e.g. "java:") is given.
      */
+    @Impure
     public void setResourceRef(boolean resourceRef) {
         this.resourceRef = resourceRef;
     }
@@ -103,6 +111,7 @@ public class JndiLocator {
     /**
      * Return whether the lookup occurs in a J2EE container.
      */
+    @Pure
     public boolean isResourceRef() {
         return this.resourceRef;
     }
@@ -118,6 +127,7 @@ public class JndiLocator {
      * @throws javax.naming.NamingException if the JNDI lookup failed
      * @see #setResourceRef
      */
+    @Impure
     protected Object lookup(String jndiName) throws NamingException {
         return lookup(jndiName, null);
     }
@@ -133,6 +143,7 @@ public class JndiLocator {
      * @throws NamingException if the JNDI lookup failed
      * @see #setResourceRef
      */
+    @Impure
     protected Object lookup(String jndiName, Class requiredType) throws NamingException {
         if (jndiName == null) {
             throw new IllegalArgumentException("jndiName argument must not be null");
@@ -168,6 +179,8 @@ public class JndiLocator {
      * @see #CONTAINER_PREFIX
      * @see #setResourceRef
      */
+    @Pure
+    @Impure
     protected String convertJndiName(String jndiName) {
         // Prepend container prefix if not already specified and no other scheme given.
         if (isResourceRef() && !jndiName.startsWith(CONTAINER_PREFIX) && jndiName.indexOf(':') == -1) {

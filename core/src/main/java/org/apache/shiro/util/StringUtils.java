@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.util;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 import java.text.ParseException;
 import java.util.*;
 
@@ -66,6 +69,8 @@ public class StringUtils {
      *         greater than 0, and it does not contain whitespace only
      * @see java.lang.Character#isWhitespace
      */
+    @Pure
+    @Impure
     public static boolean hasText(String str) {
         if (!hasLength(str)) {
             return false;
@@ -94,6 +99,7 @@ public class StringUtils {
      * @return <code>true</code> if the String is not null and has length
      * @see #hasText(String)
      */
+    @Pure
     public static boolean hasLength(String str) {
         return (str != null && str.length() > 0);
     }
@@ -110,6 +116,7 @@ public class StringUtils {
      * @return <code>true</code> starts with the specified prefix (ignoring case), <code>false</code> if it does not.
      * @see java.lang.String#startsWith
      */
+    @SideEffectFree
     public static boolean startsWithIgnoreCase(String str, String prefix) {
         if (str == null || prefix == null) {
             return false;
@@ -141,6 +148,7 @@ public class StringUtils {
      * @param in the input String to clean.
      * @return a populated-but-trimmed String or <code>null</code> otherwise
      */
+    @SideEffectFree
     public static String clean(String in) {
         String out = in;
 
@@ -161,6 +169,7 @@ public class StringUtils {
      * @return the array's contents as a comma-delimited (',') string.
      * @since 1.0
      */
+    @Impure
     public static String toString(Object[] array) {
         return toDelimitedString(array, ",");
     }
@@ -174,6 +183,7 @@ public class StringUtils {
      * @return a single string, delimited by the specified {@code delimiter}.
      * @since 1.0
      */
+    @Impure
     public static String toDelimitedString(Object[] array, String delimiter) {
         if (array == null || array.length == 0) {
             return EMPTY_STRING;
@@ -197,6 +207,7 @@ public class StringUtils {
      * @return a single string, delimited by the specified {@code delimiter}.
      * @since 1.2
      */
+    @Impure
     public static String toDelimitedString(Collection c, String delimiter) {
         if (c == null || c.isEmpty()) {
             return EMPTY_STRING;
@@ -221,6 +232,7 @@ public class StringUtils {
      * @see java.util.StringTokenizer
      * @see java.lang.String#trim()
      */
+    @Impure
     public static String[] tokenizeToStringArray(String str, String delimiters) {
         return tokenizeToStringArray(str, delimiters, true, true);
     }
@@ -246,6 +258,7 @@ public class StringUtils {
      * @see java.util.StringTokenizer
      * @see java.lang.String#trim()
      */
+    @Impure
     @SuppressWarnings({"unchecked"})
     public static String[] tokenizeToStringArray(
             String str, String delimiters, boolean trimTokens, boolean ignoreEmptyTokens) {
@@ -277,6 +290,7 @@ public class StringUtils {
      * @return the String array (<code>null</code> if the passed-in
      *         Collection was <code>null</code>)
      */
+    @SideEffectFree
     @SuppressWarnings({"unchecked"})
     public static String[] toStringArray(Collection collection) {
         if (collection == null) {
@@ -285,6 +299,7 @@ public class StringUtils {
         return (String[]) collection.toArray(new String[collection.size()]);
     }
 
+    @Impure
     public static String[] splitKeyValue(String aLine) throws ParseException {
         String line = clean(aLine);
         if (line == null) {
@@ -322,18 +337,22 @@ public class StringUtils {
         return split;
     }
 
+    @Impure
     public static String[] split(String line) {
         return split(line, DEFAULT_DELIMITER_CHAR);
     }
 
+    @Impure
     public static String[] split(String line, char delimiter) {
         return split(line, delimiter, DEFAULT_QUOTE_CHAR);
     }
 
+    @Impure
     public static String[] split(String line, char delimiter, char quoteChar) {
         return split(line, delimiter, quoteChar, quoteChar);
     }
 
+    @Impure
     public static String[] split(String line, char delimiter, char beginQuoteChar, char endQuoteChar) {
         return split(line, delimiter, beginQuoteChar, endQuoteChar, false, true);
     }
@@ -358,6 +377,7 @@ public class StringUtils {
      * @param trimTokens     if leading and trailing whitespace should be trimmed from discovered tokens.
      * @return the tokens discovered from parsing the given delimited <tt>line</tt>.
      */
+    @Impure
     public static String[] split(String aLine, char delimiter, char beginQuoteChar, char endQuoteChar,
                                  boolean retainQuotes, boolean trimTokens) {
         String line = clean(aLine);
@@ -426,6 +446,7 @@ public class StringUtils {
      * @return the joined String, {@code null} if null iterator input
      * @since 1.2
      */
+    @Impure
     public static String join(Iterator<?> iterator, String separator) {
         final String empty = "";
 
@@ -470,6 +491,7 @@ public class StringUtils {
      * @return the delimited values as a {@code Set}.
      * @since 1.2
      */
+    @Impure
     public static Set<String> splitToSet(String delimited, String separator) {
         if (delimited == null || separator == null) {
             return null;
@@ -484,6 +506,7 @@ public class StringUtils {
      * @return the input argument, but with the first character capitalized (if possible).
      * @since 1.2
      */
+    @Impure
     public static String uppercaseFirstChar(String in) {
         if (in == null || in.length() == 0) {
             return in;

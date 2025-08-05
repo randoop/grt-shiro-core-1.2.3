@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.util;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.Serializable;
 import java.util.*;
 
@@ -35,10 +38,12 @@ public class MapContext implements Map<String, Object>, Serializable {
 
     private final Map<String, Object> backingMap;
 
+    @Impure
     public MapContext() {
         this.backingMap = new HashMap<String, Object>();
     }
 
+    @Impure
     public MapContext(Map<String, Object> map) {
         this();
         if (!CollectionUtils.isEmpty(map)) {
@@ -55,6 +60,7 @@ public class MapContext implements Map<String, Object>, Serializable {
      * @param <E>  the expected type of the value
      * @return the typed value or {@code null} if the attribute does not exist.
      */
+    @Pure
     @SuppressWarnings({"unchecked"})
     protected <E> E getTypedValue(String key, Class<E> type) {
         E found = null;
@@ -77,56 +83,69 @@ public class MapContext implements Map<String, Object>, Serializable {
      * @param key   the attribute key under which the non-null value will be stored
      * @param value the non-null value to store.  If {@code null}, this method does nothing and returns immediately.
      */
+    @Impure
     protected void nullSafePut(String key, Object value) {
         if (value != null) {
             put(key, value);
         }
     }
 
+    @Pure
     public int size() {
         return backingMap.size();
     }
 
+    @Pure
     public boolean isEmpty() {
         return backingMap.isEmpty();
     }
 
+    @Pure
     public boolean containsKey(Object o) {
         return backingMap.containsKey(o);
     }
 
+    @Pure
     public boolean containsValue(Object o) {
         return backingMap.containsValue(o);
     }
 
+    @Pure
     public Object get(Object o) {
         return backingMap.get(o);
     }
 
+    @Impure
     public Object put(String s, Object o) {
         return backingMap.put(s, o);
     }
 
+    @Impure
     public Object remove(Object o) {
         return backingMap.remove(o);
     }
 
+    @Impure
     public void putAll(Map<? extends String, ?> map) {
         backingMap.putAll(map);
     }
 
+    @Impure
     public void clear() {
         backingMap.clear();
     }
 
+    @SideEffectFree
     public Set<String> keySet() {
         return Collections.unmodifiableSet(backingMap.keySet());
     }
 
+    @SideEffectFree
     public Collection<Object> values() {
         return Collections.unmodifiableCollection(backingMap.values());
     }
 
+    @SideEffectFree
     public Set<Entry<String, Object>> entrySet() {
         return Collections.unmodifiableSet(backingMap.entrySet());
     }

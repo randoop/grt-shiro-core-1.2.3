@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.crypto;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.util.ByteSource;
 
 import java.io.InputStream;
@@ -95,6 +96,7 @@ public interface CipherService {
      * @return a byte source representing the original form of the specified encrypted data.
      * @throws CryptoException if there is an error during decryption
      */
+    @Impure
     ByteSource decrypt(byte[] encrypted, byte[] decryptionKey) throws CryptoException;
 
     /**
@@ -127,6 +129,7 @@ public interface CipherService {
      * @param decryptionKey the cipher key to use for decryption
      * @throws CryptoException if there is any problem during decryption.
      */
+    @Impure
     void decrypt(InputStream in, OutputStream out, byte[] decryptionKey) throws CryptoException;
 
     /**
@@ -138,6 +141,7 @@ public interface CipherService {
      * @return a byte source with the encrypted representation of the specified raw data.
      * @throws CryptoException if there is an error during encryption
      */
+    @Impure
     ByteSource encrypt(byte[] raw, byte[] encryptionKey) throws CryptoException;
 
     /**
@@ -170,6 +174,7 @@ public interface CipherService {
      * @param encryptionKey the cipher key to use for encryption
      * @throws CryptoException if there is any problem during encryption.
      */
+    @Impure
     void encrypt(InputStream in, OutputStream out, byte[] encryptionKey) throws CryptoException;
 
 }

@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.session.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.session.Session;
 
 /**
@@ -38,5 +39,6 @@ public interface SessionFactory {
      * @return a new {@code Session} instance.
      * @since 1.0
      */
+    @Impure
     Session createSession(SessionContext initData);
 }

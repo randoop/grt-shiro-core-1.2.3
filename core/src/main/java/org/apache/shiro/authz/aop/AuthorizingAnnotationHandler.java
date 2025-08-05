@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authz.aop;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.lang.annotation.Annotation;
 
 import org.apache.shiro.aop.AnnotationHandler;
@@ -37,6 +38,7 @@ public abstract class AuthorizingAnnotationHandler extends AnnotationHandler {
      *
      * @param annotationClass the type of annotation this handler will process.
      */
+    @Impure
     public AuthorizingAnnotationHandler(Class<? extends Annotation> annotationClass) {
         super(annotationClass);
     }
@@ -51,5 +53,6 @@ public abstract class AuthorizingAnnotationHandler extends AnnotationHandler {
      * @param a the <code>Annotation</code> to check for performing an authorization check.
      * @throws org.apache.shiro.authz.AuthorizationException if the class/instance/method is not allowed to proceed/execute.
      */
+    @Impure
     public abstract void assertAuthorized(Annotation a) throws AuthorizationException;
 }

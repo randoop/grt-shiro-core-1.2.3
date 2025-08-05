@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.crypto.hash;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.util.ByteSource;
 
 /**
@@ -36,6 +39,7 @@ public interface HashRequest {
      *
      * @return the source data that will be hashed by a {@link HashService}.
      */
+    @Pure
     ByteSource getSource();
 
     /**
@@ -49,6 +53,7 @@ public interface HashRequest {
      * @return a salt to be used by the {@link HashService} during hash computation, or {@code null} if no salt is
      *         provided as part of the request.
      */
+    @Pure
     ByteSource getSalt();
 
     /**
@@ -61,6 +66,7 @@ public interface HashRequest {
      *
      * @return the number of requested hash iterations to be performed when computing the final {@code Hash} result.
      */
+    @Pure
     int getIterations();
 
     /**
@@ -74,6 +80,7 @@ public interface HashRequest {
      * @return the name of the hash algorithm the {@code HashService} should use when computing the {@link Hash}, or
      *         {@code null} if the default algorithm configuration of the {@code HashService} should be used.
      */
+    @Pure
     String getAlgorithmName();
 
     /**
@@ -92,6 +99,7 @@ public interface HashRequest {
         /**
          * Default no-arg constructor.
          */
+        @SideEffectFree
         public Builder() {
             this.iterations = 0;
         }
@@ -105,6 +113,7 @@ public interface HashRequest {
          * @see HashRequest#getSource()
          * @see #setSource(Object)
          */
+        @Impure
         public Builder setSource(ByteSource source) {
             this.source = source;
             return this;
@@ -126,6 +135,7 @@ public interface HashRequest {
          * @see HashRequest#getSource()
          * @see #setSource(ByteSource)
          */
+        @Impure
         public Builder setSource(Object source) throws IllegalArgumentException {
             this.source = ByteSource.Util.bytes(source);
             return this;
@@ -144,6 +154,7 @@ public interface HashRequest {
          * @return this {@code Builder} instance for method chaining.
          * @see HashRequest#getSalt()
          */
+        @Impure
         public Builder setSalt(ByteSource salt) {
             this.salt = salt;
             return this;
@@ -165,6 +176,7 @@ public interface HashRequest {
          * @see #setSalt(ByteSource)
          * @see HashRequest#getSalt()
          */
+        @Impure
         public Builder setSalt(Object salt) throws IllegalArgumentException {
             this.salt = ByteSource.Util.bytes(salt);
             return this;
@@ -186,6 +198,7 @@ public interface HashRequest {
          * @return this {@code Builder} instance for method chaining.
          * @see HashRequest#getIterations()
          */
+        @Impure
         public Builder setIterations(int iterations) {
             this.iterations = iterations;
             return this;
@@ -208,6 +221,7 @@ public interface HashRequest {
          * @return this {@code Builder} instance for method chaining.
          * @see HashRequest#getAlgorithmName()
          */
+        @Impure
         public Builder setAlgorithmName(String algorithmName) {
             this.algorithmName = algorithmName;
             return this;
@@ -218,6 +232,8 @@ public interface HashRequest {
          *
          * @return a {@link HashRequest} instance reflecting the specified configuration.
          */
+        @SideEffectFree
+        @Impure
         public HashRequest build() {
             return new SimpleHashRequest(this.algorithmName, this.source, this.salt, this.iterations);
         }

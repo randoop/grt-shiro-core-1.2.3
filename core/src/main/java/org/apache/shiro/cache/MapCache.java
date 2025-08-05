@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.cache;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.util.CollectionUtils;
 
 import java.util.Collection;
@@ -43,6 +46,7 @@ public class MapCache<K, V> implements Cache<K, V> {
      */
     private final String name;
 
+    @SideEffectFree
     public MapCache(String name, Map<K, V> backingMap) {
         if (name == null) {
             throw new IllegalArgumentException("Cache name cannot be null.");
@@ -54,26 +58,32 @@ public class MapCache<K, V> implements Cache<K, V> {
         this.map = backingMap;
     }
 
+    @Pure
     public V get(K key) throws CacheException {
         return map.get(key);
     }
 
+    @Impure
     public V put(K key, V value) throws CacheException {
         return map.put(key, value);
     }
 
+    @Impure
     public V remove(K key) throws CacheException {
         return map.remove(key);
     }
 
+    @Impure
     public void clear() throws CacheException {
         map.clear();
     }
 
+    @Pure
     public int size() {
         return map.size();
     }
 
+    @SideEffectFree
     public Set<K> keys() {
         Set<K> keys = map.keySet();
         if (!keys.isEmpty()) {
@@ -82,6 +92,8 @@ public class MapCache<K, V> implements Cache<K, V> {
         return Collections.emptySet();
     }
 
+    @SideEffectFree
+    @Impure
     public Collection<V> values() {
         Collection<V> values = map.values();
         if (!CollectionUtils.isEmpty(values)) {
@@ -90,6 +102,7 @@ public class MapCache<K, V> implements Cache<K, V> {
         return Collections.emptySet();
     }
 
+    @Impure
     public String toString() {
         return new StringBuilder("MapCache '")
                 .append(name).append("' (")

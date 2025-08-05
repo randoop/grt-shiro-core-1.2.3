@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authz.aop;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.aop.AnnotationMethodInterceptor;
 import org.apache.shiro.aop.AnnotationResolver;
 import org.apache.shiro.aop.MethodInvocation;
@@ -39,6 +40,7 @@ public abstract class AuthorizingAnnotationMethodInterceptor extends AnnotationM
      * @param handler the internal <code>handler</code> used to perform authorization assertion checks when a 
      * supported annotation is encountered.
      */
+    @Impure
     public AuthorizingAnnotationMethodInterceptor( AuthorizingAnnotationHandler handler ) {
         super(handler);
     }
@@ -49,6 +51,7 @@ public abstract class AuthorizingAnnotationMethodInterceptor extends AnnotationM
      * @param resolver
      * @since 1.1
      */
+    @Impure
     public AuthorizingAnnotationMethodInterceptor( AuthorizingAnnotationHandler handler,
                                                    AnnotationResolver resolver) {
         super(handler, resolver);
@@ -63,6 +66,7 @@ public abstract class AuthorizingAnnotationMethodInterceptor extends AnnotationM
      * @throws org.apache.shiro.authz.AuthorizationException if the <code>MethodInvocation</code> is not allowed to proceed.
      * @throws Throwable if any other error occurs.
      */
+    @Impure
     public Object invoke(MethodInvocation methodInvocation) throws Throwable {
         assertAuthorized(methodInvocation);
         return methodInvocation.proceed();
@@ -79,6 +83,7 @@ public abstract class AuthorizingAnnotationMethodInterceptor extends AnnotationM
      * @param mi the <code>MethodInvocation</code> to check to see if it is allowed to proceed/execute.
      * @throws AuthorizationException if the method invocation is not allowed to continue/execute.
      */
+    @Impure
     public void assertAuthorized(MethodInvocation mi) throws AuthorizationException {
         try {
             ((AuthorizingAnnotationHandler)getHandler()).assertAuthorized(getAnnotation(mi));

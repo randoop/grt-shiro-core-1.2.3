@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.session.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionException;
 
@@ -44,6 +45,7 @@ public interface SessionManager {
      * @see SessionFactory#createSession(SessionContext)
      * @since 1.0
      */
+    @Impure
     Session start(SessionContext context);
 
     /**
@@ -57,5 +59,6 @@ public interface SessionManager {
      * @throws SessionException if a session was found but it was invalid (stopped/expired).
      * @since 1.0
      */
+    @Impure
     Session getSession(SessionKey key) throws SessionException;
 }

@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.cache;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Interface implemented by components that utilize a CacheManager and wish that CacheManager to be supplied if
@@ -34,5 +35,6 @@ public interface CacheManagerAware {
      *
      * @param cacheManager the CacheManager instance to set on this component.
      */
+    @Impure
     void setCacheManager(CacheManager cacheManager);
 }

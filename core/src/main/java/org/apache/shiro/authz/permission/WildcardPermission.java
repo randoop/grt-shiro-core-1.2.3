@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.authz.permission;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.util.CollectionUtils;
 
@@ -131,21 +134,26 @@ public class WildcardPermission implements Permission, Serializable {
      * {@code UserPermission}, {@code SystemPermission}, {@code PrinterPermission}, etc.  If you want such type-safe
      * permission usage, consider subclassing the {@link DomainPermission DomainPermission} class for your needs.
      */
+    @SideEffectFree
     protected WildcardPermission() {
     }
 
+    @Impure
     public WildcardPermission(String wildcardString) {
         this(wildcardString, DEFAULT_CASE_SENSITIVE);
     }
 
+    @Impure
     public WildcardPermission(String wildcardString, boolean caseSensitive) {
         setParts(wildcardString, caseSensitive);
     }
 
+    @Impure
     protected void setParts(String wildcardString) {
         setParts(wildcardString, DEFAULT_CASE_SENSITIVE);
     }
 
+    @Impure
     protected void setParts(String wildcardString, boolean caseSensitive) {
         if (wildcardString == null || wildcardString.trim().length() == 0) {
             throw new IllegalArgumentException("Wildcard string cannot be null or empty. Make sure permission strings are properly formatted.");
@@ -172,6 +180,7 @@ public class WildcardPermission implements Permission, Serializable {
         }
     }
 
+    @Impure
     private Set<String> lowercase(Set<String> subparts) {
         Set<String> lowerCasedSubparts = new LinkedHashSet<String>(subparts.size());
         for (String subpart : subparts) {
@@ -183,6 +192,7 @@ public class WildcardPermission implements Permission, Serializable {
     /*--------------------------------------------
     |  A C C E S S O R S / M O D I F I E R S    |
     ============================================*/
+    @Pure
     protected List<Set<String>> getParts() {
         return this.parts;
     }
@@ -191,6 +201,8 @@ public class WildcardPermission implements Permission, Serializable {
     |               M E T H O D S               |
     ============================================*/
 
+    @Pure
+    @Impure
     public boolean implies(Permission p) {
         // By default only supports comparisons with other WildcardPermissions
         if (!(p instanceof WildcardPermission)) {
@@ -227,6 +239,7 @@ public class WildcardPermission implements Permission, Serializable {
         return true;
     }
 
+    @Impure
     public String toString() {
         StringBuilder buffer = new StringBuilder();
         for (Set<String> part : parts) {
@@ -238,6 +251,7 @@ public class WildcardPermission implements Permission, Serializable {
         return buffer.toString();
     }
 
+    @Pure
     public boolean equals(Object o) {
         if (o instanceof WildcardPermission) {
             WildcardPermission wp = (WildcardPermission) o;
@@ -246,6 +260,7 @@ public class WildcardPermission implements Permission, Serializable {
         return false;
     }
 
+    @Pure
     public int hashCode() {
         return parts.hashCode();
     }

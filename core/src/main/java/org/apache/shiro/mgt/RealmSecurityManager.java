@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.mgt;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.CacheManagerAware;
 import org.apache.shiro.realm.Realm;
@@ -44,6 +47,8 @@ public abstract class RealmSecurityManager extends CachingSecurityManager {
     /**
      * Default no-arg constructor.
      */
+    @SideEffectFree
+    @Impure
     public RealmSecurityManager() {
         super();
     }
@@ -55,6 +60,7 @@ public abstract class RealmSecurityManager extends CachingSecurityManager {
      * @param realm the realm to set for a single-realm application.
      * @since 0.2
      */
+    @Impure
     public void setRealm(Realm realm) {
         if (realm == null) {
             throw new IllegalArgumentException("Realm argument cannot be null");
@@ -70,6 +76,7 @@ public abstract class RealmSecurityManager extends CachingSecurityManager {
      * @param realms the realms managed by this <tt>SecurityManager</tt> instance.
      * @throws IllegalArgumentException if the realms collection is null or empty.
      */
+    @Impure
     public void setRealms(Collection<Realm> realms) {
         if (realms == null) {
             throw new IllegalArgumentException("Realms collection argument cannot be null.");
@@ -81,6 +88,7 @@ public abstract class RealmSecurityManager extends CachingSecurityManager {
         afterRealmsSet();
     }
 
+    @Impure
     protected void afterRealmsSet() {
         applyCacheManagerToRealms();
     }
@@ -90,6 +98,7 @@ public abstract class RealmSecurityManager extends CachingSecurityManager {
      *
      * @return the {@link Realm Realm}s managed by this SecurityManager instance.
      */
+    @Pure
     public Collection<Realm> getRealms() {
         return realms;
     }
@@ -106,6 +115,7 @@ public abstract class RealmSecurityManager extends CachingSecurityManager {
      * {@link #setRealms setRealms} methods to allow these newly available realms to be given the cache manager
      * already in use.
      */
+    @Impure
     protected void applyCacheManagerToRealms() {
         CacheManager cacheManager = getCacheManager();
         Collection<Realm> realms = getRealms();
@@ -123,10 +133,12 @@ public abstract class RealmSecurityManager extends CachingSecurityManager {
      * newly set {@link org.apache.shiro.cache.CacheManager CacheManager} to be propagated to the internal collection of <code>Realm</code>
      * that would need to use it.
      */
+    @Impure
     protected void afterCacheManagerSet() {
         applyCacheManagerToRealms();
     }
 
+    @Impure
     public void destroy() {
         LifecycleUtils.destroy(getRealms());
         this.realms = null;

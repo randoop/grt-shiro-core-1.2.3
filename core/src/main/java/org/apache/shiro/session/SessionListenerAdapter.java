@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.session;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Simple adapter implementation of the {@link SessionListener} interface, effectively providing
@@ -31,6 +32,7 @@ public class SessionListenerAdapter implements SessionListener {
      *
      * @param session the session that has started.
      */
+    @SideEffectFree
     public void onStart(Session session) {
         //no-op
     }
@@ -40,6 +42,7 @@ public class SessionListenerAdapter implements SessionListener {
      *
      * @param session the session that has stopped.
      */
+    @SideEffectFree
     public void onStop(Session session) {
         //no-op
     }
@@ -49,6 +52,7 @@ public class SessionListenerAdapter implements SessionListener {
      *
      * @param session the session that has expired.
      */
+    @SideEffectFree
     public void onExpiration(Session session) {
         //no-op
     }

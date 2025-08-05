@@ -17,6 +17,9 @@
  * under the License.
  */
 package org.apache.shiro.authz;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * Thrown when a particular client (that is, host address) has not been enabled to access the system
@@ -32,6 +35,8 @@ public class HostUnauthorizedException extends UnauthorizedException {
     /**
      * Creates a new HostUnauthorizedException.
      */
+    @SideEffectFree
+    @Impure
     public HostUnauthorizedException() {
         super();
     }
@@ -41,6 +46,8 @@ public class HostUnauthorizedException extends UnauthorizedException {
      *
      * @param message the reason for the exception
      */
+    @SideEffectFree
+    @Impure
     public HostUnauthorizedException(String message) {
         super(message);
     }
@@ -50,6 +57,8 @@ public class HostUnauthorizedException extends UnauthorizedException {
      *
      * @param cause the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public HostUnauthorizedException(Throwable cause) {
         super(cause);
     }
@@ -60,6 +69,8 @@ public class HostUnauthorizedException extends UnauthorizedException {
      * @param message the reason for the exception
      * @param cause   the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public HostUnauthorizedException(String message, Throwable cause) {
         super(message, cause);
     }
@@ -69,6 +80,7 @@ public class HostUnauthorizedException extends UnauthorizedException {
      *
      * @return the host associated with this exception.
      */
+    @Pure
     public String getHost() {
         return this.host;
     }
@@ -78,6 +90,7 @@ public class HostUnauthorizedException extends UnauthorizedException {
      *
      * @param host the host associated with this exception.
      */
+    @Impure
     public void setHostAddress(String host) {
         this.host = host;
     }

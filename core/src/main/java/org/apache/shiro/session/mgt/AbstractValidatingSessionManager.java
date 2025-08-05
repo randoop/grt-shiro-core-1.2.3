@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.session.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.session.ExpiredSessionException;
 import org.apache.shiro.session.InvalidSessionException;
@@ -58,28 +61,35 @@ public abstract class AbstractValidatingSessionManager extends AbstractNativeSes
 
     protected long sessionValidationInterval;
 
+    @SideEffectFree
+    @Impure
     public AbstractValidatingSessionManager() {
         this.sessionValidationSchedulerEnabled = true;
         this.sessionValidationInterval = DEFAULT_SESSION_VALIDATION_INTERVAL;
     }
 
+    @Pure
     public boolean isSessionValidationSchedulerEnabled() {
         return sessionValidationSchedulerEnabled;
     }
 
+    @Impure
     @SuppressWarnings({"UnusedDeclaration"})
     public void setSessionValidationSchedulerEnabled(boolean sessionValidationSchedulerEnabled) {
         this.sessionValidationSchedulerEnabled = sessionValidationSchedulerEnabled;
     }
 
+    @Impure
     public void setSessionValidationScheduler(SessionValidationScheduler sessionValidationScheduler) {
         this.sessionValidationScheduler = sessionValidationScheduler;
     }
 
+    @Pure
     public SessionValidationScheduler getSessionValidationScheduler() {
         return sessionValidationScheduler;
     }
 
+    @Impure
     private void enableSessionValidationIfNecessary() {
         SessionValidationScheduler scheduler = getSessionValidationScheduler();
         if (isSessionValidationSchedulerEnabled() && (scheduler == null || !scheduler.isEnabled())) {
@@ -101,14 +111,17 @@ public abstract class AbstractValidatingSessionManager extends AbstractNativeSes
      *
      * @param sessionValidationInterval the time in milliseconds between checking for valid sessions to reap orphans.
      */
+    @Impure
     public void setSessionValidationInterval(long sessionValidationInterval) {
         this.sessionValidationInterval = sessionValidationInterval;
     }
 
+    @Pure
     public long getSessionValidationInterval() {
         return sessionValidationInterval;
     }
 
+    @Impure
     @Override
     protected final Session doGetSession(final SessionKey key) throws InvalidSessionException {
         enableSessionValidationIfNecessary();
@@ -129,15 +142,19 @@ public abstract class AbstractValidatingSessionManager extends AbstractNativeSes
      * @return the session identified by {@code sessionId}.
      * @throws UnknownSessionException if there is no session identified by {@code sessionId}.
      */
+    @Impure
     protected abstract Session retrieveSession(SessionKey key) throws UnknownSessionException;
 
+    @Impure
     protected Session createSession(SessionContext context) throws AuthorizationException {
         enableSessionValidationIfNecessary();
         return doCreateSession(context);
     }
 
+    @Impure
     protected abstract Session doCreateSession(SessionContext initData) throws AuthorizationException;
 
+    @Impure
     protected void validate(Session session, SessionKey key) throws InvalidSessionException {
         try {
             doValidate(session);
@@ -150,6 +167,7 @@ public abstract class AbstractValidatingSessionManager extends AbstractNativeSes
         }
     }
 
+    @Impure
     protected void onExpiration(Session s, ExpiredSessionException ese, SessionKey key) {
         log.trace("Session with id [{}] has expired.", s.getId());
         try {
@@ -160,13 +178,16 @@ public abstract class AbstractValidatingSessionManager extends AbstractNativeSes
         }
     }
 
+    @Impure
     protected void onExpiration(Session session) {
         onChange(session);
     }
 
+    @Impure
     protected void afterExpired(Session session) {
     }
 
+    @Impure
     protected void onInvalidation(Session s, InvalidSessionException ise, SessionKey key) {
         if (ise instanceof ExpiredSessionException) {
             onExpiration(s, (ExpiredSessionException) ise, key);
@@ -181,6 +202,7 @@ public abstract class AbstractValidatingSessionManager extends AbstractNativeSes
         }
     }
 
+    @Impure
     protected void doValidate(Session session) throws InvalidSessionException {
         if (session instanceof ValidatingSession) {
             ((ValidatingSession) session).validate();
@@ -202,10 +224,12 @@ public abstract class AbstractValidatingSessionManager extends AbstractNativeSes
      * @param session the session for which to determine session timeout.
      * @return the time in milliseconds the specified session may remain idle before expiring.
      */
+    @Impure
     protected long getTimeout(Session session) {
         return session.getTimeout();
     }
 
+    @Impure
     protected SessionValidationScheduler createSessionValidationScheduler() {
         ExecutorServiceSessionValidationScheduler scheduler;
 
@@ -220,6 +244,7 @@ public abstract class AbstractValidatingSessionManager extends AbstractNativeSes
         return scheduler;
     }
 
+    @Impure
     protected void enableSessionValidation() {
         SessionValidationScheduler scheduler = getSessionValidationScheduler();
         if (scheduler == null) {
@@ -233,9 +258,11 @@ public abstract class AbstractValidatingSessionManager extends AbstractNativeSes
         afterSessionValidationEnabled();
     }
 
+    @SideEffectFree
     protected void afterSessionValidationEnabled() {
     }
 
+    @Impure
     protected void disableSessionValidation() {
         beforeSessionValidationDisabled();
         SessionValidationScheduler scheduler = getSessionValidationScheduler();
@@ -256,9 +283,11 @@ public abstract class AbstractValidatingSessionManager extends AbstractNativeSes
         }
     }
 
+    @SideEffectFree
     protected void beforeSessionValidationDisabled() {
     }
 
+    @Impure
     public void destroy() {
         disableSessionValidation();
     }
@@ -266,6 +295,7 @@ public abstract class AbstractValidatingSessionManager extends AbstractNativeSes
     /**
      * @see ValidatingSessionManager#validateSessions()
      */
+    @Impure
     public void validateSessions() {
         if (log.isInfoEnabled()) {
             log.info("Validating all active sessions...");
@@ -305,5 +335,6 @@ public abstract class AbstractValidatingSessionManager extends AbstractNativeSes
         }
     }
 
+    @Impure
     protected abstract Collection<Session> getActiveSessions();
 }

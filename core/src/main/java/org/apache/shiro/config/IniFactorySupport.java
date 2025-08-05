@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.config;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.io.ResourceUtils;
 import org.apache.shiro.util.AbstractFactory;
 import org.apache.shiro.util.CollectionUtils;
@@ -39,17 +42,23 @@ public abstract class IniFactorySupport<T> extends AbstractFactory<T> {
 
     private Ini ini;
 
+    @SideEffectFree
+    @Impure
     protected IniFactorySupport() {
     }
 
+    @SideEffectFree
+    @Impure
     protected IniFactorySupport(Ini ini) {
         this.ini = ini;
     }
 
+    @Pure
     public Ini getIni() {
         return ini;
     }
 
+    @Impure
     public void setIni(Ini ini) {
         this.ini = ini;
     }
@@ -61,6 +70,7 @@ public abstract class IniFactorySupport<T> extends AbstractFactory<T> {
      * @return a new Ini instance created from the default {@code classpath:shiro.ini} file, or {@code null} if
      *         the file does not exist.
      */
+    @Impure
     public static Ini loadDefaultClassPathIni() {
         Ini ini = null;
         if (ResourceUtils.resourceExists(DEFAULT_INI_RESOURCE_PATH)) {
@@ -85,6 +95,7 @@ public abstract class IniFactorySupport<T> extends AbstractFactory<T> {
      *
      * @return the Ini instance to use for configuration.
      */
+    @Impure
     protected Ini resolveIni() {
         Ini ini = getIni();
         if (CollectionUtils.isEmpty(ini)) {
@@ -104,6 +115,7 @@ public abstract class IniFactorySupport<T> extends AbstractFactory<T> {
      *
      * @return a new {@code SecurityManager} instance by using a configured INI source.
      */
+    @Impure
     public T createInstance() {
         Ini ini = resolveIni();
 
@@ -131,7 +143,9 @@ public abstract class IniFactorySupport<T> extends AbstractFactory<T> {
         return instance;
     }
 
+    @Impure
     protected abstract T createInstance(Ini ini);
 
+    @Impure
     protected abstract T createDefaultInstance();
 }

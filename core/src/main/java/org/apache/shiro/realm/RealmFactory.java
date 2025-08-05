@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.realm;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.util.Collection;
 
 /**
@@ -48,6 +49,7 @@ public interface RealmFactory {
      * @return the <code>Collection</code> of Realms that the application's <code>SecurityManager</code> will use
      *         for security data access.
      */
+    @Impure
     Collection<Realm> getRealms();
 
 }

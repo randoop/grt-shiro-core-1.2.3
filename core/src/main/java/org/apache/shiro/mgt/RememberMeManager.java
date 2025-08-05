@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -45,6 +47,7 @@ public interface RememberMeManager {
      * @return he remembered principals or {@code null} if none could be acquired.
      * @since 1.0
      */
+    @Impure
     PrincipalCollection getRememberedPrincipals(SubjectContext subjectContext);
 
     /**
@@ -57,6 +60,7 @@ public interface RememberMeManager {
      *                       is being used to construct a {@link Subject} instance.
      * @since 1.0
      */
+    @SideEffectFree
     void forgetIdentity(SubjectContext subjectContext);
 
     /**
@@ -68,6 +72,7 @@ public interface RememberMeManager {
      * @param info    the authenticationInfo returned as a result of the successful authentication attempt
      * @since 1.0
      */
+    @Impure
     void onSuccessfulLogin(Subject subject, AuthenticationToken token, AuthenticationInfo info);
 
     /**
@@ -79,6 +84,8 @@ public interface RememberMeManager {
      * @param ae      the authentication exception thrown as a result of the failed authentication attempt
      * @since 1.0
      */
+    @SideEffectFree
+    @Impure
     void onFailedLogin(Subject subject, AuthenticationToken token, AuthenticationException ae);
 
     /**
@@ -88,5 +95,7 @@ public interface RememberMeManager {
      * @param subject the subject logging out.
      * @since 1.0
      */
+    @SideEffectFree
+    @Impure
     void onLogout(Subject subject);
 }

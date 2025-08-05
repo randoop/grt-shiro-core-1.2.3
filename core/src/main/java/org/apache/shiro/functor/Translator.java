@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.functor;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * Generic <a href="http://en.wikipedia.org/wiki/Functor">functor</a> interface representing a data translation (or
@@ -40,6 +41,7 @@ public interface Translator<I,O> {
      * @return the translated output data
      * @since 1.2
      */
+    @Pure
     O translate(I input);
 
 }

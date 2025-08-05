@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.session.mgt.eis;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 
@@ -58,6 +59,7 @@ public interface SessionDAO {
      * @param session the {@link org.apache.shiro.session.Session} object to create in the EIS.
      * @return the EIS id (e.g. primary key) of the created {@code Session} object.
      */
+    @Impure
     Serializable create(Session session);
 
     /**
@@ -70,6 +72,7 @@ public interface SessionDAO {
      * @throws UnknownSessionException if there is no EIS record for any session with the
      *                                 specified {@code sessionId}
      */
+    @Impure
     Session readSession(Serializable sessionId) throws UnknownSessionException;
 
     /**
@@ -86,6 +89,7 @@ public interface SessionDAO {
      *          if no existing EIS session record exists with the
      *          identifier of {@link Session#getId() session.getSessionId()}
      */
+    @Impure
     void update(Session session) throws UnknownSessionException;
 
     /**
@@ -95,6 +99,7 @@ public interface SessionDAO {
      *
      * @param session the session to delete.
      */
+    @Impure
     void delete(Session session);
 
     /**
@@ -126,5 +131,6 @@ public interface SessionDAO {
      * @return a Collection of {@code Session}s that are considered active, or an
      *         empty collection or {@code null} if there are no active sessions.
      */
+    @Impure
     Collection<Session> getActiveSessions();
 }

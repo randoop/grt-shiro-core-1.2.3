@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.subject;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.util.CollectionUtils;
 
 import java.util.*;
@@ -41,10 +44,12 @@ public class SimplePrincipalMap implements PrincipalMap {
     //the realmPrincipals for each lookup.
     private Map<String, Object> combinedPrincipals;
 
+    @Impure
     public SimplePrincipalMap() {
         this(null);
     }
 
+    @Impure
     public SimplePrincipalMap(Map<String, Map<String, Object>> backingMap) {
         if (!CollectionUtils.isEmpty(backingMap)) {
             this.realmPrincipals = backingMap;
@@ -56,10 +61,13 @@ public class SimplePrincipalMap implements PrincipalMap {
         }
     }
 
+    @Pure
+    @Impure
     public int size() {
         return CollectionUtils.size(this.combinedPrincipals);
     }
 
+    @Impure
     protected Map<String, Object> ensureCombinedPrincipals() {
         if (this.combinedPrincipals == null) {
             this.combinedPrincipals = new HashMap<String, Object>();
@@ -67,55 +75,69 @@ public class SimplePrincipalMap implements PrincipalMap {
         return this.combinedPrincipals;
     }
 
+    @Pure
     public boolean containsKey(Object o) {
         return this.combinedPrincipals != null && this.combinedPrincipals.containsKey(o);
     }
 
+    @Pure
     public boolean containsValue(Object o) {
         return this.combinedPrincipals != null && this.combinedPrincipals.containsKey(o);
     }
 
+    @Pure
     public Object get(Object o) {
         return this.combinedPrincipals != null && this.combinedPrincipals.containsKey(o);
     }
 
+    @Impure
     public Object put(String s, Object o) {
         return ensureCombinedPrincipals().put(s, o);
     }
 
+    @Impure
     public Object remove(Object o) {
         return this.combinedPrincipals != null ? this.combinedPrincipals.remove(o) : null;
     }
 
+    @Impure
     public void putAll(Map<? extends String, ?> map) {
         if (!CollectionUtils.isEmpty(map)) {
             ensureCombinedPrincipals().putAll(map);
         }
     }
 
+    @SideEffectFree
+    @Impure
     public Set<String> keySet() {
         return CollectionUtils.isEmpty(this.combinedPrincipals) ?
                 Collections.<String>emptySet() :
                 Collections.unmodifiableSet(this.combinedPrincipals.keySet());
     }
 
+    @SideEffectFree
+    @Impure
     public Collection<Object> values() {
         return CollectionUtils.isEmpty(this.combinedPrincipals) ?
                 Collections.emptySet() :
                 Collections.unmodifiableCollection(this.combinedPrincipals.values());
     }
 
+    @SideEffectFree
+    @Impure
     public Set<Entry<String, Object>> entrySet() {
         return CollectionUtils.isEmpty(this.combinedPrincipals) ?
                 Collections.<Entry<String,Object>>emptySet() :
                 Collections.unmodifiableSet(this.combinedPrincipals.entrySet());
     }
 
+    @Impure
     public void clear() {
         this.realmPrincipals = null;
         this.combinedPrincipals = null;
     }
 
+    @Impure
     public Object getPrimaryPrincipal() {
         //heuristic - just use the first one we come across:
         return !CollectionUtils.isEmpty(this.combinedPrincipals) ?
@@ -123,6 +145,7 @@ public class SimplePrincipalMap implements PrincipalMap {
                 null;
     }
 
+    @Impure
     public <T> T oneByType(Class<T> type) {
         if (CollectionUtils.isEmpty(this.combinedPrincipals)) {
             return null;
@@ -135,6 +158,7 @@ public class SimplePrincipalMap implements PrincipalMap {
         return null;
     }
 
+    @Impure
     public <T> Collection<T> byType(Class<T> type) {
         if (CollectionUtils.isEmpty(this.combinedPrincipals)) {
             return Collections.emptySet();
@@ -151,6 +175,7 @@ public class SimplePrincipalMap implements PrincipalMap {
         return instances != null ? instances : Collections.<T>emptyList();
     }
 
+    @Impure
     public List asList() {
         if (CollectionUtils.isEmpty(this.combinedPrincipals)) {
             return Collections.emptyList();
@@ -160,6 +185,7 @@ public class SimplePrincipalMap implements PrincipalMap {
         return list;
     }
 
+    @Impure
     public Set asSet() {
         if (CollectionUtils.isEmpty(this.combinedPrincipals)) {
             return Collections.emptySet();
@@ -169,6 +195,8 @@ public class SimplePrincipalMap implements PrincipalMap {
         return set;
     }
 
+    @SideEffectFree
+    @Impure
     public Collection fromRealm(String realmName) {
         if (CollectionUtils.isEmpty(this.realmPrincipals)) {
             return Collections.emptySet();
@@ -180,6 +208,8 @@ public class SimplePrincipalMap implements PrincipalMap {
         return Collections.unmodifiableCollection(principals.values());
     }
 
+    @SideEffectFree
+    @Impure
     public Set<String> getRealmNames() {
         if (CollectionUtils.isEmpty(this.realmPrincipals)) {
             return Collections.emptySet();
@@ -187,14 +217,18 @@ public class SimplePrincipalMap implements PrincipalMap {
         return Collections.unmodifiableSet(this.realmPrincipals.keySet());
     }
 
+    @Pure
+    @Impure
     public boolean isEmpty() {
         return CollectionUtils.isEmpty(this.combinedPrincipals);
     }
 
+    @Impure
     public Iterator iterator() {
         return asList().iterator();
     }
 
+    @Impure
     public Map<String, Object> getRealmPrincipals(String name) {
         if (this.realmPrincipals == null) {
             return null;
@@ -206,6 +240,7 @@ public class SimplePrincipalMap implements PrincipalMap {
         return Collections.unmodifiableMap(principals);
     }
 
+    @Impure
     public Map<String,Object> setRealmPrincipals(String realmName, Map<String, Object> principals) {
         if (realmName == null) {
             throw new NullPointerException("realmName argument cannot be null.");
@@ -226,6 +261,7 @@ public class SimplePrincipalMap implements PrincipalMap {
         }
     }
 
+    @Impure
     public Object setRealmPrincipal(String realmName, String principalName, Object principal) {
         if (realmName == null) {
             throw new NullPointerException("realmName argument cannot be null.");
@@ -247,6 +283,7 @@ public class SimplePrincipalMap implements PrincipalMap {
         return principals.put(principalName, principal);
     }
 
+    @Pure
     public Object getRealmPrincipal(String realmName, String principalName) {
         if (realmName == null) {
             throw new NullPointerException("realmName argument cannot be null.");
@@ -264,6 +301,7 @@ public class SimplePrincipalMap implements PrincipalMap {
         return null;
     }
 
+    @Impure
     public Object removeRealmPrincipal(String realmName, String principalName) {
         if (realmName == null) {
             throw new NullPointerException("realmName argument cannot be null.");

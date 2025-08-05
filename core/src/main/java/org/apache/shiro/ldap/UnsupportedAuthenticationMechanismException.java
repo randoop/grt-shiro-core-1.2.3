@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.ldap;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.dao.InvalidResourceUsageException;
 
 /**
@@ -29,10 +31,14 @@ import org.apache.shiro.dao.InvalidResourceUsageException;
  */
 public class UnsupportedAuthenticationMechanismException extends InvalidResourceUsageException {
 
+    @SideEffectFree
+    @Impure
     public UnsupportedAuthenticationMechanismException(String message) {
         super(message);
     }
 
+    @SideEffectFree
+    @Impure
     public UnsupportedAuthenticationMechanismException(String message, Throwable cause) {
         super(message, cause);
     }

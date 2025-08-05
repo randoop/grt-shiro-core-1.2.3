@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.crypto;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.ShiroException;
 
 /**
@@ -27,14 +29,20 @@ import org.apache.shiro.ShiroException;
  */
 public class CryptoException extends ShiroException {
 
+    @SideEffectFree
+    @Impure
     public CryptoException(String message) {
         super(message);
     }
 
+    @SideEffectFree
+    @Impure
     public CryptoException(Throwable cause) {
         super(cause);
     }
 
+    @SideEffectFree
+    @Impure
     public CryptoException(String message, Throwable cause) {
         super(message, cause);
     }

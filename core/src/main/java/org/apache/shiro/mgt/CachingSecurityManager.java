@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.CacheManagerAware;
 import org.apache.shiro.util.Destroyable;
@@ -44,6 +47,7 @@ public abstract class CachingSecurityManager implements SecurityManager, Destroy
     /**
      * Default no-arg constructor that will automatically attempt to initialize a default cacheManager
      */
+    @SideEffectFree
     public CachingSecurityManager() {
     }
 
@@ -52,6 +56,7 @@ public abstract class CachingSecurityManager implements SecurityManager, Destroy
      *
      * @return the cacheManager used by this SecurityManager
      */
+    @Pure
     public CacheManager getCacheManager() {
         return cacheManager;
     }
@@ -67,6 +72,7 @@ public abstract class CachingSecurityManager implements SecurityManager, Destroy
      * @param cacheManager the CacheManager used by this {@code SecurityManager} and potentially any of its
      *                     children components.
      */
+    @Impure
     public void setCacheManager(CacheManager cacheManager) {
         this.cacheManager = cacheManager;
         afterCacheManagerSet();
@@ -77,12 +83,14 @@ public abstract class CachingSecurityManager implements SecurityManager, Destroy
      * {@link org.apache.shiro.cache.CacheManager CacheManager} has been set and is available for use via the
      * {@link #getCacheManager getCacheManager()} method.
      */
+    @Impure
     protected void afterCacheManagerSet() {
     }
 
     /**
      * Destroys the {@link #getCacheManager() cacheManager} via {@link LifecycleUtils#destroy LifecycleUtils.destroy}.
      */
+    @Impure
     public void destroy() {
         LifecycleUtils.destroy(getCacheManager());
         this.cacheManager = null;

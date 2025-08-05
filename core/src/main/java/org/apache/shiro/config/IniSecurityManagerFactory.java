@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.config;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
@@ -58,29 +61,38 @@ public class IniSecurityManagerFactory extends IniFactorySupport<SecurityManager
      * Creates a new instance.  See the {@link #getInstance()} JavaDoc for detailed explanation of how an INI
      * source will be resolved to use to build the instance.
      */
+    @SideEffectFree
+    @Impure
     public IniSecurityManagerFactory() {
     }
 
+    @Impure
     public IniSecurityManagerFactory(Ini config) {
         setIni(config);
     }
 
+    @Impure
     public IniSecurityManagerFactory(String iniResourcePath) {
         this(Ini.fromResourcePath(iniResourcePath));
     }
 
+    @Impure
     public Map<String, ?> getBeans() {
         return this.builder != null ? Collections.unmodifiableMap(builder.getObjects()) : null;
     }
 
+    @Pure
+    @Impure
     private SecurityManager getSecurityManagerBean() {
         return builder.getBean(SECURITY_MANAGER_NAME, SecurityManager.class);
     }
 
+    @Impure
     protected SecurityManager createDefaultInstance() {
         return new DefaultSecurityManager();
     }
 
+    @Impure
     protected SecurityManager createInstance(Ini ini) {
         if (CollectionUtils.isEmpty(ini)) {
             throw new NullPointerException("Ini argument cannot be null or empty.");
@@ -93,6 +105,7 @@ public class IniSecurityManagerFactory extends IniFactorySupport<SecurityManager
         return securityManager;
     }
 
+    @Impure
     private SecurityManager createSecurityManager(Ini ini) {
         Ini.Section mainSection = ini.getSection(MAIN_SECTION_NAME);
         if (CollectionUtils.isEmpty(mainSection)) {
@@ -102,6 +115,7 @@ public class IniSecurityManagerFactory extends IniFactorySupport<SecurityManager
         return createSecurityManager(ini, mainSection);
     }
 
+    @Impure
     protected boolean isAutoApplyRealms(SecurityManager securityManager) {
         boolean autoApply = true;
         if (securityManager instanceof RealmSecurityManager) {
@@ -117,6 +131,7 @@ public class IniSecurityManagerFactory extends IniFactorySupport<SecurityManager
         return autoApply;
     }
 
+    @Impure
     @SuppressWarnings({"unchecked"})
     private SecurityManager createSecurityManager(Ini ini, Ini.Section mainSection) {
 
@@ -140,6 +155,7 @@ public class IniSecurityManagerFactory extends IniFactorySupport<SecurityManager
         return securityManager;
     }
 
+    @Impure
     protected Map<String, ?> createDefaults(Ini ini, Ini.Section mainSection) {
         Map<String, Object> defaults = new LinkedHashMap<String, Object>();
 
@@ -156,11 +172,13 @@ public class IniSecurityManagerFactory extends IniFactorySupport<SecurityManager
         return defaults;
     }
 
+    @Impure
     private Map<String, ?> buildInstances(Ini.Section section, Map<String, ?> defaults) {
         this.builder = new ReflectionBuilder(defaults);
         return this.builder.buildObjects(section);
     }
 
+    @Impure
     private void addToRealms(Collection<Realm> realms, RealmFactory factory) {
         LifecycleUtils.init(factory);
         Collection<Realm> factoryRealms = factory.getRealms();
@@ -170,6 +188,7 @@ public class IniSecurityManagerFactory extends IniFactorySupport<SecurityManager
         }
     }
 
+    @Impure
     private Collection<Realm> getRealms(Map<String, ?> instances) {
 
         //realms and realm factory might have been created - pull them out first so we can
@@ -204,6 +223,8 @@ public class IniSecurityManagerFactory extends IniFactorySupport<SecurityManager
         return realms;
     }
 
+    @SideEffectFree
+    @Impure
     private void assertRealmSecurityManager(SecurityManager securityManager) {
         if (securityManager == null) {
             throw new NullPointerException("securityManager instance cannot be null");
@@ -215,6 +236,7 @@ public class IniSecurityManagerFactory extends IniFactorySupport<SecurityManager
         }
     }
 
+    @Impure
     protected void applyRealmsToSecurityManager(Collection<Realm> realms, SecurityManager securityManager) {
         assertRealmSecurityManager(securityManager);
         ((RealmSecurityManager) securityManager).setRealms(realms);
@@ -230,6 +252,7 @@ public class IniSecurityManagerFactory extends IniFactorySupport<SecurityManager
      *         {@link #createRealm(Ini) created} to reflect the account data, {@code false} if no realm should be
      *         implicitly created.
      */
+    @Impure
     protected boolean shouldImplicitlyCreateRealm(Ini ini) {
         return !CollectionUtils.isEmpty(ini) &&
                 (!CollectionUtils.isEmpty(ini.getSection(IniRealm.ROLES_SECTION_NAME)) ||
@@ -242,6 +265,7 @@ public class IniSecurityManagerFactory extends IniFactorySupport<SecurityManager
      * @param ini the Ini instance from which to acquire the account data.
      * @return a new Realm instance reflecting the account data discovered in the {@code Ini}.
      */
+    @Impure
     protected Realm createRealm(Ini ini) {
         //IniRealm realm = new IniRealm(ini); changed to support SHIRO-322
         IniRealm realm = new IniRealm();

@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.util;
+import org.checkerframework.dataflow.qual.Impure;
 
 
 /**
@@ -31,5 +32,6 @@ public interface Nameable {
      * Sets the (preferably application unique) name for this component.
      * @param name the preferably application unique name for this component.
      */
+    @Impure
     void setName(String name);
 }

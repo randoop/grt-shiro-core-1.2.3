@@ -18,6 +18,10 @@
  */
 package org.apache.shiro.authc.pam;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Deterministic;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.realm.Realm;
 
@@ -36,6 +40,8 @@ public abstract class AbstractAuthenticationStrategy implements AuthenticationSt
      * Simply returns <code>new {@link org.apache.shiro.authc.SimpleAuthenticationInfo SimpleAuthenticationInfo}();</code>, which supports
      * aggregating account data across realms.
      */
+    @SideEffectFree
+    @Impure
     public AuthenticationInfo beforeAllAttempts(Collection<? extends Realm> realms, AuthenticationToken token) throws AuthenticationException {
         return new SimpleAuthenticationInfo();
     }
@@ -43,6 +49,9 @@ public abstract class AbstractAuthenticationStrategy implements AuthenticationSt
     /**
      * Simply returns the <code>aggregate</code> method argument, without modification.
      */
+    @Pure
+    @Deterministic
+    @Impure
     public AuthenticationInfo beforeAttempt(Realm realm, AuthenticationToken token, AuthenticationInfo aggregate) throws AuthenticationException {
         return aggregate;
     }
@@ -51,6 +60,7 @@ public abstract class AbstractAuthenticationStrategy implements AuthenticationSt
      * Base implementation that will aggregate the specified <code>singleRealmInfo</code> into the
      * <code>aggregateInfo</code> and then returns the aggregate.  Can be overridden by subclasses for custom behavior.
      */
+    @Impure
     public AuthenticationInfo afterAttempt(Realm realm, AuthenticationToken token, AuthenticationInfo singleRealmInfo, AuthenticationInfo aggregateInfo, Throwable t) throws AuthenticationException {
         AuthenticationInfo info;
         if (singleRealmInfo == null) {
@@ -77,6 +87,7 @@ public abstract class AbstractAuthenticationStrategy implements AuthenticationSt
      * Can be overridden by subclasses for custom merging behavior if implementing the
      * {@link org.apache.shiro.authc.MergableAuthenticationInfo MergableAuthenticationInfo} is not desired for some reason.
      */
+    @Impure
     protected AuthenticationInfo merge(AuthenticationInfo info, AuthenticationInfo aggregate) {
         if( aggregate instanceof MergableAuthenticationInfo ) {
             ((MergableAuthenticationInfo)aggregate).merge(info);
@@ -90,6 +101,8 @@ public abstract class AbstractAuthenticationStrategy implements AuthenticationSt
     /**
      * Simply returns the <code>aggregate</code> argument without modification.  Can be overridden for custom behavior.
      */
+    @Pure
+    @Impure
     public AuthenticationInfo afterAllAttempts(AuthenticationToken token, AuthenticationInfo aggregate) throws AuthenticationException {
         return aggregate;
     }

@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.subject.Subject;
 
 /**
@@ -59,6 +60,7 @@ public interface SessionStorageEvaluator {
      * @see Subject#getSession()
      * @see Subject#getSession(boolean)
      */
+    @Impure
     boolean isSessionStorageEnabled(Subject subject);
 
 }

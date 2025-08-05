@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.io;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.util.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +59,7 @@ public class ResourceUtils {
     /**
      * Prevent instantiation.
      */
+    @SideEffectFree
     private ResourceUtils() {
     }
 
@@ -69,6 +73,7 @@ public class ResourceUtils {
      *         resource prefixes, {@code false} otherwise.
      * @since 0.9
      */
+    @Pure
     @SuppressWarnings({"UnusedDeclaration"})
     public static boolean hasResourcePrefix(String resourcePath) {
         return resourcePath != null &&
@@ -85,6 +90,7 @@ public class ResourceUtils {
      * @return {@code true} if the resource at the specified path exists, {@code false} otherwise.
      * @since 0.9
      */
+    @Impure
     public static boolean resourceExists(String resourcePath) {
         InputStream stream = null;
         boolean exists = false;
@@ -119,6 +125,7 @@ public class ResourceUtils {
      * @return the InputStraem for the specified resource.
      * @throws IOException if there is a problem acquiring the resource at the specified path.
      */
+    @Impure
     public static InputStream getInputStreamForPath(String resourcePath) throws IOException {
 
         InputStream is;
@@ -142,6 +149,7 @@ public class ResourceUtils {
         return is;
     }
 
+    @Impure
     private static InputStream loadFromFile(String path) throws IOException {
         if (log.isDebugEnabled()) {
             log.debug("Opening file [" + path + "]...");
@@ -149,17 +157,20 @@ public class ResourceUtils {
         return new FileInputStream(path);
     }
 
+    @Impure
     private static InputStream loadFromUrl(String urlPath) throws IOException {
         log.debug("Opening url {}", urlPath);
         URL url = new URL(urlPath);
         return url.openStream();
     }
 
+    @Impure
     private static InputStream loadFromClassPath(String path) {
         log.debug("Opening resource from class path [{}]", path);
         return ClassUtils.getResourceAsStream(path);
     }
 
+    @SideEffectFree
     private static String stripPrefix(String resourcePath) {
         return resourcePath.substring(resourcePath.indexOf(":") + 1);
     }
@@ -171,6 +182,7 @@ public class ResourceUtils {
      *
      * @param is the {@code InputStream} to close, logging any {@code IOException} that might occur.
      */
+    @Impure
     public static void close(InputStream is) {
         if (is != null) {
             try {

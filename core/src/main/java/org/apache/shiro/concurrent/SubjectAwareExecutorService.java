@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.concurrent;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.subject.Subject;
 
 import java.util.ArrayList;
@@ -59,22 +62,28 @@ public class SubjectAwareExecutorService extends SubjectAwareExecutor implements
 
     private ExecutorService targetExecutorService;
 
+    @SideEffectFree
+    @Impure
     public SubjectAwareExecutorService() {
     }
 
+    @Impure
     public SubjectAwareExecutorService(ExecutorService target) {
         setTargetExecutorService(target);
     }
 
+    @Pure
     public ExecutorService getTargetExecutorService() {
         return targetExecutorService;
     }
 
+    @Impure
     public void setTargetExecutorService(ExecutorService targetExecutorService) {
         super.setTargetExecutor(targetExecutorService);
         this.targetExecutorService = targetExecutorService;
     }
 
+    @Impure
     @Override
     public void setTargetExecutor(Executor targetExecutor) {
         if (!(targetExecutor instanceof ExecutorService)) {
@@ -85,46 +94,56 @@ public class SubjectAwareExecutorService extends SubjectAwareExecutor implements
         super.setTargetExecutor(targetExecutor);
     }
 
+    @Impure
     public void shutdown() {
         this.targetExecutorService.shutdown();
     }
 
+    @Impure
     public List<Runnable> shutdownNow() {
         return this.targetExecutorService.shutdownNow();
     }
 
+    @Impure
     public boolean isShutdown() {
         return this.targetExecutorService.isShutdown();
     }
 
+    @Impure
     public boolean isTerminated() {
         return this.targetExecutorService.isTerminated();
     }
 
+    @Impure
     public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
         return this.targetExecutorService.awaitTermination(timeout, unit);
     }
 
+    @Impure
     protected <T> Callable<T> associateWithSubject(Callable<T> task) {
         Subject subject = getSubject();
         return subject.associateWith(task);
     }
 
+    @Impure
     public <T> Future<T> submit(Callable<T> task) {
         Callable<T> work = associateWithSubject(task);
         return this.targetExecutorService.submit(work);
     }
 
+    @Impure
     public <T> Future<T> submit(Runnable task, T result) {
         Runnable work = associateWithSubject(task);
         return this.targetExecutorService.submit(work, result);
     }
 
+    @Impure
     public Future<?> submit(Runnable task) {
         Runnable work = associateWithSubject(task);
         return this.targetExecutorService.submit(work);
     }
 
+    @Impure
     protected <T> Collection<Callable<T>> associateWithSubject(Collection<? extends Callable<T>> tasks) {
         Collection<Callable<T>> workItems = new ArrayList<Callable<T>>(tasks.size());
         for (Callable<T> task : tasks) {
@@ -134,22 +153,26 @@ public class SubjectAwareExecutorService extends SubjectAwareExecutor implements
         return workItems;
     }
 
+    @Impure
     public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks) throws InterruptedException {
         Collection<Callable<T>> workItems = associateWithSubject(tasks);
         return this.targetExecutorService.invokeAll(workItems);
     }
 
+    @Impure
     public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit)
             throws InterruptedException {
         Collection<Callable<T>> workItems = associateWithSubject(tasks);
         return this.targetExecutorService.invokeAll(workItems, timeout, unit);
     }
 
+    @Impure
     public <T> T invokeAny(Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException {
         Collection<Callable<T>> workItems = associateWithSubject(tasks);
         return this.targetExecutorService.invokeAny(workItems);
     }
 
+    @Impure
     public <T> T invokeAny(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit)
             throws InterruptedException, ExecutionException, TimeoutException {
         Collection<Callable<T>> workItems = associateWithSubject(tasks);

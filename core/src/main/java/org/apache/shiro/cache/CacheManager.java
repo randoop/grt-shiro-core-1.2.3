@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.cache;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * A CacheManager provides and maintains the lifecycles of {@link Cache Cache} instances.
@@ -38,5 +39,6 @@ public interface CacheManager {
      * @return the Cache with the given name
      * @throws CacheException if there is an error acquiring the Cache instance.
      */
+    @Impure
     public <K, V> Cache<K, V> getCache(String name) throws CacheException;
 }

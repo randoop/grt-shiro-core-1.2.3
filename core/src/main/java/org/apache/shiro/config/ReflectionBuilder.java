@@ -18,6 +18,10 @@
  */
 package org.apache.shiro.config;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Deterministic;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.shiro.codec.Base64;
@@ -59,26 +63,33 @@ public class ReflectionBuilder {
 
     private Map<String, ?> objects;
 
+    @Impure
     public ReflectionBuilder() {
         this.objects = new LinkedHashMap<String, Object>();
     }
 
+    @Impure
     public ReflectionBuilder(Map<String, ?> defaults) {
         this.objects = CollectionUtils.isEmpty(defaults) ? new LinkedHashMap<String, Object>() : defaults;
     }
 
+    @Pure
     public Map<String, ?> getObjects() {
         return objects;
     }
 
+    @Impure
     public void setObjects(Map<String, ?> objects) {
         this.objects = CollectionUtils.isEmpty(objects) ? new LinkedHashMap<String, Object>() : objects;
     }
 
+    @Pure
     public Object getBean(String id) {
         return objects.get(id);
     }
 
+    @Pure
+    @Impure
     @SuppressWarnings({"unchecked"})
     public <T> T getBean(String id, Class<T> requiredType) {
         if (requiredType == null) {
@@ -95,6 +106,7 @@ public class ReflectionBuilder {
         return (T) bean;
     }
 
+    @Impure
     @SuppressWarnings({"unchecked"})
     public Map<String, ?> buildObjects(Map<String, String> kvPairs) {
         if (kvPairs != null && !kvPairs.isEmpty()) {
@@ -131,6 +143,7 @@ public class ReflectionBuilder {
         return objects;
     }
 
+    @Impure
     protected void createNewInstance(Map<String, Object> objects, String name, String value) {
 
         Object currentInstance = objects.get(name);
@@ -153,6 +166,7 @@ public class ReflectionBuilder {
         objects.put(name, instance);
     }
 
+    @Impure
     protected void applyProperty(String key, String value, Map objects) {
 
         int index = key.indexOf('.');
@@ -173,6 +187,7 @@ public class ReflectionBuilder {
         }
     }
 
+    @Impure
     protected void applyGlobalProperty(Map objects, String property, String value) {
         for (Object instance : objects.values()) {
             try {
@@ -189,6 +204,7 @@ public class ReflectionBuilder {
         }
     }
 
+    @Impure
     protected void applySingleProperty(Map objects, String name, String property, String value) {
         Object instance = objects.get(name);
         if (property.equals("class")) {
@@ -207,14 +223,18 @@ public class ReflectionBuilder {
         }
     }
 
+    @Pure
     protected boolean isReference(String value) {
         return value != null && value.startsWith(OBJECT_REFERENCE_BEGIN_TOKEN);
     }
 
+    @SideEffectFree
     protected String getId(String referenceToken) {
         return referenceToken.substring(OBJECT_REFERENCE_BEGIN_TOKEN.length());
     }
 
+    @Pure
+    @Deterministic
     protected Object getReferencedObject(String id) {
         Object o = objects != null && !objects.isEmpty() ? objects.get(id) : null;
         if (o == null) {
@@ -226,6 +246,7 @@ public class ReflectionBuilder {
         return o;
     }
 
+    @SideEffectFree
     protected String unescapeIfNecessary(String value) {
         if (value != null && value.startsWith(ESCAPED_OBJECT_REFERENCE_BEGIN_TOKEN)) {
             return value.substring(ESCAPED_OBJECT_REFERENCE_BEGIN_TOKEN.length() - 1);
@@ -233,6 +254,7 @@ public class ReflectionBuilder {
         return value;
     }
 
+    @Impure
     protected Object resolveReference(String reference) {
         String id = getId(reference);
         log.debug("Encountered object reference '{}'.  Looking up object with id '{}'", reference, id);
@@ -243,6 +265,7 @@ public class ReflectionBuilder {
         return referencedObject;
     }
 
+    @Impure
     protected boolean isTypedProperty(Object object, String propertyName, Class clazz) {
         if (clazz == null) {
             throw new NullPointerException("type (class) argument cannot be null.");
@@ -265,6 +288,7 @@ public class ReflectionBuilder {
         }
     }
 
+    @Impure
     protected Set<?> toSet(String sValue) {
         String[] tokens = StringUtils.split(sValue);
         if (tokens == null || tokens.length <= 0) {
@@ -290,6 +314,7 @@ public class ReflectionBuilder {
         return values;
     }
 
+    @Impure
     protected Map<?, ?> toMap(String sValue) {
         String[] tokens = StringUtils.split(sValue, StringUtils.DEFAULT_DELIMITER_CHAR,
                 StringUtils.DEFAULT_QUOTE_CHAR, StringUtils.DEFAULT_QUOTE_CHAR, true, true);
@@ -329,6 +354,7 @@ public class ReflectionBuilder {
 
     // @since 1.2.2
     // TODO: make protected in 1.3+
+    @Impure
     private Collection<?> toCollection(String sValue) {
 
         String[] tokens = StringUtils.split(sValue);
@@ -353,6 +379,7 @@ public class ReflectionBuilder {
         return values;
     }
 
+    @Impure
     protected List<?> toList(String sValue) {
         String[] tokens = StringUtils.split(sValue);
         if (tokens == null || tokens.length <= 0) {
@@ -376,6 +403,7 @@ public class ReflectionBuilder {
         return values;
     }
 
+    @Impure
     protected byte[] toBytes(String sValue) {
         if (sValue == null) {
             return null;
@@ -391,6 +419,7 @@ public class ReflectionBuilder {
         return bytes;
     }
 
+    @Impure
     protected Object resolveValue(String stringValue) {
         Object value;
         if (isReference(stringValue)) {
@@ -401,6 +430,7 @@ public class ReflectionBuilder {
         return value;
     }
 
+    @Pure
     protected String checkForNullOrEmptyLiteral(String stringValue) {
         if (stringValue == null) {
             return null;
@@ -417,6 +447,7 @@ public class ReflectionBuilder {
         }
     }
     
+    @Impure
     protected void applyProperty(Object object, String propertyPath, Object value) {
 
         int mapBegin = propertyPath.indexOf(MAP_PROPERTY_BEGIN_TOKEN);
@@ -484,6 +515,7 @@ public class ReflectionBuilder {
         }
     }
     
+    @Impure
     private void setProperty(Object object, String propertyPath, Object value) {
         try {
             if (log.isTraceEnabled()) {
@@ -502,6 +534,7 @@ public class ReflectionBuilder {
         }
     }
     
+    @Impure
     private Object getProperty(Object object, String propertyPath) {
         try {
             return PropertyUtils.getProperty(object, propertyPath);
@@ -510,6 +543,7 @@ public class ReflectionBuilder {
         }
     }
     
+    @Impure
     private void setIndexedProperty(Object object, String propertyPath, int index, Object value) {
         try {
             PropertyUtils.setIndexedProperty(object, propertyPath, index, value);
@@ -518,6 +552,7 @@ public class ReflectionBuilder {
         }
     }
     
+    @Impure
     private Object getIndexedProperty(Object object, String propertyPath, int index) {
         try {
             return PropertyUtils.getIndexedProperty(object, propertyPath, index);
@@ -526,10 +561,12 @@ public class ReflectionBuilder {
         }
     }
     
+    @Pure
     protected boolean isIndexedPropertyAssignment(String propertyPath) {
         return propertyPath.endsWith("" + MAP_PROPERTY_END_TOKEN);
     }
 
+    @Impure
     protected void applyProperty(Object object, String propertyName, String stringValue) {
 
         Object value;

@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authc.credential;
 
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 
@@ -37,6 +38,7 @@ public class AllowAllCredentialsMatcher implements CredentialsMatcher {
      * @param info    the account being verified for access
      * @return <code>true</code> <em>always</em>.
      */
+    @Pure
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
         return true;
     }

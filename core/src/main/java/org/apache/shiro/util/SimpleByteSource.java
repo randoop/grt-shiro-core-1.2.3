@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.util;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.codec.CodecSupport;
 import org.apache.shiro.codec.Hex;
@@ -50,6 +53,7 @@ public class SimpleByteSource implements ByteSource {
     private String cachedHex;
     private String cachedBase64;
 
+    @SideEffectFree
     public SimpleByteSource(byte[] bytes) {
         this.bytes = bytes;
     }
@@ -60,6 +64,8 @@ public class SimpleByteSource implements ByteSource {
      * @param chars the source characters to use to create the underlying byte array.
      * @since 1.1
      */
+    @SideEffectFree
+    @Impure
     public SimpleByteSource(char[] chars) {
         this.bytes = CodecSupport.toBytes(chars);
     }
@@ -70,6 +76,8 @@ public class SimpleByteSource implements ByteSource {
      * @param string the source string to convert to a byte array (assumes UTF-8 encoding).
      * @since 1.1
      */
+    @SideEffectFree
+    @Impure
     public SimpleByteSource(String string) {
         this.bytes = CodecSupport.toBytes(string);
     }
@@ -81,6 +89,8 @@ public class SimpleByteSource implements ByteSource {
      * @param source the source to use to populate the underlying byte array.
      * @since 1.1
      */
+    @SideEffectFree
+    @Impure
     public SimpleByteSource(ByteSource source) {
         this.bytes = source.getBytes();
     }
@@ -91,6 +101,7 @@ public class SimpleByteSource implements ByteSource {
      * @param file the file from which to acquire bytes.
      * @since 1.1
      */
+    @Impure
     public SimpleByteSource(File file) {
         this.bytes = new BytesHelper().getBytes(file);
     }
@@ -101,6 +112,7 @@ public class SimpleByteSource implements ByteSource {
      * @param stream the stream from which to acquire bytes.
      * @since 1.1
      */
+    @Impure
     public SimpleByteSource(InputStream stream) {
         this.bytes = new BytesHelper().getBytes(stream);
     }
@@ -125,19 +137,23 @@ public class SimpleByteSource implements ByteSource {
      *         {@code false} otherwise.
      * @since 1.2
      */
+    @Pure
     public static boolean isCompatible(Object o) {
         return o instanceof byte[] || o instanceof char[] || o instanceof String ||
                 o instanceof ByteSource || o instanceof File || o instanceof InputStream;
     }
 
+    @Pure
     public byte[] getBytes() {
         return this.bytes;
     }
 
+    @Pure
     public boolean isEmpty() {
         return this.bytes == null || this.bytes.length == 0;
     }
 
+    @Impure
     public String toHex() {
         if ( this.cachedHex == null ) {
             this.cachedHex = Hex.encodeToString(getBytes());
@@ -145,6 +161,7 @@ public class SimpleByteSource implements ByteSource {
         return this.cachedHex;
     }
 
+    @Impure
     public String toBase64() {
         if ( this.cachedBase64 == null ) {
             this.cachedBase64 = Base64.encodeToString(getBytes());
@@ -152,10 +169,12 @@ public class SimpleByteSource implements ByteSource {
         return this.cachedBase64;
     }
 
+    @Impure
     public String toString() {
         return toBase64();
     }
 
+    @Pure
     public int hashCode() {
         if (this.bytes == null || this.bytes.length == 0) {
             return 0;
@@ -163,6 +182,8 @@ public class SimpleByteSource implements ByteSource {
         return Arrays.hashCode(this.bytes);
     }
 
+    @Pure
+    @Impure
     public boolean equals(Object o) {
         if (o == this) {
             return true;
@@ -177,10 +198,12 @@ public class SimpleByteSource implements ByteSource {
     //will probably be removed in Shiro 2.0.  See SHIRO-203:
     //https://issues.apache.org/jira/browse/SHIRO-203
     private static final class BytesHelper extends CodecSupport {
+        @Impure
         public byte[] getBytes(File file) {
             return toBytes(file);
         }
 
+        @Impure
         public byte[] getBytes(InputStream stream) {
             return toBytes(stream);
         }

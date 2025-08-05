@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.session.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.session.Session;
 
 /**
@@ -46,6 +49,7 @@ public abstract class AbstractSessionManager implements SessionManager {
 
     private long globalSessionTimeout = DEFAULT_GLOBAL_SESSION_TIMEOUT;
 
+    @SideEffectFree
     public AbstractSessionManager() {
     }
 
@@ -63,6 +67,7 @@ public abstract class AbstractSessionManager implements SessionManager {
      *
      * @return the time in milliseconds that any session may remain idle before expiring.
      */
+    @Pure
     public long getGlobalSessionTimeout() {
         return this.globalSessionTimeout;
     }
@@ -81,6 +86,7 @@ public abstract class AbstractSessionManager implements SessionManager {
      *
      * @param globalSessionTimeout the time in milliseconds that any session may remain idel before expiring.
      */
+    @Impure
     public void setGlobalSessionTimeout(long globalSessionTimeout) {
         this.globalSessionTimeout = globalSessionTimeout;
     }

@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.session;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.ShiroException;
 
 
@@ -32,6 +34,8 @@ public class SessionException extends ShiroException {
     /**
      * Creates a new SessionException.
      */
+    @SideEffectFree
+    @Impure
     public SessionException() {
         super();
     }
@@ -41,6 +45,8 @@ public class SessionException extends ShiroException {
      *
      * @param message the reason for the exception
      */
+    @SideEffectFree
+    @Impure
     public SessionException(String message) {
         super(message);
     }
@@ -50,6 +56,8 @@ public class SessionException extends ShiroException {
      *
      * @param cause the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public SessionException(Throwable cause) {
         super(cause);
     }
@@ -60,6 +68,8 @@ public class SessionException extends ShiroException {
      * @param message the reason for the exception
      * @param cause   the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public SessionException(String message, Throwable cause) {
         super(message, cause);
     }

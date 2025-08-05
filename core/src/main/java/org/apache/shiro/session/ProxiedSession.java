@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.session;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -44,6 +46,7 @@ public class ProxiedSession implements Session {
      *
      * @param target the specified target <code>Session</code> to proxy.
      */
+    @SideEffectFree
     public ProxiedSession(Session target) {
         if (target == null) {
             throw new IllegalArgumentException("Target session to proxy cannot be null.");
@@ -54,6 +57,7 @@ public class ProxiedSession implements Session {
     /**
      * Immediately delegates to the underlying proxied session.
      */
+    @Impure
     public Serializable getId() {
         return delegate.getId();
     }
@@ -61,6 +65,7 @@ public class ProxiedSession implements Session {
     /**
      * Immediately delegates to the underlying proxied session.
      */
+    @Impure
     public Date getStartTimestamp() {
         return delegate.getStartTimestamp();
     }
@@ -68,6 +73,7 @@ public class ProxiedSession implements Session {
     /**
      * Immediately delegates to the underlying proxied session.
      */
+    @Impure
     public Date getLastAccessTime() {
         return delegate.getLastAccessTime();
     }
@@ -75,6 +81,7 @@ public class ProxiedSession implements Session {
     /**
      * Immediately delegates to the underlying proxied session.
      */
+    @Impure
     public long getTimeout() throws InvalidSessionException {
         return delegate.getTimeout();
     }
@@ -82,6 +89,7 @@ public class ProxiedSession implements Session {
     /**
      * Immediately delegates to the underlying proxied session.
      */
+    @Impure
     public void setTimeout(long maxIdleTimeInMillis) throws InvalidSessionException {
         delegate.setTimeout(maxIdleTimeInMillis);
     }
@@ -89,6 +97,7 @@ public class ProxiedSession implements Session {
     /**
      * Immediately delegates to the underlying proxied session.
      */
+    @Impure
     public String getHost() {
         return delegate.getHost();
     }
@@ -96,6 +105,7 @@ public class ProxiedSession implements Session {
     /**
      * Immediately delegates to the underlying proxied session.
      */
+    @Impure
     public void touch() throws InvalidSessionException {
         delegate.touch();
     }
@@ -103,6 +113,7 @@ public class ProxiedSession implements Session {
     /**
      * Immediately delegates to the underlying proxied session.
      */
+    @Impure
     public void stop() throws InvalidSessionException {
         delegate.stop();
     }
@@ -110,6 +121,7 @@ public class ProxiedSession implements Session {
     /**
      * Immediately delegates to the underlying proxied session.
      */
+    @Impure
     public Collection<Object> getAttributeKeys() throws InvalidSessionException {
         return delegate.getAttributeKeys();
     }
@@ -117,6 +129,7 @@ public class ProxiedSession implements Session {
     /**
      * Immediately delegates to the underlying proxied session.
      */
+    @Impure
     public Object getAttribute(Object key) throws InvalidSessionException {
         return delegate.getAttribute(key);
     }
@@ -124,6 +137,7 @@ public class ProxiedSession implements Session {
     /**
      * Immediately delegates to the underlying proxied session.
      */
+    @Impure
     public void setAttribute(Object key, Object value) throws InvalidSessionException {
         delegate.setAttribute(key, value);
     }
@@ -131,6 +145,7 @@ public class ProxiedSession implements Session {
     /**
      * Immediately delegates to the underlying proxied session.
      */
+    @Impure
     public Object removeAttribute(Object key) throws InvalidSessionException {
         return delegate.removeAttribute(key);
     }

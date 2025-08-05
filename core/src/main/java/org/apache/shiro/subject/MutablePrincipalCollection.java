@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.subject;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.util.Collection;
 
 
@@ -34,6 +35,7 @@ public interface MutablePrincipalCollection extends PrincipalCollection {
      * @param principal the principal to be added.
      * @param realmName the realm this principal came from.
      */
+    @Impure
     void add(Object principal, String realmName);
 
     /**
@@ -42,6 +44,7 @@ public interface MutablePrincipalCollection extends PrincipalCollection {
      * @param principals the principals to be added.
      * @param realmName  the realm these principals came from.
      */
+    @Impure
     void addAll(Collection principals, String realmName);
 
     /**
@@ -49,10 +52,12 @@ public interface MutablePrincipalCollection extends PrincipalCollection {
      *
      * @param principals the principals to add.
      */
+    @Impure
     void addAll(PrincipalCollection principals);
 
     /**
      * Removes all Principals in this collection.
      */
+    @Impure
     void clear();
 }

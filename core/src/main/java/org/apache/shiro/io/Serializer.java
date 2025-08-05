@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.io;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * A <code>Serializer</code> converts objects to raw binary data and vice versa, enabling persistent storage
@@ -39,6 +40,7 @@ public interface Serializer<T> {
      * @return a byte[] array representing the Object's state that can be restored later.
      * @throws SerializationException if an error occurrs converting the Object into a byte[] array.
      */
+    @Impure
     byte[] serialize(T o) throws SerializationException;
 
     /**
@@ -49,5 +51,6 @@ public interface Serializer<T> {
      * @return the Object that was previously serialized into the raw byte[] array.
      * @throws SerializationException if an error occurrs converting the raw byte[] array back into an Object.
      */
+    @Impure
     T deserialize(byte[] serialized) throws SerializationException;
 }

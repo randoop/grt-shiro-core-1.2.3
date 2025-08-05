@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.io;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.BufferedInputStream;
@@ -44,6 +45,7 @@ public class XmlSerializer implements Serializer {
      * @param source the Object to convert into a byte[] array.
      * @return the byte[] array representation of the XML encoded output.
      */
+    @Impure
     public byte[] serialize(Object source) {
         if (source == null) {
             String msg = "argument cannot be null.";
@@ -66,6 +68,7 @@ public class XmlSerializer implements Serializer {
      * @param serialized the byte[] array representation of the XML encoded output.
      * @return the original source Object in reconstituted form.
      */
+    @Impure
     public Object deserialize(byte[] serialized) {
         if (serialized == null) {
             throw new IllegalArgumentException("Argument cannot be null.");

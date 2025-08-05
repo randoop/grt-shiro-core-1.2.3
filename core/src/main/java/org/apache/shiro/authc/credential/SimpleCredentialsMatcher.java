@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.authc.credential;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.codec.CodecSupport;
@@ -53,6 +55,8 @@ public class SimpleCredentialsMatcher extends CodecSupport implements Credential
      * @param token the {@code AuthenticationToken} submitted during the authentication attempt.
      * @return the {@code token}'s associated credentials.
      */
+    @Pure
+    @Impure
     protected Object getCredentials(AuthenticationToken token) {
         return token.getCredentials();
     }
@@ -69,6 +73,7 @@ public class SimpleCredentialsMatcher extends CodecSupport implements Credential
      *             token's credentials.
      * @return the {@code account}'s associated credentials.
      */
+    @Impure
     protected Object getCredentials(AuthenticationInfo info) {
         return info.getCredentials();
     }
@@ -90,6 +95,7 @@ public class SimpleCredentialsMatcher extends CodecSupport implements Credential
      * @param accountCredentials the {@code AuthenticationInfo}'s stored credentials.
      * @return {@code true} if the {@code tokenCredentials} are equal to the {@code accountCredentials}.
      */
+    @Impure
     protected boolean equals(Object tokenCredentials, Object accountCredentials) {
         if (log.isDebugEnabled()) {
             log.debug("Performing credentials equality check for tokenCredentials of type [" +
@@ -122,6 +128,7 @@ public class SimpleCredentialsMatcher extends CodecSupport implements Credential
      * @return {@code true} if the provided token credentials are equal to the stored account credentials,
      *         {@code false} otherwise
      */
+    @Impure
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
         Object tokenCredentials = getCredentials(token);
         Object accountCredentials = getCredentials(info);

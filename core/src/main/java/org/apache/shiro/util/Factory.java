@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.util;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Generics-aware interface supporting the
@@ -33,5 +34,6 @@ public interface Factory<T> {
      *
      * @return an instance of the required type.
      */
+    @Impure
     T getInstance();
 }

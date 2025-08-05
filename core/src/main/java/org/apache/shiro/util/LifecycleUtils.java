@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.util;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.ShiroException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,12 +36,14 @@ public abstract class LifecycleUtils {
 
     private static final Logger log = LoggerFactory.getLogger(LifecycleUtils.class);
 
+    @Impure
     public static void init(Object o) throws ShiroException {
         if (o instanceof Initializable) {
             init((Initializable) o);
         }
     }
 
+    @Impure
     public static void init(Initializable initializable) throws ShiroException {
         initializable.init();
     }
@@ -53,6 +56,7 @@ public abstract class LifecycleUtils {
      * @throws ShiroException if unable to initialize one or more instances.
      * @since 0.9
      */
+    @Impure
     public static void init(Collection c) throws ShiroException {
         if (c == null || c.isEmpty()) {
             return;
@@ -62,6 +66,7 @@ public abstract class LifecycleUtils {
         }
     }
 
+    @Impure
     public static void destroy(Object o) {
         if (o instanceof Destroyable) {
             destroy((Destroyable) o);
@@ -70,6 +75,7 @@ public abstract class LifecycleUtils {
         }
     }
 
+    @Impure
     public static void destroy(Destroyable d) {
         if (d != null) {
             try {
@@ -90,6 +96,7 @@ public abstract class LifecycleUtils {
      * @param c the collection of objects to destroy.
      * @since 0.9
      */
+    @Impure
     public static void destroy(Collection c) {
         if (c == null || c.isEmpty()) {
             return;

@@ -18,6 +18,10 @@
  */
 package org.apache.shiro.authc.pam;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Deterministic;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -56,6 +60,8 @@ public interface AuthenticationStrategy {
      * @return an empty AuthenticationInfo object that will populated with data from multiple realms.
      * @throws AuthenticationException if the strategy implementation does not wish the Authentication attempt to execute.
      */
+    @SideEffectFree
+    @Impure
     AuthenticationInfo beforeAllAttempts(Collection<? extends Realm> realms, AuthenticationToken token) throws AuthenticationException;
 
     /**
@@ -75,6 +81,9 @@ public interface AuthenticationStrategy {
      *          an exception thrown by the Strategy implementation if it wishes the login
      *          process for the associated subject (user) to stop immediately.
      */
+    @Pure
+    @Deterministic
+    @Impure
     AuthenticationInfo beforeAttempt(Realm realm, AuthenticationToken token, AuthenticationInfo aggregate) throws AuthenticationException;
 
     /**
@@ -95,6 +104,7 @@ public interface AuthenticationStrategy {
      * @throws AuthenticationException an exception thrown by the Strategy implementation if it wishes the login process
      *                                 for the associated subject (user) to stop immediately.
      */
+    @Impure
     AuthenticationInfo afterAttempt(Realm realm, AuthenticationToken token, AuthenticationInfo singleRealmInfo, AuthenticationInfo aggregateInfo, Throwable t)
             throws AuthenticationException;
 
@@ -111,5 +121,7 @@ public interface AuthenticationStrategy {
      * @return the final {@code AuthenticationInfo} object to return to the Authenticator.authenticate() caller.
      * @throws AuthenticationException if the Strategy implementation wishes to fail the authentication attempt.
      */
+    @Pure
+    @Impure
     AuthenticationInfo afterAllAttempts(AuthenticationToken token, AuthenticationInfo aggregate) throws AuthenticationException;
 }

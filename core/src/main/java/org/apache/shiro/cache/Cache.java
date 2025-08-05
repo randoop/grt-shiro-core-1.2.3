@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.cache;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 import java.util.Collection;
 import java.util.Set;
 
@@ -41,6 +44,7 @@ public interface Cache<K, V> {
      * @return the cached object or {@code null} if there is no entry for the specified {@code key}
      * @throws CacheException if there is a problem accessing the underlying cache system
      */
+    @Pure
     public V get(K key) throws CacheException;
 
     /**
@@ -51,6 +55,7 @@ public interface Cache<K, V> {
      * @return the previous value associated with the given {@code key} or {@code null} if there was previous value
      * @throws CacheException if there is a problem accessing the underlying cache system
      */
+    @Impure
     public V put(K key, V value) throws CacheException;
 
     /**
@@ -60,6 +65,7 @@ public interface Cache<K, V> {
      * @return the previous value associated with the given {@code key} or {@code null} if there was previous value
      * @throws CacheException if there is a problem accessing the underlying cache system
      */
+    @Impure
     public V remove(K key) throws CacheException;
 
     /**
@@ -67,6 +73,7 @@ public interface Cache<K, V> {
      *
      * @throws CacheException if there is a problem accessing the underlying cache system
      */
+    @Impure
     public void clear() throws CacheException;
 
     /**
@@ -74,6 +81,7 @@ public interface Cache<K, V> {
      *
      * @return the number of entries in the cache.
      */
+    @Pure
     public int size();
 
     /**
@@ -81,6 +89,7 @@ public interface Cache<K, V> {
      *
      * @return a view of all the keys for entries contained in this cache.
      */
+    @SideEffectFree
     public Set<K> keys();
 
     /**
@@ -88,5 +97,7 @@ public interface Cache<K, V> {
      *
      * @return a view of all of the values contained in this cache.
      */
+    @SideEffectFree
+    @Impure
     public Collection<V> values();
 }

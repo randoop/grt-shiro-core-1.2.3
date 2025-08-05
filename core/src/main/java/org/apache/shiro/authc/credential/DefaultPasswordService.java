@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.authc.credential;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.crypto.hash.DefaultHashService;
 import org.apache.shiro.crypto.hash.Hash;
 import org.apache.shiro.crypto.hash.HashRequest;
@@ -51,6 +53,7 @@ public class DefaultPasswordService implements HashingPasswordService {
 
     private volatile boolean hashFormatWarned; //used to avoid excessive log noise
 
+    @Impure
     public DefaultPasswordService() {
         this.hashFormatWarned = false;
 
@@ -64,12 +67,14 @@ public class DefaultPasswordService implements HashingPasswordService {
         this.hashFormatFactory = new DefaultHashFormatFactory();
     }
 
+    @Impure
     public String encryptPassword(Object plaintext) {
         Hash hash = hashPassword(plaintext);
         checkHashFormatDurability();
         return this.hashFormat.format(hash);
     }
 
+    @Impure
     public Hash hashPassword(Object plaintext) {
         ByteSource plaintextBytes = createByteSource(plaintext);
         if (plaintextBytes == null || plaintextBytes.isEmpty()) {
@@ -79,6 +84,7 @@ public class DefaultPasswordService implements HashingPasswordService {
         return hashService.computeHash(request);
     }
 
+    @Impure
     public boolean passwordsMatch(Object plaintext, Hash saved) {
         ByteSource plaintextBytes = createByteSource(plaintext);
 
@@ -97,6 +103,7 @@ public class DefaultPasswordService implements HashingPasswordService {
         return saved.equals(computed);
     }
 
+    @Impure
     protected void checkHashFormatDurability() {
 
         if (!this.hashFormatWarned) {
@@ -115,14 +122,17 @@ public class DefaultPasswordService implements HashingPasswordService {
         }
     }
 
+    @Impure
     protected HashRequest createHashRequest(ByteSource plaintext) {
         return new HashRequest.Builder().setSource(plaintext).build();
     }
 
+    @Impure
     protected ByteSource createByteSource(Object o) {
         return ByteSource.Util.bytes(o);
     }
 
+    @Impure
     public boolean passwordsMatch(Object submittedPlaintext, String saved) {
         ByteSource plaintextBytes = createByteSource(submittedPlaintext);
 
@@ -164,6 +174,7 @@ public class DefaultPasswordService implements HashingPasswordService {
         return saved.equals(formatted);
     }
 
+    @Impure
     protected HashRequest buildHashRequest(ByteSource plaintext, Hash saved) {
         //keep everything from the saved hash except for the source:
         return new HashRequest.Builder().setSource(plaintext)
@@ -174,26 +185,32 @@ public class DefaultPasswordService implements HashingPasswordService {
                 .build();
     }
 
+    @Pure
     public HashService getHashService() {
         return hashService;
     }
 
+    @Impure
     public void setHashService(HashService hashService) {
         this.hashService = hashService;
     }
 
+    @Pure
     public HashFormat getHashFormat() {
         return hashFormat;
     }
 
+    @Impure
     public void setHashFormat(HashFormat hashFormat) {
         this.hashFormat = hashFormat;
     }
 
+    @Pure
     public HashFormatFactory getHashFormatFactory() {
         return hashFormatFactory;
     }
 
+    @Impure
     public void setHashFormatFactory(HashFormatFactory hashFormatFactory) {
         this.hashFormatFactory = hashFormatFactory;
     }

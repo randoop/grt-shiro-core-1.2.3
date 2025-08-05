@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.crypto.hash.format;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.crypto.hash.Hash;
 import org.apache.shiro.crypto.hash.SimpleHash;
@@ -90,13 +93,16 @@ public class Shiro1CryptFormat implements ModularCryptFormat, ParsableHashFormat
     public static final String ID = "shiro1";
     public static final String MCF_PREFIX = TOKEN_DELIMITER + ID + TOKEN_DELIMITER;
 
+    @SideEffectFree
     public Shiro1CryptFormat() {
     }
 
+    @Pure
     public String getId() {
         return ID;
     }
 
+    @Impure
     public String format(Hash hash) {
         if (hash == null) {
             return null;
@@ -117,6 +123,7 @@ public class Shiro1CryptFormat implements ModularCryptFormat, ParsableHashFormat
         return sb.toString();
     }
 
+    @Impure
     public Hash parse(String formatted) {
         if (formatted == null) {
             return null;

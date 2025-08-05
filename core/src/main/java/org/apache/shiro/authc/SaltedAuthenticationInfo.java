@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.authc;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.util.ByteSource;
 
 /**
@@ -44,5 +46,7 @@ public interface SaltedAuthenticationInfo extends AuthenticationInfo {
      *
      * @return the salt used to salt the account's credentials or {@code null} if no salt was used.
      */
+    @Pure
+    @Impure
     ByteSource getCredentialsSalt();
 }

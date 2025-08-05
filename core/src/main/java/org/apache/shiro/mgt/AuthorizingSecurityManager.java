@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.Authorizer;
 import org.apache.shiro.authz.ModularRealmAuthorizer;
@@ -55,6 +57,7 @@ public abstract class AuthorizingSecurityManager extends AuthenticatingSecurityM
      * Default no-arg constructor that initializes an internal default
      * {@link org.apache.shiro.authz.ModularRealmAuthorizer ModularRealmAuthorizer}.
      */
+    @Impure
     public AuthorizingSecurityManager() {
         super();
         this.authorizer = new ModularRealmAuthorizer();
@@ -66,6 +69,7 @@ public abstract class AuthorizingSecurityManager extends AuthenticatingSecurityM
      *
      * @return the wrapped <tt>Authorizer</tt> used by this <tt>SecurityManager</tt> implementation.
      */
+    @Pure
     public Authorizer getAuthorizer() {
         return authorizer;
     }
@@ -77,6 +81,7 @@ public abstract class AuthorizingSecurityManager extends AuthenticatingSecurityM
      * @param authorizer the <tt>Authorizer</tt> this <tt>SecurityManager</tt> should wrap and delegate all of its
      *                   authorization calls to.
      */
+    @Impure
     public void setAuthorizer(Authorizer authorizer) {
         if (authorizer == null) {
             String msg = "Authorizer argument cannot be null.";
@@ -96,6 +101,7 @@ public abstract class AuthorizingSecurityManager extends AuthenticatingSecurityM
      *     ((ModularRealmAuthorizer)this.authorizer).setRealms(realms);
      * }</pre>
      */
+    @Impure
     protected void afterRealmsSet() {
         super.afterRealmsSet();
         if (this.authorizer instanceof ModularRealmAuthorizer) {
@@ -103,72 +109,89 @@ public abstract class AuthorizingSecurityManager extends AuthenticatingSecurityM
         }
     }
 
+    @Impure
     public void destroy() {
         LifecycleUtils.destroy(getAuthorizer());
         this.authorizer = null;
         super.destroy();
     }
 
+    @Impure
     public boolean isPermitted(PrincipalCollection principals, String permissionString) {
         return this.authorizer.isPermitted(principals, permissionString);
     }
 
+    @Impure
     public boolean isPermitted(PrincipalCollection principals, Permission permission) {
         return this.authorizer.isPermitted(principals, permission);
     }
 
+    @Impure
     public boolean[] isPermitted(PrincipalCollection principals, String... permissions) {
         return this.authorizer.isPermitted(principals, permissions);
     }
 
+    @Impure
     public boolean[] isPermitted(PrincipalCollection principals, List<Permission> permissions) {
         return this.authorizer.isPermitted(principals, permissions);
     }
 
+    @Impure
     public boolean isPermittedAll(PrincipalCollection principals, String... permissions) {
         return this.authorizer.isPermittedAll(principals, permissions);
     }
 
+    @Impure
     public boolean isPermittedAll(PrincipalCollection principals, Collection<Permission> permissions) {
         return this.authorizer.isPermittedAll(principals, permissions);
     }
 
+    @Impure
     public void checkPermission(PrincipalCollection principals, String permission) throws AuthorizationException {
         this.authorizer.checkPermission(principals, permission);
     }
 
+    @Impure
     public void checkPermission(PrincipalCollection principals, Permission permission) throws AuthorizationException {
         this.authorizer.checkPermission(principals, permission);
     }
 
+    @Impure
     public void checkPermissions(PrincipalCollection principals, String... permissions) throws AuthorizationException {
         this.authorizer.checkPermissions(principals, permissions);
     }
 
+    @Impure
     public void checkPermissions(PrincipalCollection principals, Collection<Permission> permissions) throws AuthorizationException {
         this.authorizer.checkPermissions(principals, permissions);
     }
 
+    @Impure
     public boolean hasRole(PrincipalCollection principals, String roleIdentifier) {
         return this.authorizer.hasRole(principals, roleIdentifier);
     }
 
+    @Impure
     public boolean[] hasRoles(PrincipalCollection principals, List<String> roleIdentifiers) {
         return this.authorizer.hasRoles(principals, roleIdentifiers);
     }
 
+    @Impure
     public boolean hasAllRoles(PrincipalCollection principals, Collection<String> roleIdentifiers) {
         return this.authorizer.hasAllRoles(principals, roleIdentifiers);
     }
 
+    @Impure
     public void checkRole(PrincipalCollection principals, String role) throws AuthorizationException {
         this.authorizer.checkRole(principals, role);
     }
 
+    @Impure
     public void checkRoles(PrincipalCollection principals, Collection<String> roles) throws AuthorizationException {
         this.authorizer.checkRoles(principals, roles);
     }
     
+    @Impure
     public void checkRoles(PrincipalCollection principals, String... roles) throws AuthorizationException {
         this.authorizer.checkRoles(principals, roles);
     }    

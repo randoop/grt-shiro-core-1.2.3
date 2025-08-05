@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.authc.pam;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -41,6 +43,7 @@ public class FirstSuccessfulStrategy extends AbstractAuthenticationStrategy {
      * Returns {@code null} immediately, relying on this class's {@link #merge merge} implementation to return
      * only the first {@code info} object it encounters, ignoring all subsequent ones.
      */
+    @Pure
     public AuthenticationInfo beforeAllAttempts(Collection<? extends Realm> realms, AuthenticationToken token) throws AuthenticationException {
         return null;
     }
@@ -52,6 +55,8 @@ public class FirstSuccessfulStrategy extends AbstractAuthenticationStrategy {
      * This logic ensures that the first valid info encountered is the one retained and all subsequent ones are ignored,
      * since this strategy mandates that only the info from the first successfully authenticated realm be used.
      */
+    @Pure
+    @Impure
     protected AuthenticationInfo merge(AuthenticationInfo info, AuthenticationInfo aggregate) {
         if (aggregate != null && !CollectionUtils.isEmpty(aggregate.getPrincipals())) {
             return aggregate;

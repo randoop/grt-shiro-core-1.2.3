@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.jndi;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
@@ -49,6 +52,7 @@ public class JndiTemplate {
     private Properties environment;
 
     /** Create a new JndiTemplate instance. */
+    @SideEffectFree
     public JndiTemplate() {
     }
 
@@ -57,6 +61,7 @@ public class JndiTemplate {
      *
      * @param environment the Properties to initialize with
      */
+    @SideEffectFree
     public JndiTemplate(Properties environment) {
         this.environment = environment;
     }
@@ -66,6 +71,7 @@ public class JndiTemplate {
      *
      * @param environment the Properties to initialize with
      */
+    @Impure
     public void setEnvironment(Properties environment) {
         this.environment = environment;
     }
@@ -75,6 +81,7 @@ public class JndiTemplate {
      *
      * @return the environment for the JNDI InitialContext, or <code>null</code> if none should be used.
      */
+    @Pure
     public Properties getEnvironment() {
         return this.environment;
     }
@@ -87,6 +94,7 @@ public class JndiTemplate {
      * @throws NamingException thrown by the callback implementation
      * @see #createInitialContext
      */
+    @Impure
     public Object execute(JndiCallback contextCallback) throws NamingException {
         Context ctx = createInitialContext();
         try {
@@ -109,6 +117,7 @@ public class JndiTemplate {
      * @return the initial Context instance
      * @throws NamingException in case of initialization errors
      */
+    @Impure
     @SuppressWarnings({"unchecked"})
     protected Context createInitialContext() throws NamingException {
         Properties env = getEnvironment();
@@ -132,9 +141,11 @@ public class JndiTemplate {
      * @throws NamingException if there is no object with the given
      *                         name bound to JNDI
      */
+    @Impure
     public Object lookup(final String name) throws NamingException {
         log.debug("Looking up JNDI object with name '{}'", name);
         return execute(new JndiCallback() {
+            @Impure
             public Object doInContext(Context ctx) throws NamingException {
                 Object located = ctx.lookup(name);
                 if (located == null) {
@@ -159,6 +170,7 @@ public class JndiTemplate {
      * @throws NamingException if there is no object with the given
      *                         name bound to JNDI
      */
+    @Impure
     public Object lookup(String name, Class requiredType) throws NamingException {
         Object jndiObject = lookup(name);
         if (requiredType != null && !requiredType.isInstance(jndiObject)) {
@@ -177,9 +189,11 @@ public class JndiTemplate {
      * @param object the object to bind
      * @throws NamingException thrown by JNDI, mostly name already bound
      */
+    @Impure
     public void bind(final String name, final Object object) throws NamingException {
         log.debug("Binding JNDI object with name '{}'", name);
         execute(new JndiCallback() {
+            @Impure
             public Object doInContext(Context ctx) throws NamingException {
                 ctx.bind(name, object);
                 return null;
@@ -195,9 +209,11 @@ public class JndiTemplate {
      * @param object the object to rebind
      * @throws NamingException thrown by JNDI
      */
+    @Impure
     public void rebind(final String name, final Object object) throws NamingException {
         log.debug("Rebinding JNDI object with name '{}'", name);
         execute(new JndiCallback() {
+            @Impure
             public Object doInContext(Context ctx) throws NamingException {
                 ctx.rebind(name, object);
                 return null;
@@ -211,9 +227,11 @@ public class JndiTemplate {
      * @param name the JNDI name of the object
      * @throws NamingException thrown by JNDI, mostly name not found
      */
+    @Impure
     public void unbind(final String name) throws NamingException {
         log.debug("Unbinding JNDI object with name '{}'", name);
         execute(new JndiCallback() {
+            @Impure
             public Object doInContext(Context ctx) throws NamingException {
                 ctx.unbind(name);
                 return null;

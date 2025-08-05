@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.util;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +46,7 @@ public class ClassUtils {
      * @since 1.0
      */
     private static final ClassLoaderAccessor THREAD_CL_ACCESSOR = new ExceptionIgnoringAccessor() {
+        @Impure
         @Override
         protected ClassLoader doGetClassLoader() throws Throwable {
             return Thread.currentThread().getContextClassLoader();
@@ -54,6 +57,7 @@ public class ClassUtils {
      * @since 1.0
      */
     private static final ClassLoaderAccessor CLASS_CL_ACCESSOR = new ExceptionIgnoringAccessor() {
+        @Impure
         @Override
         protected ClassLoader doGetClassLoader() throws Throwable {
             return ClassUtils.class.getClassLoader();
@@ -64,6 +68,7 @@ public class ClassUtils {
      * @since 1.0
      */
     private static final ClassLoaderAccessor SYSTEM_CL_ACCESSOR = new ExceptionIgnoringAccessor() {
+        @Impure
         @Override
         protected ClassLoader doGetClassLoader() throws Throwable {
             return ClassLoader.getSystemClassLoader();
@@ -82,6 +87,7 @@ public class ClassUtils {
      *         of the three mentioned ClassLoaders.
      * @since 0.9
      */
+    @Impure
     public static InputStream getResourceAsStream(String name) {
 
         InputStream is = THREAD_CL_ACCESSOR.getResourceStream(name);
@@ -122,6 +128,7 @@ public class ClassUtils {
      * @return the located class
      * @throws UnknownClassException if the class cannot be found.
      */
+    @Impure
     public static Class forName(String fqcn) throws UnknownClassException {
 
         Class clazz = THREAD_CL_ACCESSOR.loadClass(fqcn);
@@ -151,6 +158,7 @@ public class ClassUtils {
         return clazz;
     }
 
+    @Impure
     public static boolean isAvailable(String fullyQualifiedClassName) {
         try {
             forName(fullyQualifiedClassName);
@@ -160,14 +168,17 @@ public class ClassUtils {
         }
     }
 
+    @Impure
     public static Object newInstance(String fqcn) {
         return newInstance(forName(fqcn));
     }
 
+    @Impure
     public static Object newInstance(String fqcn, Object... args) {
         return newInstance(forName(fqcn), args);
     }
 
+    @Impure
     public static Object newInstance(Class clazz) {
         if (clazz == null) {
             String msg = "Class method parameter cannot be null.";
@@ -180,6 +191,7 @@ public class ClassUtils {
         }
     }
 
+    @Impure
     public static Object newInstance(Class clazz, Object... args) {
         Class[] argTypes = new Class[args.length];
         for (int i = 0; i < args.length; i++) {
@@ -189,6 +201,7 @@ public class ClassUtils {
         return instantiate(ctor, args);
     }
 
+    @SideEffectFree
     public static Constructor getConstructor(Class clazz, Class... argTypes) {
         try {
             return clazz.getConstructor(argTypes);
@@ -198,6 +211,7 @@ public class ClassUtils {
 
     }
 
+    @Impure
     public static Object instantiate(Constructor ctor, Object... args) {
         try {
             return ctor.newInstance(args);
@@ -211,7 +225,9 @@ public class ClassUtils {
      * @since 1.0
      */
     private static interface ClassLoaderAccessor {
+        @Impure
         Class loadClass(String fqcn);
+        @Impure
         InputStream getResourceStream(String name);
     }
 
@@ -220,6 +236,7 @@ public class ClassUtils {
      */
     private static abstract class ExceptionIgnoringAccessor implements ClassLoaderAccessor {
 
+        @Impure
         public Class loadClass(String fqcn) {
             Class clazz = null;
             ClassLoader cl = getClassLoader();
@@ -235,6 +252,7 @@ public class ClassUtils {
             return clazz;
         }
 
+        @Impure
         public InputStream getResourceStream(String name) {
             InputStream is = null;
             ClassLoader cl = getClassLoader();
@@ -244,6 +262,7 @@ public class ClassUtils {
             return is;
         }
 
+        @Impure
         protected final ClassLoader getClassLoader() {
             try {
                 return doGetClassLoader();
@@ -255,6 +274,7 @@ public class ClassUtils {
             return null;
         }
 
+        @Impure
         protected abstract ClassLoader doGetClassLoader() throws Throwable;
     }
 }

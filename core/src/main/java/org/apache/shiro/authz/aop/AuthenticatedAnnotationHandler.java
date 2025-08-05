@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authz.aop;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.lang.annotation.Annotation;
 
 import org.apache.shiro.authz.UnauthenticatedException;
@@ -36,6 +37,7 @@ public class AuthenticatedAnnotationHandler extends AuthorizingAnnotationHandler
      * Default no-argument constructor that ensures this handler to process
      * {@link org.apache.shiro.authz.annotation.RequiresAuthentication RequiresAuthentication} annotations.
      */
+    @Impure
     public AuthenticatedAnnotationHandler() {
         super(RequiresAuthentication.class);
     }
@@ -48,6 +50,7 @@ public class AuthenticatedAnnotationHandler extends AuthorizingAnnotationHandler
      * @throws org.apache.shiro.authz.UnauthenticatedException if the calling <code>Subject</code> has not yet
      * authenticated.
      */
+    @Impure
     public void assertAuthorized(Annotation a) throws UnauthenticatedException {
         if (a instanceof RequiresAuthentication && !getSubject().isAuthenticated() ) {
             throw new UnauthenticatedException( "The current Subject is not authenticated.  Access denied." );

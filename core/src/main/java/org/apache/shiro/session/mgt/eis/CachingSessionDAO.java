@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.session.mgt.eis;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.CacheManagerAware;
@@ -70,6 +73,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
     /**
      * Default no-arg constructor.
      */
+    @Impure
     public CachingSessionDAO() {
     }
 
@@ -79,6 +83,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      *
      * @param cacheManager the manager to use for constructing the session cache.
      */
+    @Impure
     public void setCacheManager(CacheManager cacheManager) {
         this.cacheManager = cacheManager;
     }
@@ -90,6 +95,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      *
      * @return the CacheManager used by the implementation that creates the activeSessions Cache.
      */
+    @Pure
     public CacheManager getCacheManager() {
         return cacheManager;
     }
@@ -100,6 +106,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      *
      * @return the name of the active sessions cache.
      */
+    @Pure
     public String getActiveSessionsCacheName() {
         return activeSessionsCacheName;
     }
@@ -110,6 +117,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      *
      * @param activeSessionsCacheName the name of the active sessions cache to be returned by the {@code CacheManager}.
      */
+    @Impure
     public void setActiveSessionsCacheName(String activeSessionsCacheName) {
         this.activeSessionsCacheName = activeSessionsCacheName;
     }
@@ -122,6 +130,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      * @return the cache instance to use for storing active sessions or {@code null} if the {@code Cache} instance
      *         should be retrieved from the
      */
+    @Pure
     public Cache<Serializable, Session> getActiveSessionsCache() {
         return this.activeSessions;
     }
@@ -134,6 +143,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      * @param cache the cache instance to use for storing active sessions or {@code null} if the cache is to be
      *              acquired from the {@link #setCacheManager configured} {@code CacheManager}.
      */
+    @Impure
     public void setActiveSessionsCache(Cache<Serializable, Session> cache) {
         this.activeSessions = cache;
     }
@@ -147,6 +157,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      *
      * @return the active sessions cache instance.
      */
+    @Impure
     private Cache<Serializable, Session> getActiveSessionsCacheLazy() {
         if (this.activeSessions == null) {
             this.activeSessions = createActiveSessionsCache();
@@ -164,6 +175,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      * @return a cache instance used to store active sessions, or {@code null} if the {@code CacheManager} has
      *         not been set.
      */
+    @Impure
     protected Cache<Serializable, Session> createActiveSessionsCache() {
         Cache<Serializable, Session> cache = null;
         CacheManager mgr = getCacheManager();
@@ -180,6 +192,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      *
      * @param session Session object to create in the EIS and then cache.
      */
+    @Impure
     public Serializable create(Session session) {
         Serializable sessionId = super.create(session);
         cache(session, sessionId);
@@ -194,6 +207,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      * @return the cached session with the corresponding {@code sessionId}, or {@code null} if the session
      *         does not exist or is not cached.
      */
+    @Impure
     protected Session getCachedSession(Serializable sessionId) {
         Session cached = null;
         if (sessionId != null) {
@@ -213,6 +227,8 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      * @param cache     the cache to acquire the session from
      * @return the cached session, or {@code null} if the session wasn't in the cache.
      */
+    @Pure
+    @Impure
     protected Session getCachedSession(Serializable sessionId, Cache<Serializable, Session> cache) {
         return cache.get(sessionId);
     }
@@ -224,6 +240,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      * @param sessionId the session id, to be used as the cache entry key.
      * @since 1.0
      */
+    @Impure
     protected void cache(Session session, Serializable sessionId) {
         if (session == null || sessionId == null) {
             return;
@@ -243,6 +260,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      * @param sessionId the id of the session, expected to be the cache key.
      * @param cache     the cache to store the session
      */
+    @Impure
     protected void cache(Session session, Serializable sessionId, Cache<Serializable, Session> cache) {
         cache.put(sessionId, session);
     }
@@ -255,6 +273,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      * @return the session identified by {@code sessionId} in the EIS.
      * @throws UnknownSessionException if the id specified does not correspond to any session in the cache or EIS.
      */
+    @Impure
     public Session readSession(Serializable sessionId) throws UnknownSessionException {
         Session s = getCachedSession(sessionId);
         if (s == null) {
@@ -273,6 +292,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      * @throws UnknownSessionException if no existing EIS session record exists with the
      *                                 identifier of {@link Session#getId() session.getId()}
      */
+    @Impure
     public void update(Session session) throws UnknownSessionException {
         doUpdate(session);
         if (session instanceof ValidatingSession) {
@@ -291,6 +311,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      *
      * @param session the session object whose state will be propagated to the EIS.
      */
+    @SideEffectFree
     protected abstract void doUpdate(Session session);
 
     /**
@@ -299,6 +320,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      *
      * @param session the session to remove from caches and permanently delete from the EIS.
      */
+    @Impure
     public void delete(Session session) {
         uncache(session);
         doDelete(session);
@@ -309,6 +331,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      *
      * @param session the session instance to permanently delete from the EIS.
      */
+    @SideEffectFree
     protected abstract void doDelete(Session session);
 
     /**
@@ -316,6 +339,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      *
      * @param session the session to remove from the cache.
      */
+    @Impure
     protected void uncache(Session session) {
         if (session == null) {
             return;
@@ -339,6 +363,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      *
      * @return the sessions found in the activeSessions cache.
      */
+    @Impure
     public Collection<Session> getActiveSessions() {
         Cache<Serializable, Session> cache = getActiveSessionsCacheLazy();
         if (cache != null) {

@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.aop;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import java.lang.annotation.Annotation;
 
 import org.apache.shiro.SecurityUtils;
@@ -42,6 +44,7 @@ public abstract class AnnotationHandler {
      *
      * @param annotationClass the type of annotation this handler will process.
      */
+    @Impure
     public AnnotationHandler(Class<? extends Annotation> annotationClass) {
         setAnnotationClass(annotationClass);
     }
@@ -53,6 +56,7 @@ public abstract class AnnotationHandler {
      *
      * @return the {@link org.apache.shiro.subject.Subject Subject} associated with the currently-executing code.
      */
+    @Impure
     protected Subject getSubject() {
         return SecurityUtils.getSubject();
     }
@@ -63,6 +67,7 @@ public abstract class AnnotationHandler {
      * @param annotationClass the type of annotation this handler will process.
      * @throws IllegalArgumentException if the argument is <code>null</code>.
      */
+    @Impure
     protected void setAnnotationClass(Class<? extends Annotation> annotationClass)
             throws IllegalArgumentException {
         if (annotationClass == null) {
@@ -77,6 +82,7 @@ public abstract class AnnotationHandler {
      *
      * @return the type of annotation this handler inspects and processes.
      */
+    @Pure
     public Class<? extends Annotation> getAnnotationClass() {
         return this.annotationClass;
     }

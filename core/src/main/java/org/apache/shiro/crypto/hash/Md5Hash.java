@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.crypto.hash;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.codec.Hex;
 
@@ -36,28 +37,34 @@ public class Md5Hash extends SimpleHash {
 
     public static final String ALGORITHM_NAME = "MD5";
 
+    @Impure
     public Md5Hash() {
         super(ALGORITHM_NAME);
     }
 
+    @Impure
     public Md5Hash(Object source) {
         super(ALGORITHM_NAME, source);
     }
 
+    @Impure
     public Md5Hash(Object source, Object salt) {
         super(ALGORITHM_NAME, source, salt);
     }
 
+    @Impure
     public Md5Hash(Object source, Object salt, int hashIterations) {
         super(ALGORITHM_NAME, source, salt, hashIterations);
     }
 
+    @Impure
     public static Md5Hash fromHexString(String hex) {
         Md5Hash hash = new Md5Hash();
         hash.setBytes(Hex.decode(hex));
         return hash;
     }
 
+    @Impure
     public static Md5Hash fromBase64String(String base64) {
         Md5Hash hash = new Md5Hash();
         hash.setBytes(Base64.decode(base64));

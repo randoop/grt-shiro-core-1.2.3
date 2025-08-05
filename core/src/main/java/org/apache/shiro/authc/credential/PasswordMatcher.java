@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.authc.credential;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.crypto.hash.Hash;
@@ -35,10 +38,12 @@ public class PasswordMatcher implements CredentialsMatcher {
 
     private PasswordService passwordService;
 
+    @Impure
     public PasswordMatcher() {
         this.passwordService = new DefaultPasswordService();
     }
 
+    @Impure
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
 
         PasswordService service = ensurePasswordService();
@@ -57,6 +62,7 @@ public class PasswordMatcher implements CredentialsMatcher {
         return passwordService.passwordsMatch(submittedPassword, formatted);
     }
 
+    @Pure
     private HashingPasswordService assertHashingPasswordService(PasswordService service) {
         if (service instanceof HashingPasswordService) {
             return (HashingPasswordService) service;
@@ -68,6 +74,8 @@ public class PasswordMatcher implements CredentialsMatcher {
         throw new IllegalStateException(msg);
     }
 
+    @Pure
+    @Impure
     private PasswordService ensurePasswordService() {
         PasswordService service = getPasswordService();
         if (service == null) {
@@ -77,10 +85,13 @@ public class PasswordMatcher implements CredentialsMatcher {
         return service;
     }
 
+    @Pure
+    @Impure
     protected Object getSubmittedPassword(AuthenticationToken token) {
         return token != null ? token.getCredentials() : null;
     }
 
+    @SideEffectFree
     private void assertStoredCredentialsType(Object credentials) {
         if (credentials instanceof String || credentials instanceof Hash) {
             return;
@@ -91,6 +102,8 @@ public class PasswordMatcher implements CredentialsMatcher {
         throw new IllegalArgumentException(msg);
     }
 
+    @SideEffectFree
+    @Impure
     protected Object getStoredPassword(AuthenticationInfo storedAccountInfo) {
         Object stored = storedAccountInfo != null ? storedAccountInfo.getCredentials() : null;
         //fix for https://issues.apache.org/jira/browse/SHIRO-363
@@ -100,10 +113,12 @@ public class PasswordMatcher implements CredentialsMatcher {
         return stored;
     }
 
+    @Pure
     public PasswordService getPasswordService() {
         return passwordService;
     }
 
+    @Impure
     public void setPasswordService(PasswordService passwordService) {
         this.passwordService = passwordService;
     }

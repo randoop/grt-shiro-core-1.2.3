@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.config;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Interface implemented by components that can be configured by resource locations (paths).
@@ -30,6 +31,7 @@ public interface ResourceConfigurable {
      *
      * @param locations comma-delimited list of config locations (resource paths).
      */
+    @SideEffectFree
     void setConfigLocations(String locations);
 
     /**
@@ -37,6 +39,7 @@ public interface ResourceConfigurable {
      *
      * @param locations the configuration locations (resource paths) that will be used to configure the instance.
      */
+    @SideEffectFree
     void setConfigLocations(String[] locations);
 
 }

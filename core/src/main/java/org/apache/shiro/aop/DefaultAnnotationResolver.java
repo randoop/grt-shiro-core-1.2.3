@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.aop;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
@@ -48,6 +49,7 @@ public class DefaultAnnotationResolver implements AnnotationResolver {
      * @return the discovered annotation or {@code null} if an annotation instance could not be
      *         found.
      */
+    @Impure
     public Annotation getAnnotation(MethodInvocation mi, Class<? extends Annotation> clazz) {
         if (mi == null) {
             throw new IllegalArgumentException("method argument cannot be null");

@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.aop;
 
+import org.checkerframework.dataflow.qual.Pure;
 import java.lang.reflect.Method;
 
 /**
@@ -34,6 +35,7 @@ public interface MethodInvocation {
      * @return the result of the Method invocation.
      * @throws Throwable if the method or chain throws a Throwable
      */
+    @Pure
     Object proceed() throws Throwable;
 
     /**
@@ -41,6 +43,7 @@ public interface MethodInvocation {
      *
      * @return the actual {@link Method Method} to be invoked.
      */
+    @Pure
     Method getMethod();
 
     /**
@@ -48,6 +51,7 @@ public interface MethodInvocation {
      *
      * @return the (possibly null) arguments to be supplied to the method invocation.
      */
+    @Pure
     Object[] getArguments();
 
     /**
@@ -57,6 +61,7 @@ public interface MethodInvocation {
      * @return the object that holds the current joinpoint's static part.
      * @since 1.0
      */
+    @Pure
     Object getThis();
 
 

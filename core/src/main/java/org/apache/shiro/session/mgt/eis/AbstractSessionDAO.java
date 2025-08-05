@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.session.mgt.eis;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.SimpleSession;
@@ -55,6 +58,7 @@ public abstract class AbstractSessionDAO implements SessionDAO {
      * Default no-arg constructor that defaults the {@link #setSessionIdGenerator sessionIdGenerator} to be a
      * {@link org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator}.
      */
+    @Impure
     public AbstractSessionDAO() {
         this.sessionIdGenerator = new JavaUuidSessionIdGenerator();
     }
@@ -67,6 +71,7 @@ public abstract class AbstractSessionDAO implements SessionDAO {
      * @return the {@code SessionIdGenerator} used by the {@link #generateSessionId(org.apache.shiro.session.Session)}
      *         method.
      */
+    @Pure
     public SessionIdGenerator getSessionIdGenerator() {
         return sessionIdGenerator;
     }
@@ -78,6 +83,7 @@ public abstract class AbstractSessionDAO implements SessionDAO {
      * @param sessionIdGenerator the {@code SessionIdGenerator} to use in the
      *                           {@link #generateSessionId(org.apache.shiro.session.Session)} method.
      */
+    @Impure
     public void setSessionIdGenerator(SessionIdGenerator sessionIdGenerator) {
         this.sessionIdGenerator = sessionIdGenerator;
     }
@@ -98,6 +104,7 @@ public abstract class AbstractSessionDAO implements SessionDAO {
      * @param session the new session instance for which an ID will be generated and then assigned
      * @return the generated ID to assign
      */
+    @Impure
     protected Serializable generateSessionId(Session session) {
         if (this.sessionIdGenerator == null) {
             String msg = "sessionIdGenerator attribute has not been configured.";
@@ -112,6 +119,7 @@ public abstract class AbstractSessionDAO implements SessionDAO {
      *
      * @param session Session object to create in the EIS and associate with an ID.
      */
+    @Impure
     public Serializable create(Session session) {
         Serializable sessionId = doCreate(session);
         verifySessionId(sessionId);
@@ -124,6 +132,7 @@ public abstract class AbstractSessionDAO implements SessionDAO {
      *
      * @param sessionId session id returned from the subclass implementation of {@link #doCreate}
      */
+    @SideEffectFree
     private void verifySessionId(Serializable sessionId) {
         if (sessionId == null) {
             String msg = "sessionId returned from doCreate implementation is null.  Please verify the implementation.";
@@ -142,6 +151,7 @@ public abstract class AbstractSessionDAO implements SessionDAO {
      * @param session   the session instance to which the sessionId will be applied
      * @param sessionId the id to assign to the specified session instance.
      */
+    @Impure
     protected void assignSessionId(Session session, Serializable sessionId) {
         ((SimpleSession) session).setId(sessionId);
     }
@@ -153,6 +163,7 @@ public abstract class AbstractSessionDAO implements SessionDAO {
      * @return the id of the session created in the EIS (i.e. this is almost always a primary key and should be the
      *         value returned from {@link org.apache.shiro.session.Session#getId() Session.getId()}.
      */
+    @Impure
     protected abstract Serializable doCreate(Session session);
 
     /**
@@ -164,6 +175,7 @@ public abstract class AbstractSessionDAO implements SessionDAO {
      * @return the session identified by <tt>sessionId</tt> in the EIS.
      * @throws UnknownSessionException if the id specified does not correspond to any session in the EIS.
      */
+    @Impure
     public Session readSession(Serializable sessionId) throws UnknownSessionException {
         Session s = doReadSession(sessionId);
         if (s == null) {
@@ -180,6 +192,7 @@ public abstract class AbstractSessionDAO implements SessionDAO {
      * @return the Session in the EIS identified by <tt>sessionId</tt> or {@code null} if a
      *         session with that ID could not be found.
      */
+    @Pure
     protected abstract Session doReadSession(Serializable sessionId);
 
 }

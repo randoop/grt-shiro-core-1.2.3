@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.codec;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * Provides <a href="http://en.wikipedia.org/wiki/Base64">Base 64</a> encoding and decoding as defined by
@@ -157,6 +159,7 @@ public class Base64 {
      * @param octect The value to test
      * @return <code>true</code> if the value is defined in the the base 64 alphabet, <code>false</code> otherwise.
      */
+    @Pure
     private static boolean isBase64(byte octect) {
         if (octect == PAD) {
             return true;
@@ -175,6 +178,7 @@ public class Base64 {
      * @return <code>true</code> if all bytes are valid characters in the Base64 alphabet or if the byte array is
      *         empty; false, otherwise
      */
+    @Impure
     public static boolean isBase64(byte[] arrayOctect) {
 
         arrayOctect = discardWhitespace(arrayOctect);
@@ -199,6 +203,7 @@ public class Base64 {
      * @param data The base-64 encoded data to discard the whitespace from.
      * @return The data, less whitespace (see RFC 2045).
      */
+    @Impure
     static byte[] discardWhitespace(byte[] data) {
         byte groomedData[] = new byte[data.length];
         int bytesCopied = 0;
@@ -229,6 +234,7 @@ public class Base64 {
      * @param bytes the byte array to Base64 encode.
      * @return a UTF-8 encoded String of the resulting Base64 encoded byte array.
      */
+    @Impure
     public static String encodeToString(byte[] bytes) {
         byte[] encoded = encode(bytes);
         return CodecSupport.toString(encoded);
@@ -240,6 +246,7 @@ public class Base64 {
      * @param binaryData binary data to encodeToChars
      * @return Base64 characters chunked in 76 character blocks
      */
+    @Impure
     public static byte[] encodeChunked(byte[] binaryData) {
         return encode(binaryData, true);
     }
@@ -250,6 +257,7 @@ public class Base64 {
      * @param pArray a byte array containing binary data
      * @return A byte array containing only Base64 character data
      */
+    @Impure
     public static byte[] encode(byte[] pArray) {
         return encode(pArray, false);
     }
@@ -262,6 +270,7 @@ public class Base64 {
      * @return Base64-encoded data.
      * @throws IllegalArgumentException Thrown when the input array needs an output array bigger than {@link Integer#MAX_VALUE}
      */
+    @Impure
     public static byte[] encode(byte[] binaryData, boolean isChunked) {
         long binaryDataLength = binaryData.length;
         long lengthDataBits = binaryDataLength * EIGHTBIT;
@@ -387,6 +396,7 @@ public class Base64 {
      * @param base64Encoded a UTF-8 Base64 encoded String
      * @return the decoded String, UTF-8 encoded.
      */
+    @Impure
     public static String decodeToString(String base64Encoded) {
         byte[] encodedBytes = CodecSupport.toBytes(base64Encoded);
         return decodeToString(encodedBytes);
@@ -398,6 +408,7 @@ public class Base64 {
      * @param base64Encoded a Base64 encoded byte array
      * @return the decoded String, UTF-8 encoded.
      */
+    @Impure
     public static String decodeToString(byte[] base64Encoded) {
         byte[] decoded = decode(base64Encoded);
         return CodecSupport.toString(decoded);
@@ -409,6 +420,7 @@ public class Base64 {
      * @param base64Encoded a UTF-8 Base64 encoded String
      * @return the raw Base64 decoded byte array.
      */
+    @Impure
     public static byte[] decode(String base64Encoded) {
         byte[] bytes = CodecSupport.toBytes(base64Encoded);
         return decode(bytes);
@@ -420,6 +432,7 @@ public class Base64 {
      * @param base64Data Byte array containing Base64 data
      * @return Array containing decoded data.
      */
+    @Impure
     public static byte[] decode(byte[] base64Data) {
         // RFC 2045 requires that we discard ALL non-Base64 characters
         base64Data = discardNonBase64(base64Data);
@@ -486,6 +499,7 @@ public class Base64 {
      * @param data The base-64 encoded data to groom
      * @return The data, less non-base64 characters (see RFC 2045).
      */
+    @Impure
     static byte[] discardNonBase64(byte[] data) {
         byte groomedData[] = new byte[data.length];
         int bytesCopied = 0;

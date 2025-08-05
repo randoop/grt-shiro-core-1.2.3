@@ -19,6 +19,8 @@
 
 package org.apache.shiro.authc;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import java.io.Serializable;
@@ -67,6 +69,8 @@ public interface AuthenticationInfo extends Serializable {
      *
      * @return all principals associated with the corresponding Subject.
      */
+    @Pure
+    @Impure
     PrincipalCollection getPrincipals();
 
     /**
@@ -77,6 +81,8 @@ public interface AuthenticationInfo extends Serializable {
      *
      * @return the credentials associated with the corresponding Subject.
      */
+    @Pure
+    @Impure
     Object getCredentials();
 
 }

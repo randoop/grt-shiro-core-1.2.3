@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.config;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Exception thrown when a reference to an object is made, but that object cannot be found.  This is most likely
@@ -29,6 +31,8 @@ public class UnresolveableReferenceException extends ConfigurationException {
     /**
      * Creates a new UnresolveableReferenceException.
      */
+    @SideEffectFree
+    @Impure
     public UnresolveableReferenceException() {
         super();
     }
@@ -38,6 +42,8 @@ public class UnresolveableReferenceException extends ConfigurationException {
      *
      * @param message the reason for the exception
      */
+    @SideEffectFree
+    @Impure
     public UnresolveableReferenceException(String message) {
         super(message);
     }
@@ -47,6 +53,8 @@ public class UnresolveableReferenceException extends ConfigurationException {
      *
      * @param cause the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public UnresolveableReferenceException(Throwable cause) {
         super(cause);
     }
@@ -57,6 +65,8 @@ public class UnresolveableReferenceException extends ConfigurationException {
      * @param message the reason for the exception
      * @param cause   the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public UnresolveableReferenceException(String message, Throwable cause) {
         super(message, cause);
     }

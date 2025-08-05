@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.dao;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Root exception indicating invalid or incorrect usage of a data access resource.  This is thrown
@@ -31,6 +33,8 @@ public class InvalidResourceUsageException extends DataAccessException {
      *
      * @param message the message explaining the cause of the exception
      */
+    @SideEffectFree
+    @Impure
     public InvalidResourceUsageException(String message) {
         super(message);
     }
@@ -41,6 +45,8 @@ public class InvalidResourceUsageException extends DataAccessException {
      * @param message the explanation
      * @param cause   the root cause of the exception, typically an API-specific exception
      */
+    @SideEffectFree
+    @Impure
     public InvalidResourceUsageException(String message, Throwable cause) {
         super(message, cause);
     }

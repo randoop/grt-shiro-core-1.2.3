@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authz.aop;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.aop.AnnotationResolver;
 
 /**
@@ -35,6 +36,7 @@ public class AuthenticatedAnnotationMethodInterceptor extends AuthorizingAnnotat
      * {@link org.apache.shiro.authz.annotation.RequiresAuthentication RequiresAuthentication} annotations in a method
      * declaration.
      */
+    @Impure
     public AuthenticatedAnnotationMethodInterceptor() {
         super(new AuthenticatedAnnotationHandler());
     }
@@ -43,6 +45,7 @@ public class AuthenticatedAnnotationMethodInterceptor extends AuthorizingAnnotat
      * @param resolver
      * @since 1.1
      */
+    @Impure
     public AuthenticatedAnnotationMethodInterceptor(AnnotationResolver resolver) {
         super(new AuthenticatedAnnotationHandler(), resolver);
     }

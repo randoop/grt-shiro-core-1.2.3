@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.session;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Exception thrown when attempting to interact with the system under a session that has been
@@ -30,6 +32,8 @@ public class StoppedSessionException extends InvalidSessionException {
     /**
      * Creates a new StoppedSessionException.
      */
+    @SideEffectFree
+    @Impure
     public StoppedSessionException() {
         super();
     }
@@ -39,6 +43,8 @@ public class StoppedSessionException extends InvalidSessionException {
      *
      * @param message the reason for the exception
      */
+    @SideEffectFree
+    @Impure
     public StoppedSessionException(String message) {
         super(message);
     }
@@ -48,6 +54,8 @@ public class StoppedSessionException extends InvalidSessionException {
      *
      * @param cause the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public StoppedSessionException(Throwable cause) {
         super(cause);
     }
@@ -58,6 +66,8 @@ public class StoppedSessionException extends InvalidSessionException {
      * @param message the reason for the exception
      * @param cause   the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public StoppedSessionException(String message, Throwable cause) {
         super(message, cause);
     }

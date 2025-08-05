@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.authz;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -34,34 +37,42 @@ public class SimpleRole implements Serializable {
     protected String name = null;
     protected Set<Permission> permissions;
 
+    @SideEffectFree
     public SimpleRole() {
     }
 
+    @Impure
     public SimpleRole(String name) {
         setName(name);
     }
 
+    @Impure
     public SimpleRole(String name, Set<Permission> permissions) {
         setName(name);
         setPermissions(permissions);
     }
 
+    @Pure
     public String getName() {
         return name;
     }
 
+    @Impure
     public void setName(String name) {
         this.name = name;
     }
 
+    @Pure
     public Set<Permission> getPermissions() {
         return permissions;
     }
 
+    @Impure
     public void setPermissions(Set<Permission> permissions) {
         this.permissions = permissions;
     }
 
+    @Impure
     public void add(Permission permission) {
         Set<Permission> permissions = getPermissions();
         if (permissions == null) {
@@ -71,6 +82,7 @@ public class SimpleRole implements Serializable {
         permissions.add(permission);
     }
 
+    @Impure
     public void addAll(Collection<Permission> perms) {
         if (perms != null && !perms.isEmpty()) {
             Set<Permission> permissions = getPermissions();
@@ -82,6 +94,8 @@ public class SimpleRole implements Serializable {
         }
     }
 
+    @Pure
+    @Impure
     public boolean isPermitted(Permission p) {
         Collection<Permission> perms = getPermissions();
         if (perms != null && !perms.isEmpty()) {
@@ -94,10 +108,14 @@ public class SimpleRole implements Serializable {
         return false;
     }
 
+    @Pure
+    @Impure
     public int hashCode() {
         return (getName() != null ? getName().hashCode() : 0);
     }
 
+    @Pure
+    @Impure
     public boolean equals(Object o) {
         if (o == this) {
             return true;
@@ -110,6 +128,8 @@ public class SimpleRole implements Serializable {
         return false;
     }
 
+    @Pure
+    @Impure
     public String toString() {
         return getName();
     }

@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.realm.text;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.authc.SimpleAccount;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.SimpleRole;
@@ -50,6 +52,7 @@ public class TextConfigurationRealm extends SimpleAccountRealm {
     private volatile String userDefinitions;
     private volatile String roleDefinitions;
 
+    @Impure
     public TextConfigurationRealm() {
         super();
     }
@@ -60,12 +63,14 @@ public class TextConfigurationRealm extends SimpleAccountRealm {
      * @since 1.2
      * @see <a href="https://issues.apache.org/jira/browse/SHIRO-223">SHIRO-223</a>
      */
+    @Impure
     @Override
     protected void onInit() {
         super.onInit();
         processDefinitions();
     }
 
+    @Pure
     public String getUserDefinitions() {
         return userDefinitions;
     }
@@ -86,10 +91,12 @@ public class TextConfigurationRealm extends SimpleAccountRealm {
      *
      * @param userDefinitions the user definitions to be parsed and converted to Map.Entry elements
      */
+    @Impure
     public void setUserDefinitions(String userDefinitions) {
         this.userDefinitions = userDefinitions;
     }
 
+    @Pure
     public String getRoleDefinitions() {
         return roleDefinitions;
     }
@@ -116,10 +123,12 @@ public class TextConfigurationRealm extends SimpleAccountRealm {
      *
      * @param roleDefinitions the role definitions to be parsed at initialization
      */
+    @Impure
     public void setRoleDefinitions(String roleDefinitions) {
         this.roleDefinitions = roleDefinitions;
     }
 
+    @Impure
     protected void processDefinitions() {
         try {
             processRoleDefinitions();
@@ -130,6 +139,7 @@ public class TextConfigurationRealm extends SimpleAccountRealm {
         }
     }
 
+    @Impure
     protected void processRoleDefinitions() throws ParseException {
         String roleDefinitions = getRoleDefinitions();
         if (roleDefinitions == null) {
@@ -139,6 +149,7 @@ public class TextConfigurationRealm extends SimpleAccountRealm {
         processRoleDefinitions(roleDefs);
     }
 
+    @Impure
     protected void processRoleDefinitions(Map<String, String> roleDefs) {
         if (roleDefs == null || roleDefs.isEmpty()) {
             return;
@@ -157,6 +168,7 @@ public class TextConfigurationRealm extends SimpleAccountRealm {
         }
     }
 
+    @Impure
     protected void processUserDefinitions() throws ParseException {
         String userDefinitions = getUserDefinitions();
         if (userDefinitions == null) {
@@ -168,6 +180,7 @@ public class TextConfigurationRealm extends SimpleAccountRealm {
         processUserDefinitions(userDefs);
     }
 
+    @Impure
     protected void processUserDefinitions(Map<String, String> userDefs) {
         if (userDefs == null || userDefs.isEmpty()) {
             return;
@@ -203,6 +216,7 @@ public class TextConfigurationRealm extends SimpleAccountRealm {
         }
     }
 
+    @Impure
     protected static Set<String> toLines(String s) {
         LinkedHashSet<String> set = new LinkedHashSet<String>();
         Scanner scanner = new Scanner(s);
@@ -212,6 +226,7 @@ public class TextConfigurationRealm extends SimpleAccountRealm {
         return set;
     }
 
+    @Impure
     protected static Map<String, String> toMap(Collection<String> keyValuePairs) throws ParseException {
         if (keyValuePairs == null || keyValuePairs.isEmpty()) {
             return null;

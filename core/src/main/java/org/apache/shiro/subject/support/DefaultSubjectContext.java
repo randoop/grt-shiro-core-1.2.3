@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.subject.support;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -79,22 +81,28 @@ public class DefaultSubjectContext extends MapContext implements SubjectContext 
 
     private static final transient Logger log = LoggerFactory.getLogger(DefaultSubjectContext.class);
 
+    @Impure
     public DefaultSubjectContext() {
         super();
     }
 
+    @Impure
     public DefaultSubjectContext(SubjectContext ctx) {
         super(ctx);
     }
 
+    @Pure
+    @Impure
     public SecurityManager getSecurityManager() {
         return getTypedValue(SECURITY_MANAGER, SecurityManager.class);
     }
 
+    @Impure
     public void setSecurityManager(SecurityManager securityManager) {
         nullSafePut(SECURITY_MANAGER, securityManager);
     }
 
+    @Impure
     public SecurityManager resolveSecurityManager() {
         SecurityManager securityManager = getSecurityManager();
         if (securityManager == null) {
@@ -113,32 +121,42 @@ public class DefaultSubjectContext extends MapContext implements SubjectContext 
         return securityManager;
     }
 
+    @Pure
+    @Impure
     public Serializable getSessionId() {
         return getTypedValue(SESSION_ID, Serializable.class);
     }
 
+    @Impure
     public void setSessionId(Serializable sessionId) {
         nullSafePut(SESSION_ID, sessionId);
     }
 
+    @Pure
+    @Impure
     public Subject getSubject() {
         return getTypedValue(SUBJECT, Subject.class);
     }
 
+    @Impure
     public void setSubject(Subject subject) {
         nullSafePut(SUBJECT, subject);
     }
 
+    @Pure
+    @Impure
     public PrincipalCollection getPrincipals() {
         return getTypedValue(PRINCIPALS, PrincipalCollection.class);
     }
 
+    @Impure
     public void setPrincipals(PrincipalCollection principals) {
         if (!CollectionUtils.isEmpty(principals)) {
             put(PRINCIPALS, principals);
         }
     }
 
+    @Impure
     public PrincipalCollection resolvePrincipals() {
         PrincipalCollection principals = getPrincipals();
 
@@ -169,14 +187,18 @@ public class DefaultSubjectContext extends MapContext implements SubjectContext 
     }
 
 
+    @Pure
+    @Impure
     public Session getSession() {
         return getTypedValue(SESSION, Session.class);
     }
 
+    @Impure
     public void setSession(Session session) {
         nullSafePut(SESSION, session);
     }
 
+    @Impure
     public Session resolveSession() {
         Session session = getSession();
         if (session == null) {
@@ -189,24 +211,31 @@ public class DefaultSubjectContext extends MapContext implements SubjectContext 
         return session;
     }
 
+    @Pure
+    @Impure
     public boolean isSessionCreationEnabled() {
         Boolean val = getTypedValue(SESSION_CREATION_ENABLED, Boolean.class);
         return val == null || val;
     }
 
+    @Impure
     public void setSessionCreationEnabled(boolean enabled) {
         nullSafePut(SESSION_CREATION_ENABLED, enabled);
     }
 
+    @Pure
+    @Impure
     public boolean isAuthenticated() {
         Boolean authc = getTypedValue(AUTHENTICATED, Boolean.class);
         return authc != null && authc;
     }
 
+    @Impure
     public void setAuthenticated(boolean authc) {
         put(AUTHENTICATED, authc);
     }
 
+    @Impure
     public boolean resolveAuthenticated() {
         Boolean authc = getTypedValue(AUTHENTICATED, Boolean.class);
         if (authc == null) {
@@ -227,32 +256,42 @@ public class DefaultSubjectContext extends MapContext implements SubjectContext 
         return authc;
     }
 
+    @Pure
+    @Impure
     public AuthenticationInfo getAuthenticationInfo() {
         return getTypedValue(AUTHENTICATION_INFO, AuthenticationInfo.class);
     }
 
+    @Impure
     public void setAuthenticationInfo(AuthenticationInfo info) {
         nullSafePut(AUTHENTICATION_INFO, info);
     }
 
+    @Pure
+    @Impure
     public AuthenticationToken getAuthenticationToken() {
         return getTypedValue(AUTHENTICATION_TOKEN, AuthenticationToken.class);
     }
 
+    @Impure
     public void setAuthenticationToken(AuthenticationToken token) {
         nullSafePut(AUTHENTICATION_TOKEN, token);
     }
 
+    @Pure
+    @Impure
     public String getHost() {
         return getTypedValue(HOST, String.class);
     }
 
+    @Impure
     public void setHost(String host) {
         if (StringUtils.hasText(host)) {
             put(HOST, host);
         }
     }
 
+    @Impure
     public String resolveHost() {
         String host = getHost();
 

@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.aop;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * A <tt>MethodInterceptor</tt> intercepts a <tt>MethodInvocation</tt> to perform before or after logic (aka 'advice').
@@ -36,6 +37,7 @@ public interface MethodInterceptor {
      * @return the result of the invocation
      * @throws Throwable if the method invocation throws a Throwable or if an error occurs in pre/post/finally advice.
      */
+    @Impure
     Object invoke(MethodInvocation methodInvocation) throws Throwable;
 
 }

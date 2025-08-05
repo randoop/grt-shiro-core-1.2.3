@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authz.permission;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.authz.Permission;
 
 /**
@@ -57,6 +58,7 @@ public interface PermissionResolver {
      * @throws InvalidPermissionStringException
      *          if the permission string is not valid for this resolver.
      */
+    @Impure
     Permission resolvePermission(String permissionString);
 
 }

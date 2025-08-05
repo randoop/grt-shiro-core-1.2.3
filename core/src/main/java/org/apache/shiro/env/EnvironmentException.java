@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.env;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.ShiroException;
 
 /**
@@ -27,10 +29,14 @@ import org.apache.shiro.ShiroException;
  */
 public class EnvironmentException extends ShiroException {
 
+    @SideEffectFree
+    @Impure
     public EnvironmentException(String message) {
         super(message);
     }
 
+    @SideEffectFree
+    @Impure
     public EnvironmentException(String message, Throwable cause) {
         super(message, cause);
     }

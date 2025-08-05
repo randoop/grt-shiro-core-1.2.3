@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authc.credential;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.crypto.hash.AbstractHash;
 import org.apache.shiro.crypto.hash.Hash;
 import org.apache.shiro.crypto.hash.Md2Hash;
@@ -40,6 +41,7 @@ import org.apache.shiro.crypto.hash.Md2Hash;
 @Deprecated
 public class Md2CredentialsMatcher extends HashedCredentialsMatcher {
 
+    @Impure
     public Md2CredentialsMatcher() {
         super();
         setHashAlgorithmName(Md2Hash.ALGORITHM_NAME);

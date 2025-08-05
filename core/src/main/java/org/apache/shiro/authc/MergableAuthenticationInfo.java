@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.authc;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * <p>An extension of the {@link AuthenticationInfo} interface to be implemented by
@@ -42,6 +43,7 @@ public interface MergableAuthenticationInfo extends AuthenticationInfo {
      *
      * @param info the info that should be merged into this instance.
      */
+    @Impure
     void merge(AuthenticationInfo info);
 
 }

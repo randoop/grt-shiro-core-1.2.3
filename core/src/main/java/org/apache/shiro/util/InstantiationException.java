@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.util;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.ShiroException;
 
 
@@ -32,6 +34,8 @@ public class InstantiationException extends ShiroException
     /**
      * Creates a new InstantiationException.
      */
+    @SideEffectFree
+    @Impure
     public InstantiationException() {
         super();
     }
@@ -41,6 +45,8 @@ public class InstantiationException extends ShiroException
      *
      * @param message the reason for the exception
      */
+    @SideEffectFree
+    @Impure
     public InstantiationException(String message) {
         super(message);
     }
@@ -50,6 +56,8 @@ public class InstantiationException extends ShiroException
      *
      * @param cause the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public InstantiationException(Throwable cause) {
         super(cause);
     }
@@ -60,6 +68,8 @@ public class InstantiationException extends ShiroException
      * @param message the reason for the exception
      * @param cause   the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public InstantiationException(String message, Throwable cause) {
         super(message, cause);
     }

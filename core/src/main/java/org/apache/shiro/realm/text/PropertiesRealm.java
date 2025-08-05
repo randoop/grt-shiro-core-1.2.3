@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.realm.text;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.io.ResourceUtils;
 import org.apache.shiro.util.Destroyable;
@@ -104,6 +107,7 @@ public class PropertiesRealm extends TextConfigurationRealm implements Destroyab
     protected long fileLastModified;
     protected int reloadIntervalSeconds = DEFAULT_RELOAD_INTERVAL_SECONDS;
 
+    @Impure
     public PropertiesRealm() {
         super();
     }
@@ -118,6 +122,7 @@ public class PropertiesRealm extends TextConfigurationRealm implements Destroyab
      *
      * @param useXmlFormat true to use XML or false to use the normal format.  Defaults to false.
      */
+    @Impure
     public void setUseXmlFormat(boolean useXmlFormat) {
         this.useXmlFormat = useXmlFormat;
     }
@@ -131,6 +136,7 @@ public class PropertiesRealm extends TextConfigurationRealm implements Destroyab
      *
      * @param resourcePath the path to load the properties file from.  This is a required property.
      */
+    @Impure
     public void setResourcePath(String resourcePath) {
         this.resourcePath = resourcePath;
     }
@@ -143,6 +149,7 @@ public class PropertiesRealm extends TextConfigurationRealm implements Destroyab
      * @param reloadIntervalSeconds the interval in seconds at which the property file should be examined for changes.
      *                              If set to zero or less, reloading is disabled.
      */
+    @Impure
     public void setReloadIntervalSeconds(int reloadIntervalSeconds) {
         this.reloadIntervalSeconds = reloadIntervalSeconds;
     }
@@ -151,6 +158,7 @@ public class PropertiesRealm extends TextConfigurationRealm implements Destroyab
     |               M E T H O D S               |
     ============================================*/
 
+    @Impure
     @Override
     public void onInit() {
         super.onInit();
@@ -158,6 +166,7 @@ public class PropertiesRealm extends TextConfigurationRealm implements Destroyab
         afterRoleCacheSet();
     }
 
+    @Impure
     protected void afterRoleCacheSet() {
         loadProperties();
         //we can only determine if files have been modified at runtime (not classpath entries or urls), so only
@@ -170,6 +179,7 @@ public class PropertiesRealm extends TextConfigurationRealm implements Destroyab
     /**
      * Destroy reload scheduler if one exists.
      */
+    @Impure
     public void destroy() {
         try {
             if (scheduler != null) {
@@ -184,6 +194,7 @@ public class PropertiesRealm extends TextConfigurationRealm implements Destroyab
         }
     }
 
+    @Impure
     protected void startReloadThread() {
         if (this.reloadIntervalSeconds > 0) {
             this.scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -191,6 +202,7 @@ public class PropertiesRealm extends TextConfigurationRealm implements Destroyab
         }
     }
 
+    @Impure
     public void run() {
         try {
             reloadPropertiesIfNecessary();
@@ -201,6 +213,7 @@ public class PropertiesRealm extends TextConfigurationRealm implements Destroyab
         }
     }
 
+    @Impure
     private void loadProperties() {
         if (resourcePath == null || resourcePath.length() == 0) {
             throw new IllegalStateException("The resourcePath property is not set.  " +
@@ -215,6 +228,7 @@ public class PropertiesRealm extends TextConfigurationRealm implements Destroyab
         createRealmEntitiesFromProperties(properties);
     }
 
+    @Impure
     private Properties loadProperties(String resourcePath) {
         Properties props = new Properties();
 
@@ -253,17 +267,20 @@ public class PropertiesRealm extends TextConfigurationRealm implements Destroyab
     }
 
 
+    @Impure
     private void reloadPropertiesIfNecessary() {
         if (isSourceModified()) {
             restart();
         }
     }
 
+    @Impure
     private boolean isSourceModified() {
         //we can only check last modified times on files - classpath and URL entries can't tell us modification times
         return this.resourcePath.startsWith(ResourceUtils.FILE_PREFIX) && isFileModified();
     }
 
+    @Impure
     private boolean isFileModified() {
         //SHIRO-394: strip file prefix before constructing the File instance:
         String fileNameWithoutPrefix = this.resourcePath.substring(this.resourcePath.indexOf(":") + 1);
@@ -277,6 +294,7 @@ public class PropertiesRealm extends TextConfigurationRealm implements Destroyab
         }
     }
 
+    @Impure
     @SuppressWarnings("unchecked")
     private void restart() {
         if (resourcePath == null || resourcePath.length() == 0) {
@@ -296,6 +314,7 @@ public class PropertiesRealm extends TextConfigurationRealm implements Destroyab
         init();
     }
 
+    @Impure
     @SuppressWarnings("unchecked")
     private void createRealmEntitiesFromProperties(Properties properties) {
 
@@ -330,22 +349,29 @@ public class PropertiesRealm extends TextConfigurationRealm implements Destroyab
         processDefinitions();
     }
 
+    @SideEffectFree
     protected String getName(String key, String prefix) {
         return key.substring(prefix.length(), key.length());
     }
 
+    @Pure
     protected boolean isUsername(String key) {
         return key != null && key.startsWith(USERNAME_PREFIX);
     }
 
+    @Pure
     protected boolean isRolename(String key) {
         return key != null && key.startsWith(ROLENAME_PREFIX);
     }
 
+    @SideEffectFree
+    @Impure
     protected String getUsername(String key) {
         return getName(key, USERNAME_PREFIX);
     }
 
+    @SideEffectFree
+    @Impure
     protected String getRolename(String key) {
         return getName(key, ROLENAME_PREFIX);
     }

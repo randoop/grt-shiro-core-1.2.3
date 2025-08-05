@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.authc;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * An {@code AuthenticationToken} that indicates if the user wishes their identity to be remembered across sessions.
@@ -38,6 +39,7 @@ public interface RememberMeAuthenticationToken extends AuthenticationToken {
      * @return {@code true} if the submitting user wishes their identity (principal(s)) to be remembered
      *         across sessions, {@code false} otherwise.
      */
+    @Pure
     boolean isRememberMe();
 
 }

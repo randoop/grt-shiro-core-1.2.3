@@ -18,6 +18,10 @@
  */
 package org.apache.shiro.env;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Deterministic;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.util.Destroyable;
 import org.apache.shiro.util.LifecycleUtils;
@@ -45,6 +49,7 @@ public class DefaultEnvironment implements NamedObjectEnvironment, Destroyable {
     /**
      * Creates a new instance with a thread-safe {@link ConcurrentHashMap} backing map.
      */
+    @Impure
     public DefaultEnvironment() {
         this(new ConcurrentHashMap<String, Object>());
     }
@@ -54,6 +59,7 @@ public class DefaultEnvironment implements NamedObjectEnvironment, Destroyable {
      *
      * @param seed backing map to use to maintain Shiro objects.
      */
+    @SideEffectFree
     @SuppressWarnings({"unchecked"})
     public DefaultEnvironment(Map<String, ?> seed) {
         this.securityManagerName = DEFAULT_SECURITY_MANAGER_KEY;
@@ -75,6 +81,9 @@ public class DefaultEnvironment implements NamedObjectEnvironment, Destroyable {
      * @return the application's {@code SecurityManager} instance accessible in the backing map using the
      *         {@link #getSecurityManagerName() securityManagerName} property as the lookup key.
      */
+    @Pure
+    @Deterministic
+    @Impure
     public SecurityManager getSecurityManager() throws IllegalStateException {
         SecurityManager securityManager = lookupSecurityManager();
         if (securityManager == null) {
@@ -84,6 +93,7 @@ public class DefaultEnvironment implements NamedObjectEnvironment, Destroyable {
         return securityManager;
     }
 
+    @Impure
     public void setSecurityManager(SecurityManager securityManager) {
         if (securityManager == null) {
             throw new IllegalArgumentException("Null SecurityManager instances are not allowed.");
@@ -97,6 +107,9 @@ public class DefaultEnvironment implements NamedObjectEnvironment, Destroyable {
      *
      * @return the {@code SecurityManager} in the backing map, or {@code null} if it has not yet been populated.
      */
+    @Pure
+    @Deterministic
+    @Impure
     protected SecurityManager lookupSecurityManager() {
         String name = getSecurityManagerName();
         return getObject(name, SecurityManager.class);
@@ -109,6 +122,7 @@ public class DefaultEnvironment implements NamedObjectEnvironment, Destroyable {
      * @return the name of the {@link SecurityManager} instance in the backing map.  Used as a key to lookup the
      *         instance.
      */
+    @Pure
     public String getSecurityManagerName() {
         return securityManagerName;
     }
@@ -120,6 +134,7 @@ public class DefaultEnvironment implements NamedObjectEnvironment, Destroyable {
      * @param securityManagerName the name of the {@link SecurityManager} instance in the backing map.  Used as a key
      *                            to lookup the instance. 
      */
+    @Impure
     public void setSecurityManagerName(String securityManagerName) {
         this.securityManagerName = securityManagerName;
     }
@@ -129,10 +144,13 @@ public class DefaultEnvironment implements NamedObjectEnvironment, Destroyable {
      *
      * @return the live (modifiable) internal objects collection.
      */
+    @Pure
     public Map<String,Object> getObjects() {
         return this.objects;
     }
 
+    @Pure
+    @Deterministic
     @SuppressWarnings({"unchecked"})
     public <T> T getObject(String name, Class<T> requiredType) throws RequiredTypeException {
         if (name == null) {
@@ -152,6 +170,7 @@ public class DefaultEnvironment implements NamedObjectEnvironment, Destroyable {
         return (T)o;
     }
 
+    @Impure
     public void setObject(String name, Object instance) {
         if (name == null) {
             throw new NullPointerException("name parameter cannot be null.");
@@ -164,6 +183,7 @@ public class DefaultEnvironment implements NamedObjectEnvironment, Destroyable {
     }
 
 
+    @Impure
     public void destroy() throws Exception {
         LifecycleUtils.destroy(this.objects.values());
     }

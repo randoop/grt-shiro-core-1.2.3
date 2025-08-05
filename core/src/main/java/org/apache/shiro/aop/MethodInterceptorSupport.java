@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.aop;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
@@ -34,6 +36,7 @@ public abstract class MethodInterceptorSupport implements MethodInterceptor {
     /**
      * Default no-argument constructor for subclasses.
      */
+    @SideEffectFree
     public MethodInterceptorSupport() {
     }
 
@@ -44,6 +47,7 @@ public abstract class MethodInterceptorSupport implements MethodInterceptor {
      *
      * @return the {@link org.apache.shiro.subject.Subject Subject} associated with the currently-executing code.
      */
+    @Impure
     protected Subject getSubject() {
         return SecurityUtils.getSubject();
     }

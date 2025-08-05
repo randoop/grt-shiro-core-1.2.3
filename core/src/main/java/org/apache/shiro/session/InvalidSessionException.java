@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.session;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Exception thrown when attempting to interact with the system under an established session
@@ -36,6 +38,8 @@ public class InvalidSessionException extends SessionException {
     /**
      * Creates a new InvalidSessionException.
      */
+    @SideEffectFree
+    @Impure
     public InvalidSessionException() {
         super();
     }
@@ -45,6 +49,8 @@ public class InvalidSessionException extends SessionException {
      *
      * @param message the reason for the exception
      */
+    @SideEffectFree
+    @Impure
     public InvalidSessionException(String message) {
         super(message);
     }
@@ -54,6 +60,8 @@ public class InvalidSessionException extends SessionException {
      *
      * @param cause the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public InvalidSessionException(Throwable cause) {
         super(cause);
     }
@@ -64,6 +72,8 @@ public class InvalidSessionException extends SessionException {
      * @param message the reason for the exception
      * @param cause   the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public InvalidSessionException(String message, Throwable cause) {
         super(message, cause);
     }

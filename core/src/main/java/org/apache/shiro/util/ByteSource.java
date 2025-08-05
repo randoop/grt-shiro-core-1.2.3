@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.util;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.File;
 import java.io.InputStream;
 
@@ -34,6 +37,7 @@ public interface ByteSource {
      *
      * @return the wrapped byte array.
      */
+    @Pure
     byte[] getBytes();
 
     /**
@@ -43,6 +47,7 @@ public interface ByteSource {
      * @return the <a href="http://en.wikipedia.org/wiki/Hexadecimal">Hex</a>-formatted String representation of the
      *         underlying wrapped byte array.
      */
+    @Impure
     String toHex();
 
     /**
@@ -52,6 +57,7 @@ public interface ByteSource {
      * @return the <a href="http://en.wikipedia.org/wiki/Base64">Base 64</a>-formatted String representation of the
      *         underlying wrapped byte array.
      */
+    @Impure
     String toBase64();
 
     /**
@@ -62,6 +68,7 @@ public interface ByteSource {
      *         otherwise.
      * @since 1.2
      */
+    @Pure
     boolean isEmpty();
 
     /**
@@ -78,6 +85,8 @@ public interface ByteSource {
          * @param bytes the bytes to represent as a {@code ByteSource} instance.
          * @return a new {@code ByteSource} instance representing the specified byte array.
          */
+        @SideEffectFree
+        @Impure
         public static ByteSource bytes(byte[] bytes) {
             return new SimpleByteSource(bytes);
         }
@@ -89,6 +98,8 @@ public interface ByteSource {
          * @param chars the character array to represent as a {@code ByteSource} instance.
          * @return a new {@code ByteSource} instance representing the specified character array's bytes.
          */
+        @SideEffectFree
+        @Impure
         public static ByteSource bytes(char[] chars) {
             return new SimpleByteSource(chars);
         }
@@ -100,6 +111,8 @@ public interface ByteSource {
          * @param string the string to represent as a {@code ByteSource} instance.
          * @return a new {@code ByteSource} instance representing the specified string's bytes.
          */
+        @SideEffectFree
+        @Impure
         public static ByteSource bytes(String string) {
             return new SimpleByteSource(string);
         }
@@ -110,6 +123,8 @@ public interface ByteSource {
          * @param source the ByteSource to represent as a new {@code ByteSource} instance.
          * @return a new {@code ByteSource} instance representing the specified ByteSource.
          */
+        @SideEffectFree
+        @Impure
         public static ByteSource bytes(ByteSource source) {
             return new SimpleByteSource(source);
         }
@@ -120,6 +135,7 @@ public interface ByteSource {
          * @param file the file to represent as a {@code ByteSource} instance.
          * @return a new {@code ByteSource} instance representing the specified File's bytes.
          */
+        @Impure
         public static ByteSource bytes(File file) {
             return new SimpleByteSource(file);
         }
@@ -130,6 +146,7 @@ public interface ByteSource {
          * @param stream the InputStream to represent as a {@code ByteSource} instance.
          * @return a new {@code ByteSource} instance representing the specified InputStream's bytes.
          */
+        @Impure
         public static ByteSource bytes(InputStream stream) {
             return new SimpleByteSource(stream);
         }
@@ -145,6 +162,8 @@ public interface ByteSource {
          * @return {@code true} if the specified object can be easily represented as a {@code ByteSource} using
          *         the {@link ByteSource.Util}'s default heuristics, {@code false} otherwise.
          */
+        @Pure
+        @Impure
         public static boolean isCompatible(Object source) {
             return SimpleByteSource.isCompatible(source);
         }
@@ -159,6 +178,7 @@ public interface ByteSource {
          * @throws IllegalArgumentException if the argument <em>cannot</em> be easily converted to bytes
          *                                  (as indicated by the {@link #isCompatible(Object)} JavaDoc)
          */
+        @Impure
         public static ByteSource bytes(Object source) throws IllegalArgumentException {
             if (source == null) {
                 return null;

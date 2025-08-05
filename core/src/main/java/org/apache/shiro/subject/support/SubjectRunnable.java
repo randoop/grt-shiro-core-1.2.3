@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.subject.support;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ThreadState;
 
@@ -66,6 +68,7 @@ public class SubjectRunnable implements Runnable {
      * @param subject  the Subject to associate with the delegate's execution.
      * @param delegate the runnable to run.
      */
+    @Impure
     public SubjectRunnable(Subject subject, Runnable delegate) {
         this(new SubjectThreadState(subject), delegate);
     }
@@ -79,6 +82,7 @@ public class SubjectRunnable implements Runnable {
      * @param delegate    the delegate {@code Runnable} to execute when this instance is {@link #run() run()}.
      * @throws IllegalArgumentException if either the {@code ThreadState} or {@link Runnable} arguments are {@code null}.
      */
+    @SideEffectFree
     protected SubjectRunnable(ThreadState threadState, Runnable delegate) throws IllegalArgumentException {
         if (threadState == null) {
             throw new IllegalArgumentException("ThreadState argument cannot be null.");
@@ -102,6 +106,7 @@ public class SubjectRunnable implements Runnable {
      * }
      * </pre>
      */
+    @Impure
     public void run() {
         try {
             threadState.bind();
@@ -116,6 +121,7 @@ public class SubjectRunnable implements Runnable {
      *
      * @param runnable the target runnable to run.
      */
+    @Impure
     protected void doRun(Runnable runnable) {
         runnable.run();
     }

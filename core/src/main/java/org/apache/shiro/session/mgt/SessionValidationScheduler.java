@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.session.mgt;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * Interface that should be implemented by classes that can control validating sessions on a regular
@@ -37,16 +39,19 @@ public interface SessionValidationScheduler {
      * @return <code>true</code> if this Scheduler is enabled and ready to begin validation at the appropriate time,
      * <code>false</code> otherwise.
      */
+    @Pure
     boolean isEnabled();
 
     /**
      * Enables the session validation job.
      */
+    @Impure
     void enableSessionValidation();
 
     /**
      * Disables the session validation job.
      */
+    @Impure
     void disableSessionValidation();
 
 }

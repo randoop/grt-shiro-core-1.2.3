@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authz.aop;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -37,6 +38,7 @@ public class RoleAnnotationHandler extends AuthorizingAnnotationHandler {
      * Default no-argument constructor that ensures this handler looks for
      * {@link org.apache.shiro.authz.annotation.RequiresRoles RequiresRoles} annotations.
      */
+    @Impure
     public RoleAnnotationHandler() {
         super(RequiresRoles.class);
     }
@@ -50,6 +52,7 @@ public class RoleAnnotationHandler extends AuthorizingAnnotationHandler {
      *          if the calling <code>Subject</code> does not have the role(s) necessary to
      *          proceed.
      */
+    @Impure
     public void assertAuthorized(Annotation a) throws AuthorizationException {
         if (!(a instanceof RequiresRoles)) return;
 

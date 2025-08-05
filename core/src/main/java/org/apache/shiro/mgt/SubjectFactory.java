@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.SubjectContext;
 
@@ -43,6 +44,7 @@ public interface SubjectFactory {
      * @return a {@code Subject} instance created based on the specified context.
      * @see SubjectContext
      */
+    @Impure
     Subject createSubject(SubjectContext context);
 
 }

@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.crypto.hash;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.util.ByteSource;
 
 /**
@@ -46,6 +48,7 @@ public class SimpleHashRequest implements HashRequest {
      * for the request, at which point the number of iterations is decided by the {@code HashService}
      * @throws NullPointerException if {@code source} is null or empty.
      */
+    @SideEffectFree
     public SimpleHashRequest(String algorithmName, ByteSource source, ByteSource salt, int iterations) {
         if (source == null) {
             throw new NullPointerException("source argument cannot be null");
@@ -56,18 +59,22 @@ public class SimpleHashRequest implements HashRequest {
         this.iterations = Math.max(0, iterations);
     }
 
+    @Pure
     public ByteSource getSource() {
         return this.source;
     }
 
+    @Pure
     public ByteSource getSalt() {
         return this.salt;
     }
 
+    @Pure
     public int getIterations() {
         return iterations;
     }
 
+    @Pure
     public String getAlgorithmName() {
         return algorithmName;
     }

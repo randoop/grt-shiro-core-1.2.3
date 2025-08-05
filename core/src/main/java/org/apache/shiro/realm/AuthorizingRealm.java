@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.realm;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.*;
 import org.apache.shiro.authz.permission.*;
@@ -87,18 +90,22 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
     |         C O N S T R U C T O R S           |
     ============================================*/
 
+    @Impure
     public AuthorizingRealm() {
         this(null, null);
     }
 
+    @Impure
     public AuthorizingRealm(CacheManager cacheManager) {
         this(cacheManager, null);
     }
 
+    @Impure
     public AuthorizingRealm(CredentialsMatcher matcher) {
         this(null, matcher);
     }
 
+    @Impure
     public AuthorizingRealm(CacheManager cacheManager, CredentialsMatcher matcher) {
         super();
         if (cacheManager != null) setCacheManager(cacheManager);
@@ -118,6 +125,7 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
     |  A C C E S S O R S / M O D I F I E R S    |
     ============================================*/
 
+    @Impure
     public void setName(String name) {
         super.setName(name);
         String authzCacheName = this.authorizationCacheName;
@@ -128,18 +136,22 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         }
     }
 
+    @Impure
     public void setAuthorizationCache(Cache<Object, AuthorizationInfo> authorizationCache) {
         this.authorizationCache = authorizationCache;
     }
 
+    @Pure
     public Cache<Object, AuthorizationInfo> getAuthorizationCache() {
         return this.authorizationCache;
     }
 
+    @Pure
     public String getAuthorizationCacheName() {
         return authorizationCacheName;
     }
 
+    @Impure
     @SuppressWarnings({"UnusedDeclaration"})
     public void setAuthorizationCacheName(String authorizationCacheName) {
         this.authorizationCacheName = authorizationCacheName;
@@ -153,6 +165,8 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
      *
      * @return {@code true} if authorization caching should be utilized, {@code false} otherwise.
      */
+    @Pure
+    @Impure
     public boolean isAuthorizationCachingEnabled() {
         return isCachingEnabled() && authorizationCachingEnabled;
     }
@@ -165,6 +179,7 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
      *
      * @param authenticationCachingEnabled the value to set
      */
+    @Impure
     @SuppressWarnings({"UnusedDeclaration"})
     public void setAuthorizationCachingEnabled(boolean authenticationCachingEnabled) {
         this.authorizationCachingEnabled = authenticationCachingEnabled;
@@ -173,19 +188,23 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         }
     }
 
+    @Pure
     public PermissionResolver getPermissionResolver() {
         return permissionResolver;
     }
 
+    @Impure
     public void setPermissionResolver(PermissionResolver permissionResolver) {
         if (permissionResolver == null) throw new IllegalArgumentException("Null PermissionResolver is not allowed");
         this.permissionResolver = permissionResolver;
     }
 
+    @Pure
     public RolePermissionResolver getRolePermissionResolver() {
         return permissionRoleResolver;
     }
 
+    @Impure
     public void setRolePermissionResolver(RolePermissionResolver permissionRoleResolver) {
         this.permissionRoleResolver = permissionRoleResolver;
     }
@@ -214,18 +233,21 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
      * subclass implementations for each authorization check.</li>
      * </ol>
      */
+    @Impure
     protected void onInit() {
         super.onInit();
         //trigger obtaining the authorization cache if possible
         getAvailableAuthorizationCache();
     }
 
+    @Impure
     protected void afterCacheManagerSet() {
         super.afterCacheManagerSet();
         //trigger obtaining the authorization cache if possible
         getAvailableAuthorizationCache();
     }
 
+    @Impure
     private Cache<Object, AuthorizationInfo> getAuthorizationCacheLazy() {
 
         if (this.authorizationCache == null) {
@@ -254,6 +276,7 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         return this.authorizationCache;
     }
 
+    @Impure
     private Cache<Object, AuthorizationInfo> getAvailableAuthorizationCache() {
         Cache<Object, AuthorizationInfo> cache = getAuthorizationCache();
         if (cache == null && isAuthorizationCachingEnabled()) {
@@ -307,6 +330,7 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
      * @return the authorization information for the account associated with the specified {@code principals},
      *         or {@code null} if no account could be found.
      */
+    @Impure
     protected AuthorizationInfo getAuthorizationInfo(PrincipalCollection principals) {
 
         if (principals == null) {
@@ -352,6 +376,7 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         return info;
     }
 
+    @Pure
     protected Object getAuthorizationCacheKey(PrincipalCollection principals) {
         return principals;
     }
@@ -374,6 +399,7 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
      *
      * @param principals the principals of the account for which to clear the cached AuthorizationInfo.
      */
+    @Impure
     protected void clearCachedAuthorizationInfo(PrincipalCollection principals) {
         if (principals == null) {
             return;
@@ -396,8 +422,10 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
      * @return the AuthorizationInfo associated with this principals.
      * @see org.apache.shiro.authz.SimpleAuthorizationInfo
      */
+    @Impure
     protected abstract AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals);
 
+    @Impure
     private Collection<Permission> getPermissions(AuthorizationInfo info) {
         Set<Permission> permissions = new HashSet<Permission>();
 
@@ -424,6 +452,7 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         }
     }
 
+    @Impure
     private Collection<Permission> resolvePermissions(Collection<String> stringPerms) {
         Collection<Permission> perms = Collections.emptySet();
         PermissionResolver resolver = getPermissionResolver();
@@ -437,6 +466,7 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         return perms;
     }
 
+    @Impure
     private Collection<Permission> resolveRolePermissions(Collection<String> roleNames) {
         Collection<Permission> perms = Collections.emptySet();
         RolePermissionResolver resolver = getRolePermissionResolver();
@@ -452,16 +482,19 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         return perms;
     }
 
+    @Impure
     public boolean isPermitted(PrincipalCollection principals, String permission) {
         Permission p = getPermissionResolver().resolvePermission(permission);
         return isPermitted(principals, p);
     }
 
+    @Impure
     public boolean isPermitted(PrincipalCollection principals, Permission permission) {
         AuthorizationInfo info = getAuthorizationInfo(principals);
         return isPermitted(permission, info);
     }
 
+    @Impure
     private boolean isPermitted(Permission permission, AuthorizationInfo info) {
         Collection<Permission> perms = getPermissions(info);
         if (perms != null && !perms.isEmpty()) {
@@ -474,6 +507,7 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         return false;
     }
 
+    @Impure
     public boolean[] isPermitted(PrincipalCollection subjectIdentifier, String... permissions) {
         List<Permission> perms = new ArrayList<Permission>(permissions.length);
         for (String permString : permissions) {
@@ -482,11 +516,13 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         return isPermitted(subjectIdentifier, perms);
     }
 
+    @Impure
     public boolean[] isPermitted(PrincipalCollection principals, List<Permission> permissions) {
         AuthorizationInfo info = getAuthorizationInfo(principals);
         return isPermitted(permissions, info);
     }
 
+    @Impure
     protected boolean[] isPermitted(List<Permission> permissions, AuthorizationInfo info) {
         boolean[] result;
         if (permissions != null && !permissions.isEmpty()) {
@@ -502,6 +538,7 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         return result;
     }
 
+    @Impure
     public boolean isPermittedAll(PrincipalCollection subjectIdentifier, String... permissions) {
         if (permissions != null && permissions.length > 0) {
             Collection<Permission> perms = new ArrayList<Permission>(permissions.length);
@@ -513,11 +550,13 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         return false;
     }
 
+    @Impure
     public boolean isPermittedAll(PrincipalCollection principal, Collection<Permission> permissions) {
         AuthorizationInfo info = getAuthorizationInfo(principal);
         return info != null && isPermittedAll(permissions, info);
     }
 
+    @Impure
     protected boolean isPermittedAll(Collection<Permission> permissions, AuthorizationInfo info) {
         if (permissions != null && !permissions.isEmpty()) {
             for (Permission p : permissions) {
@@ -529,16 +568,19 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         return true;
     }
 
+    @Impure
     public void checkPermission(PrincipalCollection subjectIdentifier, String permission) throws AuthorizationException {
         Permission p = getPermissionResolver().resolvePermission(permission);
         checkPermission(subjectIdentifier, p);
     }
 
+    @Impure
     public void checkPermission(PrincipalCollection principal, Permission permission) throws AuthorizationException {
         AuthorizationInfo info = getAuthorizationInfo(principal);
         checkPermission(permission, info);
     }
 
+    @Impure
     protected void checkPermission(Permission permission, AuthorizationInfo info) {
         if (!isPermitted(permission, info)) {
             String msg = "User is not permitted [" + permission + "]";
@@ -546,6 +588,7 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         }
     }
 
+    @Impure
     public void checkPermissions(PrincipalCollection subjectIdentifier, String... permissions) throws AuthorizationException {
         if (permissions != null) {
             for (String permString : permissions) {
@@ -554,11 +597,13 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         }
     }
 
+    @Impure
     public void checkPermissions(PrincipalCollection principal, Collection<Permission> permissions) throws AuthorizationException {
         AuthorizationInfo info = getAuthorizationInfo(principal);
         checkPermissions(permissions, info);
     }
 
+    @Impure
     protected void checkPermissions(Collection<Permission> permissions, AuthorizationInfo info) {
         if (permissions != null && !permissions.isEmpty()) {
             for (Permission p : permissions) {
@@ -567,15 +612,19 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         }
     }
 
+    @Impure
     public boolean hasRole(PrincipalCollection principal, String roleIdentifier) {
         AuthorizationInfo info = getAuthorizationInfo(principal);
         return hasRole(roleIdentifier, info);
     }
 
+    @Pure
+    @Impure
     protected boolean hasRole(String roleIdentifier, AuthorizationInfo info) {
         return info != null && info.getRoles() != null && info.getRoles().contains(roleIdentifier);
     }
 
+    @Impure
     public boolean[] hasRoles(PrincipalCollection principal, List<String> roleIdentifiers) {
         AuthorizationInfo info = getAuthorizationInfo(principal);
         boolean[] result = new boolean[roleIdentifiers != null ? roleIdentifiers.size() : 0];
@@ -585,6 +634,7 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         return result;
     }
 
+    @Impure
     protected boolean[] hasRoles(List<String> roleIdentifiers, AuthorizationInfo info) {
         boolean[] result;
         if (roleIdentifiers != null && !roleIdentifiers.isEmpty()) {
@@ -600,11 +650,14 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         return result;
     }
 
+    @Impure
     public boolean hasAllRoles(PrincipalCollection principal, Collection<String> roleIdentifiers) {
         AuthorizationInfo info = getAuthorizationInfo(principal);
         return info != null && hasAllRoles(roleIdentifiers, info);
     }
 
+    @Pure
+    @Impure
     private boolean hasAllRoles(Collection<String> roleIdentifiers, AuthorizationInfo info) {
         if (roleIdentifiers != null && !roleIdentifiers.isEmpty()) {
             for (String roleName : roleIdentifiers) {
@@ -616,11 +669,14 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         return true;
     }
 
+    @Impure
     public void checkRole(PrincipalCollection principal, String role) throws AuthorizationException {
         AuthorizationInfo info = getAuthorizationInfo(principal);
         checkRole(role, info);
     }
 
+    @SideEffectFree
+    @Impure
     protected void checkRole(String role, AuthorizationInfo info) {
         if (!hasRole(role, info)) {
             String msg = "User does not have role [" + role + "]";
@@ -628,15 +684,19 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
         }
     }
 
+    @Impure
     public void checkRoles(PrincipalCollection principal, Collection<String> roles) throws AuthorizationException {
         AuthorizationInfo info = getAuthorizationInfo(principal);
         checkRoles(roles, info);
     }
 
+    @Impure
     public void checkRoles(PrincipalCollection principal, String... roles) throws AuthorizationException {
         checkRoles(principal, Arrays.asList(roles));
     }
 
+    @SideEffectFree
+    @Impure
     protected void checkRoles(Collection<String> roles, AuthorizationInfo info) {
         if (roles != null && !roles.isEmpty()) {
             for (String roleName : roles) {
@@ -655,6 +715,7 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
      * @param principals the principals of the account for which to clear any cached AuthorizationInfo
      * @since 1.2
      */
+    @Impure
     @Override
     protected void doClearCache(PrincipalCollection principals) {
         super.doClearCache(principals);

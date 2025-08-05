@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.jndi;
 
+import org.checkerframework.dataflow.qual.Impure;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
@@ -49,6 +50,7 @@ public interface JndiCallback {
      * @return a result object, or <code>null</code>
      * @throws NamingException if thrown by JNDI methods
      */
+    @Impure
     Object doInContext(Context ctx) throws NamingException;
 
 }

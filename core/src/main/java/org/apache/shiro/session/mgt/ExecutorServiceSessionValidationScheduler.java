@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.session.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
@@ -46,30 +49,37 @@ public class ExecutorServiceSessionValidationScheduler implements SessionValidat
     private long interval = DefaultSessionManager.DEFAULT_SESSION_VALIDATION_INTERVAL;
     private boolean enabled = false;
 
+    @SideEffectFree
     public ExecutorServiceSessionValidationScheduler() {
         super();
     }
 
+    @SideEffectFree
     public ExecutorServiceSessionValidationScheduler(ValidatingSessionManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 
+    @Pure
     public ValidatingSessionManager getSessionManager() {
         return sessionManager;
     }
 
+    @Impure
     public void setSessionManager(ValidatingSessionManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 
+    @Pure
     public long getInterval() {
         return interval;
     }
 
+    @Impure
     public void setInterval(long interval) {
         this.interval = interval;
     }
 
+    @Pure
     public boolean isEnabled() {
         return this.enabled;
     }
@@ -80,9 +90,11 @@ public class ExecutorServiceSessionValidationScheduler implements SessionValidat
      */
     //TODO Implement an integration test to test for jvm exit as part of the standalone example
     // (so we don't have to change the unit test execution model for the core module)
+    @Impure
     public void enableSessionValidation() {
         if (this.interval > 0l) {
             this.service = Executors.newSingleThreadScheduledExecutor(new ThreadFactory() {  
+	        @Impure
 	        public Thread newThread(Runnable r) {  
 	            Thread thread = new Thread(r);  
 	            thread.setDaemon(true);  
@@ -94,6 +106,7 @@ public class ExecutorServiceSessionValidationScheduler implements SessionValidat
         }
     }
 
+    @Impure
     public void run() {
         if (log.isDebugEnabled()) {
             log.debug("Executing session validation...");
@@ -106,6 +119,7 @@ public class ExecutorServiceSessionValidationScheduler implements SessionValidat
         }
     }
 
+    @Impure
     public void disableSessionValidation() {
         this.service.shutdownNow();
         this.enabled = false;

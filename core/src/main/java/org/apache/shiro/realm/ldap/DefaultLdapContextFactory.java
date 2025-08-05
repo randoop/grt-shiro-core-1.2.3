@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.realm.ldap;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.util.Hashtable;
 import java.util.Map;
 import javax.naming.AuthenticationException;
@@ -98,6 +99,7 @@ public class DefaultLdapContextFactory implements LdapContextFactory {
      *
      * @param authentication the type of LDAP authentication to perform.
      */
+    @Impure
     public void setAuthentication(String authentication) {
         this.authentication = authentication;
     }
@@ -108,6 +110,7 @@ public class DefaultLdapContextFactory implements LdapContextFactory {
      *
      * @param principalSuffix the suffix.
      */
+    @Impure
     public void setPrincipalSuffix(String principalSuffix) {
         this.principalSuffix = principalSuffix;
     }
@@ -119,6 +122,7 @@ public class DefaultLdapContextFactory implements LdapContextFactory {
      * @param searchBase the search base.
      * @deprecated this attribute existed, but was never used in Shiro 1.x.  It will be removed prior to Shiro 2.0.
      */
+    @Impure
     @Deprecated
     public void setSearchBase(String searchBase) {
         this.searchBase = searchBase;
@@ -130,6 +134,7 @@ public class DefaultLdapContextFactory implements LdapContextFactory {
      *
      * @param contextFactoryClassName the context factory that should be used.
      */
+    @Impure
     public void setContextFactoryClassName(String contextFactoryClassName) {
         this.contextFactoryClassName = contextFactoryClassName;
     }
@@ -139,6 +144,7 @@ public class DefaultLdapContextFactory implements LdapContextFactory {
      *
      * @param url the LDAP url.
      */
+    @Impure
     public void setUrl(String url) {
         this.url = url;
     }
@@ -148,6 +154,7 @@ public class DefaultLdapContextFactory implements LdapContextFactory {
      *
      * @param referral the referral property.
      */
+    @Impure
     public void setReferral(String referral) {
         this.referral = referral;
     }
@@ -159,6 +166,7 @@ public class DefaultLdapContextFactory implements LdapContextFactory {
      *
      * @param systemUsername the username to use when logging into the LDAP server for authorization.
      */
+    @Impure
     public void setSystemUsername(String systemUsername) {
         this.systemUsername = systemUsername;
     }
@@ -171,6 +179,7 @@ public class DefaultLdapContextFactory implements LdapContextFactory {
      *
      * @param systemPassword the password to use when logging into the LDAP server for authorization.
      */
+    @Impure
     public void setSystemPassword(String systemPassword) {
         this.systemPassword = systemPassword;
     }
@@ -185,6 +194,7 @@ public class DefaultLdapContextFactory implements LdapContextFactory {
      *
      * @param usePooling true to enable pooling, or false to disable it.
      */
+    @Impure
     public void setUsePooling(boolean usePooling) {
         this.usePooling = usePooling;
     }
@@ -194,6 +204,7 @@ public class DefaultLdapContextFactory implements LdapContextFactory {
      *
      * @param additionalEnvironment additional environment entries to be configured on the LDAP context.
      */
+    @Impure
     public void setAdditionalEnvironment(Map<String, String> additionalEnvironment) {
         this.additionalEnvironment = additionalEnvironment;
     }
@@ -201,6 +212,7 @@ public class DefaultLdapContextFactory implements LdapContextFactory {
     /*--------------------------------------------
     |               M E T H O D S               |
     ============================================*/
+    @Impure
     public LdapContext getSystemLdapContext() throws NamingException {
         return getLdapContext(systemUsername, systemPassword);
     }
@@ -216,6 +228,7 @@ public class DefaultLdapContextFactory implements LdapContextFactory {
      *             String principals and credentials can be used.  Shiro no longer calls this method - it will be
      *             removed before the 2.0 release.
      */
+    @Impure
     @Deprecated
     public LdapContext getLdapContext(String username, String password) throws NamingException {
         if (username != null && principalSuffix != null) {
@@ -224,6 +237,7 @@ public class DefaultLdapContextFactory implements LdapContextFactory {
         return getLdapContext((Object) username, password);
     }
 
+    @Impure
     public LdapContext getLdapContext(Object principal, Object credentials) throws NamingException {
         if (url == null) {
             throw new IllegalStateException("An LDAP URL must be specified of the form ldap://<hostname>:<port>");
@@ -272,6 +286,7 @@ public class DefaultLdapContextFactory implements LdapContextFactory {
      * @return an LdapConnection
      * @throws NamingException if a problem occurs creating the connection
      */
+    @Impure
     protected LdapContext createLdapContext(Hashtable env) throws NamingException {
         return new InitialLdapContext(env, null);
     }
@@ -288,6 +303,7 @@ public class DefaultLdapContextFactory implements LdapContextFactory {
      * @param environment the JNDI environment settings to be validated
      * @throws AuthenticationException if a configuration problem is detected
      */
+    @Impure
     private void validateAuthenticationInfo(Hashtable<String, Object> environment)
         throws AuthenticationException
     {

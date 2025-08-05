@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.authz;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Exception thrown when attempting to execute an authorization action when a successful
@@ -33,6 +35,8 @@ public class UnauthenticatedException extends AuthorizationException {
     /**
      * Creates a new UnauthenticatedException.
      */
+    @SideEffectFree
+    @Impure
     public UnauthenticatedException() {
         super();
     }
@@ -42,6 +46,8 @@ public class UnauthenticatedException extends AuthorizationException {
      *
      * @param message the reason for the exception
      */
+    @SideEffectFree
+    @Impure
     public UnauthenticatedException(String message) {
         super(message);
     }
@@ -51,6 +57,8 @@ public class UnauthenticatedException extends AuthorizationException {
      *
      * @param cause the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public UnauthenticatedException(Throwable cause) {
         super(cause);
     }
@@ -61,6 +69,8 @@ public class UnauthenticatedException extends AuthorizationException {
      * @param message the reason for the exception
      * @param cause   the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public UnauthenticatedException(String message, Throwable cause) {
         super(message, cause);
     }

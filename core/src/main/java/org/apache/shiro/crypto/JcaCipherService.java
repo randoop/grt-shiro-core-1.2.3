@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.crypto;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.util.ByteSource;
 import org.apache.shiro.util.StringUtils;
 import org.slf4j.Logger;
@@ -122,6 +125,8 @@ public abstract class JcaCipherService implements CipherService {
      *
      * @param algorithmName the name of the cipher algorithm to use for all encryption, decryption, and key operations
      */
+    @SideEffectFree
+    @Impure
     protected JcaCipherService(String algorithmName) {
         if (!StringUtils.hasText(algorithmName)) {
             throw new IllegalArgumentException("algorithmName argument cannot be null or empty.");
@@ -139,6 +144,7 @@ public abstract class JcaCipherService implements CipherService {
      *
      * @return the cipher algorithm name that will be used for all encryption, decryption, and key operations
      */
+    @Pure
     public String getAlgorithmName() {
         return algorithmName;
     }
@@ -148,6 +154,7 @@ public abstract class JcaCipherService implements CipherService {
      *
      * @return the size in bits (not bytes) of generated cipher keys.
      */
+    @Pure
     public int getKeySize() {
         return keySize;
     }
@@ -157,14 +164,17 @@ public abstract class JcaCipherService implements CipherService {
      *
      * @param keySize the size in bits (not bytes) of generated cipher keys.
      */
+    @Impure
     public void setKeySize(int keySize) {
         this.keySize = keySize;
     }
 
+    @Pure
     public boolean isGenerateInitializationVectors() {
         return generateInitializationVectors;
     }
 
+    @Impure
     public void setGenerateInitializationVectors(boolean generateInitializationVectors) {
         this.generateInitializationVectors = generateInitializationVectors;
     }
@@ -174,6 +184,7 @@ public abstract class JcaCipherService implements CipherService {
      *
      * @return the algorithm-specific size in bits of generated initialization vectors.
      */
+    @Pure
     public int getInitializationVectorSize() {
         return initializationVectorSize;
     }
@@ -186,6 +197,7 @@ public abstract class JcaCipherService implements CipherService {
      * @param initializationVectorSize the size in bits (not bytes) of generated initialization vectors.
      * @throws IllegalArgumentException if the size is not a multiple of {@code 8}.
      */
+    @Impure
     public void setInitializationVectorSize(int initializationVectorSize) throws IllegalArgumentException {
         if (initializationVectorSize % BITS_PER_BYTE != 0) {
             String msg = "Initialization vector sizes are specified in bits, but must be a multiple of 8 so they " +
@@ -195,6 +207,8 @@ public abstract class JcaCipherService implements CipherService {
         this.initializationVectorSize = initializationVectorSize;
     }
 
+    @Pure
+    @Impure
     protected boolean isGenerateInitializationVectors(boolean streaming) {
         return isGenerateInitializationVectors();
     }
@@ -209,6 +223,7 @@ public abstract class JcaCipherService implements CipherService {
      * @return the size of the internal buffer used to transfer data from one stream to another during stream
      *         operations
      */
+    @Pure
     public int getStreamingBufferSize() {
         return streamingBufferSize;
     }
@@ -223,6 +238,7 @@ public abstract class JcaCipherService implements CipherService {
      * @param streamingBufferSize the size of the internal buffer used to transfer data from one stream to another
      *                            during stream operations
      */
+    @Impure
     public void setStreamingBufferSize(int streamingBufferSize) {
         this.streamingBufferSize = streamingBufferSize;
     }
@@ -234,6 +250,7 @@ public abstract class JcaCipherService implements CipherService {
      * @return a source of randomness for encryption operations.  If one is not configured, and the underlying
      *         algorithm needs one, the JDK {@code SHA1PRNG} instance will be used by default.
      */
+    @Pure
     public SecureRandom getSecureRandom() {
         return secureRandom;
     }
@@ -245,10 +262,12 @@ public abstract class JcaCipherService implements CipherService {
      * @param secureRandom a source of randomness for encryption operations.  If one is not configured, and the
      *                     underlying algorithm needs one, the JDK {@code SHA1PRNG} instance will be used by default.
      */
+    @Impure
     public void setSecureRandom(SecureRandom secureRandom) {
         this.secureRandom = secureRandom;
     }
 
+    @Impure
     protected static SecureRandom getDefaultSecureRandom() {
         try {
             return java.security.SecureRandom.getInstance(RANDOM_NUM_GENERATOR_ALGORITHM_NAME);
@@ -259,6 +278,7 @@ public abstract class JcaCipherService implements CipherService {
         }
     }
 
+    @Impure
     protected SecureRandom ensureSecureRandom() {
         SecureRandom random = getSecureRandom();
         if (random == null) {
@@ -277,10 +297,12 @@ public abstract class JcaCipherService implements CipherService {
      * @return the transformation string to use with the {@link javax.crypto.Cipher#getInstance} invocation when
      *         creating a new {@code Cipher} instance.
      */
+    @Impure
     protected String getTransformationString(boolean streaming) {
         return getAlgorithmName();
     }
 
+    @Impure
     protected byte[] generateInitializationVector(boolean streaming) {
         int size = getInitializationVectorSize();
         if (size <= 0) {
@@ -300,6 +322,7 @@ public abstract class JcaCipherService implements CipherService {
         return ivBytes;
     }
 
+    @Impure
     public ByteSource encrypt(byte[] plaintext, byte[] key) {
         byte[] ivBytes = null;
         boolean generate = isGenerateInitializationVectors(false);
@@ -313,6 +336,7 @@ public abstract class JcaCipherService implements CipherService {
         return encrypt(plaintext, key, ivBytes, generate);
     }
 
+    @Impure
     private ByteSource encrypt(byte[] plaintext, byte[] key, byte[] iv, boolean prependIv) throws CryptoException {
 
         final int MODE = javax.crypto.Cipher.ENCRYPT_MODE;
@@ -344,6 +368,7 @@ public abstract class JcaCipherService implements CipherService {
         return ByteSource.Util.bytes(output);
     }
 
+    @Impure
     public ByteSource decrypt(byte[] ciphertext, byte[] key) throws CryptoException {
 
         byte[] encrypted = ciphertext;
@@ -382,6 +407,7 @@ public abstract class JcaCipherService implements CipherService {
         return decrypt(encrypted, key, iv);
     }
 
+    @Impure
     private ByteSource decrypt(byte[] ciphertext, byte[] key, byte[] iv) throws CryptoException {
         if (log.isTraceEnabled()) {
             log.trace("Attempting to decrypt incoming byte array of length " +
@@ -402,6 +428,7 @@ public abstract class JcaCipherService implements CipherService {
      * @throws CryptoException if a new Cipher instance cannot be constructed based on the
      *                         {@link #getTransformationString(boolean) getTransformationString} value.
      */
+    @Impure
     private javax.crypto.Cipher newCipherInstance(boolean streaming) throws CryptoException {
         String transformationString = getTransformationString(streaming);
         try {
@@ -437,6 +464,7 @@ public abstract class JcaCipherService implements CipherService {
      * @throws IllegalArgumentException if {@code bytes} are null or empty.
      * @throws CryptoException          if Cipher initialization or the crypt operation fails
      */
+    @Impure
     private byte[] crypt(byte[] bytes, byte[] key, byte[] iv, int mode) throws IllegalArgumentException, CryptoException {
         if (key == null || key.length == 0) {
             throw new IllegalArgumentException("key argument cannot be null or empty.");
@@ -454,6 +482,7 @@ public abstract class JcaCipherService implements CipherService {
      * @return the resulting crypted byte array.
      * @throws CryptoException if there is an illegal block size or bad padding
      */
+    @Impure
     private byte[] crypt(javax.crypto.Cipher cipher, byte[] bytes) throws CryptoException {
         try {
             return cipher.doFinal(bytes);
@@ -474,6 +503,7 @@ public abstract class JcaCipherService implements CipherService {
      * @param random the SecureRandom to use for cipher initialization (optional, may be null).
      * @throws CryptoException if the key is invalid
      */
+    @Impure
     private void init(javax.crypto.Cipher cipher, int mode, java.security.Key key,
                       AlgorithmParameterSpec spec, SecureRandom random) throws CryptoException {
         try {
@@ -497,6 +527,7 @@ public abstract class JcaCipherService implements CipherService {
     }
 
 
+    @Impure
     public void encrypt(InputStream in, OutputStream out, byte[] key) throws CryptoException {
         byte[] iv = null;
         boolean generate = isGenerateInitializationVectors(true);
@@ -510,6 +541,7 @@ public abstract class JcaCipherService implements CipherService {
         encrypt(in, out, key, iv, generate);
     }
 
+    @Impure
     private void encrypt(InputStream in, OutputStream out, byte[] key, byte[] iv, boolean prependIv) throws CryptoException {
         if (prependIv && iv != null && iv.length > 0) {
             try {
@@ -523,10 +555,12 @@ public abstract class JcaCipherService implements CipherService {
         crypt(in, out, key, iv, javax.crypto.Cipher.ENCRYPT_MODE);
     }
 
+    @Impure
     public void decrypt(InputStream in, OutputStream out, byte[] key) throws CryptoException {
         decrypt(in, out, key, isGenerateInitializationVectors(true));
     }
 
+    @Impure
     private void decrypt(InputStream in, OutputStream out, byte[] key, boolean ivPrepended) throws CryptoException {
 
         byte[] iv = null;
@@ -556,10 +590,12 @@ public abstract class JcaCipherService implements CipherService {
         decrypt(in, out, key, iv);
     }
 
+    @Impure
     private void decrypt(InputStream in, OutputStream out, byte[] decryptionKey, byte[] iv) throws CryptoException {
         crypt(in, out, decryptionKey, iv, javax.crypto.Cipher.DECRYPT_MODE);
     }
 
+    @Impure
     private void crypt(InputStream in, OutputStream out, byte[] keyBytes, byte[] iv, int cryptMode) throws CryptoException {
         if (in == null) {
             throw new NullPointerException("InputStream argument cannot be null.");
@@ -585,6 +621,7 @@ public abstract class JcaCipherService implements CipherService {
         }
     }
 
+    @Impure
     private javax.crypto.Cipher initNewCipher(int jcaCipherMode, byte[] key, byte[] iv, boolean streaming)
             throws CryptoException {
 

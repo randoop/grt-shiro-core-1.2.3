@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.realm.ldap;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -48,6 +49,7 @@ public final class LdapUtils {
      *
      * @param ctx the LDAP context to close.
      */
+    @Impure
     public static void closeContext(LdapContext ctx) {
         try {
             if (ctx != null) {
@@ -65,6 +67,7 @@ public final class LdapUtils {
      * @return the values of the attribute.
      * @throws javax.naming.NamingException if there is an LDAP error while reading the values.
      */
+    @Impure
     public static Collection<String> getAllAttributeValues(Attribute attr) throws NamingException {
         Set<String> values = new HashSet<String>();
         NamingEnumeration ne = null;
@@ -84,6 +87,7 @@ public final class LdapUtils {
     //added based on SHIRO-127, per Emmanuel's comment [1]
     // [1] https://issues.apache.org/jira/browse/SHIRO-127?focusedCommentId=12891380&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#action_12891380
 
+    @Impure
     public static void closeEnumeration(NamingEnumeration ne) {
         try {
             if (ne != null) {

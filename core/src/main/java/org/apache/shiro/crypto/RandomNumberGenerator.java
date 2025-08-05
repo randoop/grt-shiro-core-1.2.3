@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.crypto;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.util.ByteSource;
 
 /**
@@ -59,6 +60,7 @@ public interface RandomNumberGenerator {
      * @return a byte array of fixed length filled with random data.
      * @see #nextBytes(int)
      */
+    @Impure
     ByteSource nextBytes();
 
     /**
@@ -68,5 +70,6 @@ public interface RandomNumberGenerator {
      * @return a byte array of the specified length filled with random data.
      * @see #nextBytes()
      */
+    @Impure
     ByteSource nextBytes(int numBytes);
 }

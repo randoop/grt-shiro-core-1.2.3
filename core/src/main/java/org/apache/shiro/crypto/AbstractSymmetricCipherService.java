@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.crypto;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import javax.crypto.KeyGenerator;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -29,6 +31,8 @@ import java.security.NoSuchAlgorithmException;
  */
 public abstract class AbstractSymmetricCipherService extends JcaCipherService {
 
+    @SideEffectFree
+    @Impure
     protected AbstractSymmetricCipherService(String algorithmName) {
         super(algorithmName);
     }
@@ -39,6 +43,7 @@ public abstract class AbstractSymmetricCipherService extends JcaCipherService {
      *
      * @return a new {@link java.security.Key Key}, 128 bits in length.
      */
+    @Impure
     public Key generateNewKey() {
         return generateNewKey(getKeySize());
     }
@@ -50,6 +55,7 @@ public abstract class AbstractSymmetricCipherService extends JcaCipherService {
      * @param keyBitSize the bit size of the key to create
      * @return the created key suitable for use with this CipherService
      */
+    @Impure
     public Key generateNewKey(int keyBitSize) {
         KeyGenerator kg;
         try {

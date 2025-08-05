@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.authc;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Thrown when an authentication attempt has been received for an account that has already been
@@ -40,6 +42,8 @@ public class ConcurrentAccessException extends AccountException {
     /**
      * Creates a new ConcurrentAccessException.
      */
+    @SideEffectFree
+    @Impure
     public ConcurrentAccessException() {
         super();
     }
@@ -49,6 +53,8 @@ public class ConcurrentAccessException extends AccountException {
      *
      * @param message the reason for the exception
      */
+    @SideEffectFree
+    @Impure
     public ConcurrentAccessException(String message) {
         super(message);
     }
@@ -58,6 +64,8 @@ public class ConcurrentAccessException extends AccountException {
      *
      * @param cause the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public ConcurrentAccessException(Throwable cause) {
         super(cause);
     }
@@ -68,6 +76,8 @@ public class ConcurrentAccessException extends AccountException {
      * @param message the reason for the exception
      * @param cause   the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public ConcurrentAccessException(String message, Throwable cause) {
         super(message, cause);
     }

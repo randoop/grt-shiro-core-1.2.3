@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.aop;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.lang.annotation.Annotation;
 
 /**
@@ -38,5 +39,6 @@ public interface AnnotationResolver {
      * @return the method's annotation of the specified type or {@code null} if no annotation of
      *         that type could be found.
      */
+    @Impure
     Annotation getAnnotation(MethodInvocation mi, Class<? extends Annotation> clazz);
 }

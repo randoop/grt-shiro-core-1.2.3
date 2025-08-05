@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.env;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Exception thrown when attempting to acquire an object of a required type and that object does not equal, extend, or
@@ -26,10 +28,14 @@ package org.apache.shiro.env;
  */
 public class RequiredTypeException extends EnvironmentException {
 
+    @SideEffectFree
+    @Impure
     public RequiredTypeException(String message) {
         super(message);
     }
 
+    @SideEffectFree
+    @Impure
     public RequiredTypeException(String message, Throwable cause) {
         super(message, cause);
     }

@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authz.aop;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.aop.AnnotationResolver;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 
@@ -34,6 +35,7 @@ public class RoleAnnotationMethodInterceptor extends AuthorizingAnnotationMethod
      * Default no-argument constructor that ensures this interceptor looks for
      * {@link RequiresRoles RequiresRoles} annotations in a method declaration.
      */
+    @Impure
     public RoleAnnotationMethodInterceptor() {
         super( new RoleAnnotationHandler() );
     }
@@ -42,6 +44,7 @@ public class RoleAnnotationMethodInterceptor extends AuthorizingAnnotationMethod
      * @param resolver
      * @since 1.1
      */
+    @Impure
     public RoleAnnotationMethodInterceptor(AnnotationResolver resolver) {
         super(new RoleAnnotationHandler(), resolver);
     }

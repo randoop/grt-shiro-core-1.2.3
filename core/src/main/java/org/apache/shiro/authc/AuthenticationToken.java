@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.authc;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.Serializable;
 
 /**
@@ -73,6 +75,8 @@ public interface AuthenticationToken extends Serializable {
      * @return the account identity submitted during the authentication process.
      * @see UsernamePasswordToken
      */
+    @Pure
+    @Impure
     Object getPrincipal();
 
     /**
@@ -89,6 +93,8 @@ public interface AuthenticationToken extends Serializable {
      *
      * @return the credential submitted by the user during the authentication process.
      */
+    @Pure
+    @Impure
     Object getCredentials();
 
 }

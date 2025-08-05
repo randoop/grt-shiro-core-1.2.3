@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.realm.activedirectory;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
@@ -77,6 +79,7 @@ public class ActiveDirectoryRealm extends AbstractLdapRealm {
     |         C O N S T R U C T O R S           |
     ============================================*/
 
+    @Impure
     public void setGroupRolesMap(Map<String, String> groupRolesMap) {
         this.groupRolesMap = groupRolesMap;
     }
@@ -98,6 +101,7 @@ public class ActiveDirectoryRealm extends AbstractLdapRealm {
      * @return an {@link AuthenticationInfo} instance containing information retrieved from LDAP.
      * @throws NamingException if any LDAP errors occur during the search.
      */
+    @Impure
     protected AuthenticationInfo queryForAuthenticationInfo(AuthenticationToken token, LdapContextFactory ldapContextFactory) throws NamingException {
 
         UsernamePasswordToken upToken = (UsernamePasswordToken) token;
@@ -113,6 +117,7 @@ public class ActiveDirectoryRealm extends AbstractLdapRealm {
         return buildAuthenticationInfo(upToken.getUsername(), upToken.getPassword());
     }
 
+    @Impure
     protected AuthenticationInfo buildAuthenticationInfo(String username, char[] password) {
         return new SimpleAuthenticationInfo(username, password, getName());
     }
@@ -133,6 +138,7 @@ public class ActiveDirectoryRealm extends AbstractLdapRealm {
      * @return the AuthorizationInfo for the given Subject principal.
      * @throws NamingException if an error occurs when searching the LDAP server.
      */
+    @Impure
     protected AuthorizationInfo queryForAuthorizationInfo(PrincipalCollection principals, LdapContextFactory ldapContextFactory) throws NamingException {
 
         String username = (String) getAvailablePrincipal(principals);
@@ -151,10 +157,13 @@ public class ActiveDirectoryRealm extends AbstractLdapRealm {
         return buildAuthorizationInfo(roleNames);
     }
 
+    @SideEffectFree
+    @Impure
     protected AuthorizationInfo buildAuthorizationInfo(Set<String> roleNames) {
         return new SimpleAuthorizationInfo(roleNames);
     }
 
+    @Impure
     private Set<String> getRoleNamesForUser(String username, LdapContext ldapContext) throws NamingException {
         Set<String> roleNames;
         roleNames = new LinkedHashSet<String>();
@@ -211,6 +220,7 @@ public class ActiveDirectoryRealm extends AbstractLdapRealm {
      * @param groupNames the group names that apply to the current user.
      * @return a collection of roles that are implied by the given role names.
      */
+    @Impure
     protected Collection<String> getRoleNamesForGroups(Collection<String> groupNames) {
         Set<String> roleNames = new HashSet<String>(groupNames.size());
 

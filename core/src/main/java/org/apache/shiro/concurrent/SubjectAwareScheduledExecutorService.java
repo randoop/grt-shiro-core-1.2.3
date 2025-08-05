@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.concurrent;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.util.concurrent.*;
 
 /**
@@ -28,22 +31,28 @@ public class SubjectAwareScheduledExecutorService extends SubjectAwareExecutorSe
 
     private ScheduledExecutorService targetScheduledExecutorService;
 
+    @SideEffectFree
+    @Impure
     public SubjectAwareScheduledExecutorService() {
     }
 
+    @Impure
     public SubjectAwareScheduledExecutorService(ScheduledExecutorService target) {
         setTargetScheduledExecutorService(target);
     }
 
+    @Pure
     public ScheduledExecutorService getTargetScheduledExecutorService() {
         return targetScheduledExecutorService;
     }
 
+    @Impure
     public void setTargetScheduledExecutorService(ScheduledExecutorService targetScheduledExecutorService) {
         super.setTargetExecutorService(targetScheduledExecutorService);
         this.targetScheduledExecutorService = targetScheduledExecutorService;
     }
 
+    @Impure
     @Override
     public void setTargetExecutor(Executor targetExecutor) {
         if (!(targetExecutor instanceof ScheduledExecutorService)) {
@@ -54,6 +63,7 @@ public class SubjectAwareScheduledExecutorService extends SubjectAwareExecutorSe
         super.setTargetExecutorService((ScheduledExecutorService) targetExecutor);
     }
 
+    @Impure
     @Override
     public void setTargetExecutorService(ExecutorService targetExecutorService) {
         if (!(targetExecutorService instanceof ScheduledExecutorService)) {
@@ -64,21 +74,25 @@ public class SubjectAwareScheduledExecutorService extends SubjectAwareExecutorSe
         super.setTargetExecutorService(targetExecutorService);
     }
 
+    @Impure
     public ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit) {
         Runnable work = associateWithSubject(command);
         return this.targetScheduledExecutorService.schedule(work, delay, unit);
     }
 
+    @Impure
     public <V> ScheduledFuture<V> schedule(Callable<V> callable, long delay, TimeUnit unit) {
         Callable<V> work = associateWithSubject(callable);
         return this.targetScheduledExecutorService.schedule(work, delay, unit);
     }
 
+    @Impure
     public ScheduledFuture<?> scheduleAtFixedRate(Runnable command, long initialDelay, long period, TimeUnit unit) {
         Runnable work = associateWithSubject(command);
         return this.targetScheduledExecutorService.scheduleAtFixedRate(work, initialDelay, period, unit);
     }
 
+    @Impure
     public ScheduledFuture<?> scheduleWithFixedDelay(Runnable command, long initialDelay, long delay, TimeUnit unit) {
         Runnable work = associateWithSubject(command);
         return this.targetScheduledExecutorService.scheduleWithFixedDelay(work, initialDelay, delay, unit);

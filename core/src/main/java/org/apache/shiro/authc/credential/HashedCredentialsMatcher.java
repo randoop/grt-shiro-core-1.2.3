@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.authc.credential;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SaltedAuthenticationInfo;
@@ -132,6 +134,7 @@ public class HashedCredentialsMatcher extends SimpleCredentialsMatcher {
      * use this constructor, you <em>MUST</em> also additionally set the
      * {@link #setHashAlgorithmName(String) hashAlgorithmName} property.
      */
+    @Impure
     public HashedCredentialsMatcher() {
         this.hashAlgorithm = null;
         this.hashSalted = false;
@@ -146,6 +149,7 @@ public class HashedCredentialsMatcher extends SimpleCredentialsMatcher {
      *                          to use when performing hashes for credentials matching.
      * @since 1.1
      */
+    @Impure
     public HashedCredentialsMatcher(String hashAlgorithmName) {
         this();
         if (!StringUtils.hasText(hashAlgorithmName) ) {
@@ -162,6 +166,7 @@ public class HashedCredentialsMatcher extends SimpleCredentialsMatcher {
      *         when performing hashes for credentials matching.
      * @since 1.1
      */
+    @Pure
     public String getHashAlgorithmName() {
         return hashAlgorithm;
     }
@@ -174,6 +179,7 @@ public class HashedCredentialsMatcher extends SimpleCredentialsMatcher {
      *                          to use when performing hashes for credentials matching.
      * @since 1.1
      */
+    @Impure
     public void setHashAlgorithmName(String hashAlgorithmName) {
         this.hashAlgorithm = hashAlgorithmName;
     }
@@ -189,6 +195,7 @@ public class HashedCredentialsMatcher extends SimpleCredentialsMatcher {
      * @return {@code true} if the system's stored credential hash is Hex encoded, {@code false} if it
      *         is Base64 encoded.  Default is {@code true}
      */
+    @Pure
     public boolean isStoredCredentialsHexEncoded() {
         return storedCredentialsHexEncoded;
     }
@@ -206,6 +213,7 @@ public class HashedCredentialsMatcher extends SimpleCredentialsMatcher {
      * @param storedCredentialsHexEncoded the indicator if this system's stored credential hash is Hex
      *                                    encoded or not ('not' automatically implying it is Base64 encoded).
      */
+    @Impure
     public void setStoredCredentialsHexEncoded(boolean storedCredentialsHexEncoded) {
         this.storedCredentialsHexEncoded = storedCredentialsHexEncoded;
     }
@@ -233,6 +241,7 @@ public class HashedCredentialsMatcher extends SimpleCredentialsMatcher {
      *             attackers, whereas account-unique (and secure randomly-generated) salts never disseminated to the end-user
      *             are almost impossible to break.  This method will be removed in Shiro 2.0.
      */
+    @Pure
     @Deprecated
     public boolean isHashSalted() {
         return hashSalted;
@@ -259,6 +268,7 @@ public class HashedCredentialsMatcher extends SimpleCredentialsMatcher {
      *             attackers, whereas account-unique (and secure randomly-generated) salts never disseminated to the end-user
      *             are almost impossible to break.  This method will be removed in Shiro 2.0.
      */
+    @Impure
     @Deprecated
     public void setHashSalted(boolean hashSalted) {
         this.hashSalted = hashSalted;
@@ -273,6 +283,7 @@ public class HashedCredentialsMatcher extends SimpleCredentialsMatcher {
      * @return the number of times a submitted {@code AuthenticationToken}'s credentials will be hashed before
      *         comparing to the credentials stored in the system.
      */
+    @Pure
     public int getHashIterations() {
         return hashIterations;
     }
@@ -288,6 +299,7 @@ public class HashedCredentialsMatcher extends SimpleCredentialsMatcher {
      *
      * @param hashIterations the number of times to hash a submitted {@code AuthenticationToken}'s credentials.
      */
+    @Impure
     public void setHashIterations(int hashIterations) {
         if (hashIterations < 1) {
             this.hashIterations = 1;
@@ -317,6 +329,8 @@ public class HashedCredentialsMatcher extends SimpleCredentialsMatcher {
      *             attackers, whereas account-unique (and secure randomly-generated) salts never disseminated to the end-user
      *             are almost impossible to break.  This method will be removed in Shiro 2.0.
      */
+    @Pure
+    @Impure
     @Deprecated
     protected Object getSalt(AuthenticationToken token) {
         return token.getPrincipal();
@@ -341,6 +355,7 @@ public class HashedCredentialsMatcher extends SimpleCredentialsMatcher {
      * @param info the AuthenticationInfo from which to retrieve the credentials which assumed to be in already-hashed form.
      * @return a {@link Hash Hash} instance representing the given AuthenticationInfo's stored credentials.
      */
+    @Impure
     protected Object getCredentials(AuthenticationInfo info) {
         Object credentials = info.getCredentials();
 
@@ -374,6 +389,7 @@ public class HashedCredentialsMatcher extends SimpleCredentialsMatcher {
      *         {@code false} otherwise
      * @since 1.1
      */
+    @Impure
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
         Object tokenHashedCredentials = hashProvidedCredentials(token, info);
@@ -399,6 +415,7 @@ public class HashedCredentialsMatcher extends SimpleCredentialsMatcher {
      * @return the token credentials hash
      * @since 1.1
      */
+    @Impure
     protected Object hashProvidedCredentials(AuthenticationToken token, AuthenticationInfo info) {
         Object salt = null;
         if (info instanceof SaltedAuthenticationInfo) {
@@ -420,6 +437,8 @@ public class HashedCredentialsMatcher extends SimpleCredentialsMatcher {
      * @throws IllegalStateException if the property has not been set prior to calling this method.
      * @since 1.1
      */
+    @Pure
+    @Impure
     private String assertHashAlgorithmName() throws IllegalStateException {
         String hashAlgorithmName = getHashAlgorithmName();
         if (hashAlgorithmName == null) {
@@ -440,6 +459,7 @@ public class HashedCredentialsMatcher extends SimpleCredentialsMatcher {
      *                       even if this argument is 0 or negative.
      * @return the hashed value of the provided credentials, according to the specified salt and hash iterations.
      */
+    @Impure
     protected Hash hashProvidedCredentials(Object credentials, Object salt, int hashIterations) {
         String hashAlgorithmName = assertHashAlgorithmName();
         return new SimpleHash(hashAlgorithmName, credentials, salt, hashIterations);
@@ -451,6 +471,7 @@ public class HashedCredentialsMatcher extends SimpleCredentialsMatcher {
      *
      * @return a new, <em>uninitialized</em> instance, without its byte array set.
      */
+    @Impure
     protected AbstractHash newHashInstance() {
         String hashAlgorithmName = assertHashAlgorithmName();
         return new SimpleHash(hashAlgorithmName);

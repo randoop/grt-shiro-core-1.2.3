@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authz;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import java.util.Collection;
@@ -60,6 +61,7 @@ public interface Authorizer {
      * @see #isPermitted(PrincipalCollection principals,Permission permission)
      * @since 0.9
      */
+    @Impure
     boolean isPermitted(PrincipalCollection principals, String permission);
 
     /**
@@ -73,6 +75,7 @@ public interface Authorizer {
      * @param permission       the permission that is being checked.
      * @return true if the corresponding Subject/user is permitted, false otherwise.
      */
+    @Impure
     boolean isPermitted(PrincipalCollection subjectPrincipal, Permission permission);
 
     /**
@@ -90,6 +93,7 @@ public interface Authorizer {
      *         indicates otherwise.
      * @since 0.9
      */
+    @Impure
     boolean[] isPermitted(PrincipalCollection subjectPrincipal, String... permissions);
 
     /**
@@ -110,6 +114,7 @@ public interface Authorizer {
      *         for the associated <tt>Permission</tt> object in the list.  A false value at an index
      *         indicates otherwise.
      */
+    @Impure
     boolean[] isPermitted(PrincipalCollection subjectPrincipal, List<Permission> permissions);
 
     /**
@@ -125,6 +130,7 @@ public interface Authorizer {
      * @see #isPermittedAll(PrincipalCollection,Collection)
      * @since 0.9
      */
+    @Impure
     boolean isPermittedAll(PrincipalCollection subjectPrincipal, String... permissions);
 
     /**
@@ -138,6 +144,7 @@ public interface Authorizer {
      * @param permissions      the permissions to check.
      * @return true if the user has all of the specified permissions, false otherwise.
      */
+    @Impure
     boolean isPermittedAll(PrincipalCollection subjectPrincipal, Collection<Permission> permissions);
 
     /**
@@ -155,6 +162,7 @@ public interface Authorizer {
      *          if the user does not have the permission.
      * @since 0.9
      */
+    @Impure
     void checkPermission(PrincipalCollection subjectPrincipal, String permission) throws AuthorizationException;
 
     /**
@@ -167,6 +175,7 @@ public interface Authorizer {
      * @throws AuthorizationException
      *          if the user does not have the permission.
      */
+    @Impure
     void checkPermission(PrincipalCollection subjectPrincipal, Permission permission) throws AuthorizationException;
 
     /**
@@ -186,6 +195,7 @@ public interface Authorizer {
      * @throws AuthorizationException if the user does not have all of the given permissions.
      * @since 0.9
      */
+    @Impure
     void checkPermissions(PrincipalCollection subjectPrincipal, String... permissions) throws AuthorizationException;
 
     /**
@@ -201,6 +211,7 @@ public interface Authorizer {
      * @param permissions      the Permissions to check.
      * @throws AuthorizationException if the user does not have all of the given permissions.
      */
+    @Impure
     void checkPermissions(PrincipalCollection subjectPrincipal, Collection<Permission> permissions) throws AuthorizationException;
 
     /**
@@ -210,6 +221,7 @@ public interface Authorizer {
      * @param roleIdentifier   the application-specific role identifier (usually a role id or role name).
      * @return <tt>true</tt> if the corresponding subject has the specified role, <tt>false</tt> otherwise.
      */
+    @Impure
     boolean hasRole(PrincipalCollection subjectPrincipal, String roleIdentifier);
 
     /**
@@ -225,6 +237,7 @@ public interface Authorizer {
      *         roles in the given identifiers.  A true value indicates the user has the
      *         role at that index.  False indicates the user does not have the role at that index.
      */
+    @Impure
     boolean[] hasRoles(PrincipalCollection subjectPrincipal, List<String> roleIdentifiers);
 
     /**
@@ -234,6 +247,7 @@ public interface Authorizer {
      * @param roleIdentifiers  the application-specific role identifiers to check (usually role ids or role names).
      * @return true if the user has all the roles, false otherwise.
      */
+    @Impure
     boolean hasAllRoles(PrincipalCollection subjectPrincipal, Collection<String> roleIdentifiers);
 
     /**
@@ -245,6 +259,7 @@ public interface Authorizer {
      * @throws AuthorizationException
      *          if the user does not have the role.
      */
+    @Impure
     void checkRole(PrincipalCollection subjectPrincipal, String roleIdentifier) throws AuthorizationException;
 
     /**
@@ -256,6 +271,7 @@ public interface Authorizer {
      * @throws AuthorizationException
      *          if the user does not have all of the specified roles.
      */
+    @Impure
     void checkRoles(PrincipalCollection subjectPrincipal, Collection<String> roleIdentifiers) throws AuthorizationException;
 
     /**
@@ -272,6 +288,7 @@ public interface Authorizer {
      *          
      *  @since 1.1.0
      */
+    @Impure
     void checkRoles(PrincipalCollection subjectPrincipal, String... roleIdentifiers) throws AuthorizationException;
     
 }

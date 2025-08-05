@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.util;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -41,6 +42,7 @@ public class RegExPatternMatcher implements PatternMatcher {
      * @param source  the source to match
      * @return {@code true} if the source matches the required pattern, {@code false} otherwise.
      */
+    @SideEffectFree
     public boolean matches(String pattern, String source) {
         if (pattern == null) {
             throw new IllegalArgumentException("pattern argument cannot be null.");

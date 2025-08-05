@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.config;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.io.ResourceUtils;
 import org.apache.shiro.util.CollectionUtils;
 import org.apache.shiro.util.StringUtils;
@@ -55,6 +58,7 @@ public class Ini implements Map<String, Ini.Section> {
     /**
      * Creates a new empty {@code Ini} instance.
      */
+    @Impure
     public Ini() {
         this.sections = new LinkedHashMap<String, Section>();
     }
@@ -64,6 +68,7 @@ public class Ini implements Map<String, Ini.Section> {
      *
      * @param defaults the default sections and/or key-value pairs to copy into the new instance.
      */
+    @Impure
     public Ini(Ini defaults) {
         this();
         if (defaults == null) {
@@ -82,6 +87,7 @@ public class Ini implements Map<String, Ini.Section> {
      * @return {@code true} if no sections have been configured, or if there are sections, but the sections themselves
      *         are all empty, {@code false} otherwise.
      */
+    @SideEffectFree
     public boolean isEmpty() {
         Collection<Section> sections = this.sections.values();
         if (!sections.isEmpty()) {
@@ -101,6 +107,7 @@ public class Ini implements Map<String, Ini.Section> {
      * @return the names of all sections managed by this {@code Ini} instance or an empty collection if there are
      *         no sections.
      */
+    @SideEffectFree
     public Set<String> getSectionNames() {
         return Collections.unmodifiableSet(sections.keySet());
     }
@@ -112,6 +119,7 @@ public class Ini implements Map<String, Ini.Section> {
      * @return the sections managed by this {@code Ini} instance or an empty collection if there are
      *         no sections.
      */
+    @SideEffectFree
     public Collection<Section> getSections() {
         return Collections.unmodifiableCollection(sections.values());
     }
@@ -122,6 +130,7 @@ public class Ini implements Map<String, Ini.Section> {
      * @param sectionName the name of the section to retrieve.
      * @return the {@link Section} with the given name or {@code null} if no section with that name exists.
      */
+    @Impure
     public Section getSection(String sectionName) {
         String name = cleanName(sectionName);
         return sections.get(name);
@@ -133,6 +142,7 @@ public class Ini implements Map<String, Ini.Section> {
      * @param sectionName the name of the section to ensure existence
      * @return the section created if it did not yet exist, or the existing Section that already existed.
      */
+    @Impure
     public Section addSection(String sectionName) {
         String name = cleanName(sectionName);
         Section section = getSection(name);
@@ -149,11 +159,13 @@ public class Ini implements Map<String, Ini.Section> {
      * @param sectionName the name of the section to remove.
      * @return the section with the specified name or {@code null} if the section did not exist.
      */
+    @Impure
     public Section removeSection(String sectionName) {
         String name = cleanName(sectionName);
         return this.sections.remove(name);
     }
 
+    @Impure
     private static String cleanName(String sectionName) {
         String name = StringUtils.clean(sectionName);
         if (name == null) {
@@ -172,6 +184,7 @@ public class Ini implements Map<String, Ini.Section> {
      * @param propertyName  the name of the property to add
      * @param propertyValue the property value
      */
+    @Impure
     public void setSectionProperty(String sectionName, String propertyName, String propertyValue) {
         String name = cleanName(sectionName);
         Section section = getSection(name);
@@ -188,6 +201,7 @@ public class Ini implements Map<String, Ini.Section> {
      * @param propertyName the name of the section property for which to return the value
      * @return the value of the specified section property, or {@code null} if the section or property do not exist.
      */
+    @Impure
     public String getSectionProperty(String sectionName, String propertyName) {
         Section section = getSection(sectionName);
         return section != null ? section.get(propertyName) : null;
@@ -203,6 +217,7 @@ public class Ini implements Map<String, Ini.Section> {
      * @return the value of the specified section property, or the {@code defaultValue} if the section or
      *         property do not exist.
      */
+    @Impure
     public String getSectionProperty(String sectionName, String propertyName, String defaultValue) {
         String value = getSectionProperty(sectionName, propertyName);
         return value != null ? value : defaultValue;
@@ -217,6 +232,7 @@ public class Ini implements Map<String, Ini.Section> {
      * @return a new {@code Ini} instance loaded with the INI-formatted data in the resource at the given path.
      * @throws ConfigurationException if the path cannot be loaded into an {@code Ini} instance.
      */
+    @Impure
     public static Ini fromResourcePath(String resourcePath) throws ConfigurationException {
         if (!StringUtils.hasLength(resourcePath)) {
             throw new IllegalArgumentException("Resource Path argument cannot be null or empty.");
@@ -234,6 +250,7 @@ public class Ini implements Map<String, Ini.Section> {
      * @param resourcePath the resource location of the INI data to load into this instance.
      * @throws ConfigurationException if the path cannot be loaded
      */
+    @Impure
     public void loadFromPath(String resourcePath) throws ConfigurationException {
         InputStream is;
         try {
@@ -250,6 +267,7 @@ public class Ini implements Map<String, Ini.Section> {
      * @param iniConfig the raw INI-formatted text to load into this instance.
      * @throws ConfigurationException if the text cannot be loaded
      */
+    @Impure
     public void load(String iniConfig) throws ConfigurationException {
         load(new Scanner(iniConfig));
     }
@@ -262,6 +280,7 @@ public class Ini implements Map<String, Ini.Section> {
      * @param is the {@code InputStream} from which to read the INI-formatted text
      * @throws ConfigurationException if unable
      */
+    @Impure
     public void load(InputStream is) throws ConfigurationException {
         if (is == null) {
             throw new NullPointerException("InputStream argument cannot be null.");
@@ -281,6 +300,7 @@ public class Ini implements Map<String, Ini.Section> {
      *
      * @param reader the {@code Reader} from which to read the INI-formatted text
      */
+    @Impure
     public void load(Reader reader) {
         Scanner scanner = new Scanner(reader);
         try {
@@ -294,6 +314,7 @@ public class Ini implements Map<String, Ini.Section> {
         }
     }
 
+    @Impure
     private void addSection(String name, StringBuilder content) {
         if (content.length() > 0) {
             String contentString = content.toString();
@@ -313,6 +334,7 @@ public class Ini implements Map<String, Ini.Section> {
      *
      * @param scanner the {@code Scanner} from which to read the INI-formatted text
      */
+    @Impure
     public void load(Scanner scanner) {
 
         String sectionName = DEFAULT_SECTION_NAME;
@@ -351,11 +373,14 @@ public class Ini implements Map<String, Ini.Section> {
         addSection(sectionName, sectionContent);
     }
 
+    @SideEffectFree
+    @Impure
     protected static boolean isSectionHeader(String line) {
         String s = StringUtils.clean(line);
         return s != null && s.startsWith(SECTION_PREFIX) && s.endsWith(SECTION_SUFFIX);
     }
 
+    @Impure
     protected static String getSectionName(String line) {
         String s = StringUtils.clean(line);
         if (isSectionHeader(s)) {
@@ -364,6 +389,7 @@ public class Ini implements Map<String, Ini.Section> {
         return null;
     }
 
+    @Pure
     public boolean equals(Object obj) {
         if (obj instanceof Ini) {
             Ini ini = (Ini) obj;
@@ -372,11 +398,13 @@ public class Ini implements Map<String, Ini.Section> {
         return false;
     }
 
+    @Pure
     @Override
     public int hashCode() {
         return this.sections.hashCode();
     }
 
+    @Impure
     public String toString() {
         if (CollectionUtils.isEmpty(this.sections)) {
             return "<empty INI>";
@@ -394,46 +422,57 @@ public class Ini implements Map<String, Ini.Section> {
         }
     }
 
+    @Pure
     public int size() {
         return this.sections.size();
     }
 
+    @Pure
     public boolean containsKey(Object key) {
         return this.sections.containsKey(key);
     }
 
+    @Pure
     public boolean containsValue(Object value) {
         return this.sections.containsValue(value);
     }
 
+    @Pure
     public Section get(Object key) {
         return this.sections.get(key);
     }
 
+    @Impure
     public Section put(String key, Section value) {
         return this.sections.put(key, value);
     }
 
+    @Impure
     public Section remove(Object key) {
         return this.sections.remove(key);
     }
 
+    @Impure
     public void putAll(Map<? extends String, ? extends Section> m) {
         this.sections.putAll(m);
     }
 
+    @Impure
     public void clear() {
         this.sections.clear();
     }
 
+    @SideEffectFree
     public Set<String> keySet() {
         return Collections.unmodifiableSet(this.sections.keySet());
     }
 
+    @SideEffectFree
     public Collection<Section> values() {
         return Collections.unmodifiableCollection(this.sections.values());
     }
 
+    @SideEffectFree
     public Set<Entry<String, Section>> entrySet() {
         return Collections.unmodifiableSet(this.sections.entrySet());
     }
@@ -446,6 +485,7 @@ public class Ini implements Map<String, Ini.Section> {
         private final String name;
         private final Map<String, String> props;
 
+        @Impure
         private Section(String name) {
             if (name == null) {
                 throw new NullPointerException("name");
@@ -454,6 +494,7 @@ public class Ini implements Map<String, Ini.Section> {
             this.props = new LinkedHashMap<String, String>();
         }
 
+        @Impure
         private Section(String name, String sectionContent) {
             if (name == null) {
                 throw new NullPointerException("name");
@@ -472,6 +513,7 @@ public class Ini implements Map<String, Ini.Section> {
             }
         }
 
+        @Impure
         private Section(Section defaults) {
             this(defaults.getName());
             putAll(defaults.props);
@@ -479,6 +521,8 @@ public class Ini implements Map<String, Ini.Section> {
 
         //Protected to access in a test case - NOT considered part of Shiro's public API
 
+        @Pure
+        @Impure
         protected static boolean isContinued(String line) {
             if (!StringUtils.hasText(line)) {
                 return false;
@@ -497,15 +541,18 @@ public class Ini implements Map<String, Ini.Section> {
             return backslashCount % 2 != 0;
         }
 
+        @Pure
         private static boolean isKeyValueSeparatorChar(char c) {
             return Character.isWhitespace(c) || c == ':' || c == '=';
         }
 
+        @Pure
         private static boolean isCharEscaped(CharSequence s, int index) {
             return index > 0 && s.charAt(index - 1) == ESCAPE_TOKEN;
         }
 
         //Protected to access in a test case - NOT considered part of Shiro's public API
+        @Impure
         protected static String[] splitKeyValue(String keyValueLine) {
             String line = StringUtils.clean(keyValueLine);
             if (line == null) {
@@ -547,6 +594,7 @@ public class Ini implements Map<String, Ini.Section> {
             return new String[]{key, value};
         }
 
+        @Impure
         private static Map<String, String> toMapProps(String content) {
             Map<String, String> props = new LinkedHashMap<String, String>();
             String line;
@@ -571,58 +619,73 @@ public class Ini implements Map<String, Ini.Section> {
             return props;
         }
 
+        @Pure
         public String getName() {
             return this.name;
         }
 
+        @Impure
         public void clear() {
             this.props.clear();
         }
 
+        @Pure
         public boolean containsKey(Object key) {
             return this.props.containsKey(key);
         }
 
+        @Pure
         public boolean containsValue(Object value) {
             return this.props.containsValue(value);
         }
 
+        @SideEffectFree
         public Set<Entry<String, String>> entrySet() {
             return this.props.entrySet();
         }
 
+        @Pure
         public String get(Object key) {
             return this.props.get(key);
         }
 
+        @Pure
         public boolean isEmpty() {
             return this.props.isEmpty();
         }
 
+        @SideEffectFree
         public Set<String> keySet() {
             return this.props.keySet();
         }
 
+        @Impure
         public String put(String key, String value) {
             return this.props.put(key, value);
         }
 
+        @Impure
         public void putAll(Map<? extends String, ? extends String> m) {
             this.props.putAll(m);
         }
 
+        @Impure
         public String remove(Object key) {
             return this.props.remove(key);
         }
 
+        @Pure
         public int size() {
             return this.props.size();
         }
 
+        @SideEffectFree
         public Collection<String> values() {
             return this.props.values();
         }
 
+        @Pure
+        @Impure
         public String toString() {
             String name = getName();
             if (DEFAULT_SECTION_NAME.equals(name)) {
@@ -631,6 +694,8 @@ public class Ini implements Map<String, Ini.Section> {
             return name;
         }
 
+        @Pure
+        @Impure
         @Override
         public boolean equals(Object obj) {
             if (obj instanceof Section) {
@@ -640,6 +705,7 @@ public class Ini implements Map<String, Ini.Section> {
             return false;
         }
 
+        @Pure
         @Override
         public int hashCode() {
             return this.name.hashCode() * 31 + this.props.hashCode();

@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.authz;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -49,6 +52,7 @@ public class SimpleAuthorizationInfo implements AuthorizationInfo {
     /**
      * Default no-argument constructor.
      */
+    @SideEffectFree
     public SimpleAuthorizationInfo() {
     }
 
@@ -56,10 +60,12 @@ public class SimpleAuthorizationInfo implements AuthorizationInfo {
      * Creates a new instance with the specified roles and no permissions.
      * @param roles the roles assigned to the realm account.
      */
+    @SideEffectFree
     public SimpleAuthorizationInfo(Set<String> roles) {
         this.roles = roles;
     }
 
+    @Pure
     public Set<String> getRoles() {
         return roles;
     }
@@ -68,6 +74,7 @@ public class SimpleAuthorizationInfo implements AuthorizationInfo {
      * Sets the roles assigned to the account.
      * @param roles the roles assigned to the account.
      */
+    @Impure
     public void setRoles(Set<String> roles) {
         this.roles = roles;
     }
@@ -77,6 +84,7 @@ public class SimpleAuthorizationInfo implements AuthorizationInfo {
      * new roles collection (a Set) will be created automatically.
      * @param role the role to add to those associated with the account.
      */
+    @Impure
     public void addRole(String role) {
         if (this.roles == null) {
             this.roles = new HashSet<String>();
@@ -89,6 +97,7 @@ public class SimpleAuthorizationInfo implements AuthorizationInfo {
      * new roles collection (a Set) will be created automatically.
      * @param roles the roles to add to those associated with the account.
      */
+    @Impure
     public void addRoles(Collection<String> roles) {
         if (this.roles == null) {
             this.roles = new HashSet<String>();
@@ -96,6 +105,7 @@ public class SimpleAuthorizationInfo implements AuthorizationInfo {
         this.roles.addAll(roles);
     }
 
+    @Pure
     public Set<String> getStringPermissions() {
         return stringPermissions;
     }
@@ -107,6 +117,7 @@ public class SimpleAuthorizationInfo implements AuthorizationInfo {
      *
      * @param stringPermissions the string-based permissions assigned directly to the account.
      */
+    @Impure
     public void setStringPermissions(Set<String> stringPermissions) {
         this.stringPermissions = stringPermissions;
     }
@@ -116,6 +127,7 @@ public class SimpleAuthorizationInfo implements AuthorizationInfo {
      * direct permissions, a new permission collection (a Set&lt;String&gt;) will be created automatically.
      * @param permission the permission to add to those directly assigned to the account.
      */
+    @Impure
     public void addStringPermission(String permission) {
         if (this.stringPermissions == null) {
             this.stringPermissions = new HashSet<String>();
@@ -128,6 +140,7 @@ public class SimpleAuthorizationInfo implements AuthorizationInfo {
      * have any string-based permissions, a  new permissions collection (a Set&lt;String&gt;) will be created automatically.
      * @param permissions the permissions to add to those associated directly with the account.
      */
+    @Impure
     public void addStringPermissions(Collection<String> permissions) {
         if (this.stringPermissions == null) {
             this.stringPermissions = new HashSet<String>();
@@ -135,6 +148,7 @@ public class SimpleAuthorizationInfo implements AuthorizationInfo {
         this.stringPermissions.addAll(permissions);
     }
 
+    @Pure
     public Set<Permission> getObjectPermissions() {
         return objectPermissions;
     }
@@ -146,6 +160,7 @@ public class SimpleAuthorizationInfo implements AuthorizationInfo {
      *
      * @param objectPermissions the object-based permissions assigned directly to the account.
      */
+    @Impure
     public void setObjectPermissions(Set<Permission> objectPermissions) {
         this.objectPermissions = objectPermissions;
     }
@@ -155,6 +170,7 @@ public class SimpleAuthorizationInfo implements AuthorizationInfo {
      * direct permissions, a new permission collection (a Set&lt;{@link Permission Permission}&gt;) will be created automatically.
      * @param permission the permission to add to those directly assigned to the account.
      */
+    @Impure
     public void addObjectPermission(Permission permission) {
         if (this.objectPermissions == null) {
             this.objectPermissions = new HashSet<Permission>();
@@ -168,6 +184,7 @@ public class SimpleAuthorizationInfo implements AuthorizationInfo {
      * will be created automatically.
      * @param permissions the permissions to add to those associated directly with the account.
      */
+    @Impure
     public void addObjectPermissions(Collection<Permission> permissions) {
         if (this.objectPermissions == null) {
             this.objectPermissions = new HashSet<Permission>();

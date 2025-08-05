@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.crypto.hash;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.util.ByteSource;
@@ -107,6 +109,7 @@ public class DefaultHashService implements ConfigurableHashService {
      * {@link #setPrivateSalt(ByteSource) privateSalt} and significantly increase the number of
      * {@link #setHashIterations(int) hashIterations}.  See the class-level JavaDoc for more information.
      */
+    @Impure
     public DefaultHashService() {
         this.algorithmName = "SHA-512";
         this.iterations = 1;
@@ -147,6 +150,7 @@ public class DefaultHashService implements ConfigurableHashService {
      * @return the response containing the result of the hash computation, as well as any hash salt used that should be
      *         exposed to the caller.
      */
+    @Impure
     public Hash computeHash(HashRequest request) {
         if (request == null || request.getSource() == null || request.getSource().isEmpty()) {
             return null;
@@ -171,6 +175,8 @@ public class DefaultHashService implements ConfigurableHashService {
         return result;
     }
 
+    @Pure
+    @Impure
     protected String getAlgorithmName(HashRequest request) {
         String name = request.getAlgorithmName();
         if (name == null) {
@@ -179,6 +185,8 @@ public class DefaultHashService implements ConfigurableHashService {
         return name;
     }
 
+    @Pure
+    @Impure
     protected int getIterations(HashRequest request) {
         int iterations = Math.max(0, request.getIterations());
         if (iterations < 1) {
@@ -209,6 +217,7 @@ public class DefaultHashService implements ConfigurableHashService {
      * @return the public salt that should be used to compute a hash based on the specified request or
      *         {@code null} if no public salt should be used.
      */
+    @Impure
     protected ByteSource getPublicSalt(HashRequest request) {
 
         ByteSource publicSalt = request.getSalt();
@@ -243,6 +252,7 @@ public class DefaultHashService implements ConfigurableHashService {
      * @return a combination of the specified private salt bytes and extra bytes that will be used as the total
      *         salt during hash computation.
      */
+    @Impure
     protected ByteSource combine(ByteSource privateSalt, ByteSource publicSalt) {
 
         byte[] privateSaltBytes = privateSalt != null ? privateSalt.getBytes() : null;
@@ -272,34 +282,42 @@ public class DefaultHashService implements ConfigurableHashService {
         return ByteSource.Util.bytes(combined);
     }
 
+    @Impure
     public void setHashAlgorithmName(String name) {
         this.algorithmName = name;
     }
 
+    @Pure
     public String getHashAlgorithmName() {
         return this.algorithmName;
     }
 
+    @Impure
     public void setPrivateSalt(ByteSource privateSalt) {
         this.privateSalt = privateSalt;
     }
 
+    @Pure
     public ByteSource getPrivateSalt() {
         return this.privateSalt;
     }
 
+    @Impure
     public void setHashIterations(int count) {
         this.iterations = count;
     }
 
+    @Pure
     public int getHashIterations() {
         return this.iterations;
     }
 
+    @Impure
     public void setRandomNumberGenerator(RandomNumberGenerator rng) {
         this.rng = rng;
     }
 
+    @Pure
     public RandomNumberGenerator getRandomNumberGenerator() {
         return this.rng;
     }
@@ -319,6 +337,7 @@ public class DefaultHashService implements ConfigurableHashService {
      * @return {@code true} if a public salt should be randomly generated and used to compute a hash if a
      *         {@link HashRequest} does not specify a salt, {@code false} otherwise.
      */
+    @Pure
     public boolean isGeneratePublicSalt() {
         return generatePublicSalt;
     }
@@ -338,6 +357,7 @@ public class DefaultHashService implements ConfigurableHashService {
      * @param generatePublicSalt whether or not a public salt should be randomly generated and used to compute a hash
      *                           if a {@link HashRequest} does not specify a salt.
      */
+    @Impure
     public void setGeneratePublicSalt(boolean generatePublicSalt) {
         this.generatePublicSalt = generatePublicSalt;
     }

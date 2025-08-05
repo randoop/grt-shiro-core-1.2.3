@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -53,6 +55,7 @@ public abstract class AuthenticatingSecurityManager extends RealmSecurityManager
      * <code>authenticator</code> instance to a
      * {@link org.apache.shiro.authc.pam.ModularRealmAuthenticator ModularRealmAuthenticator}.
      */
+    @Impure
     public AuthenticatingSecurityManager() {
         super();
         this.authenticator = new ModularRealmAuthenticator();
@@ -67,6 +70,7 @@ public abstract class AuthenticatingSecurityManager extends RealmSecurityManager
      * @return the delegate <code>Authenticator</code> instance that this SecurityManager uses to perform all
      *         authentication operations.
      */
+    @Pure
     public Authenticator getAuthenticator() {
         return authenticator;
     }
@@ -80,6 +84,7 @@ public abstract class AuthenticatingSecurityManager extends RealmSecurityManager
      *                      perform all authentication operations.
      * @throws IllegalArgumentException if the argument is <code>null</code>.
      */
+    @Impure
     public void setAuthenticator(Authenticator authenticator) throws IllegalArgumentException {
         if (authenticator == null) {
             String msg = "Authenticator argument cannot be null.";
@@ -92,6 +97,7 @@ public abstract class AuthenticatingSecurityManager extends RealmSecurityManager
      * Passes on the {@link #getRealms() realms} to the internal delegate <code>Authenticator</code> instance so
      * that it may use them during authentication attempts.
      */
+    @Impure
     protected void afterRealmsSet() {
         super.afterRealmsSet();
         if (this.authenticator instanceof ModularRealmAuthenticator) {
@@ -102,10 +108,12 @@ public abstract class AuthenticatingSecurityManager extends RealmSecurityManager
     /**
      * Delegates to the wrapped {@link org.apache.shiro.authc.Authenticator Authenticator} for authentication.
      */
+    @Impure
     public AuthenticationInfo authenticate(AuthenticationToken token) throws AuthenticationException {
         return this.authenticator.authenticate(token);
     }
 
+    @Impure
     public void destroy() {
         LifecycleUtils.destroy(getAuthenticator());
         this.authenticator = null;

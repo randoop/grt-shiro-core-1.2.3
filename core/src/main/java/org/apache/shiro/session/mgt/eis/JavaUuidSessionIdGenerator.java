@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.session.mgt.eis;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.session.Session;
 
 import java.io.Serializable;
@@ -37,6 +38,7 @@ public class JavaUuidSessionIdGenerator implements SessionIdGenerator {
      * @param session the {@link Session} instance to which the ID will be applied.
      * @return the String value of the JDK's next {@link UUID#randomUUID() randomUUID()}.
      */
+    @Impure
     public Serializable generateId(Session session) {
         return UUID.randomUUID().toString();
     }

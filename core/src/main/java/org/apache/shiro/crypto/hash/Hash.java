@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.crypto.hash;
 
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.util.ByteSource;
 
 /**
@@ -46,6 +47,7 @@ public interface Hash extends ByteSource {
      * @return the the name of the algorithm used to hash the input source, for example, {@code SHA-256}, {@code MD5}, etc.
      * @since 1.1
      */
+    @Pure
     String getAlgorithmName();
 
     /**
@@ -54,6 +56,7 @@ public interface Hash extends ByteSource {
      * @return a salt used to compute the hash or {@code null} if no salt was used.
      * @since 1.2
      */
+    @Pure
     ByteSource getSalt();
 
     /**
@@ -62,6 +65,7 @@ public interface Hash extends ByteSource {
      * @return the number of hash iterations used to compute the hash.
      * @since 1.2
      */
+    @Pure
     int getIterations();
 
 }

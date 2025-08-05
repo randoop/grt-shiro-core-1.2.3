@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authc.credential;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.crypto.hash.AbstractHash;
 import org.apache.shiro.crypto.hash.Hash;
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -39,6 +40,7 @@ import org.apache.shiro.crypto.hash.Md5Hash;
  */
 public class Md5CredentialsMatcher extends HashedCredentialsMatcher {
 
+    @Impure
     public Md5CredentialsMatcher() {
         super();
         setHashAlgorithmName(Md5Hash.ALGORITHM_NAME);

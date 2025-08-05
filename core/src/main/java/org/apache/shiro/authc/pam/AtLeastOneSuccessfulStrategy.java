@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.authc.pam;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -47,6 +49,8 @@ public class AtLeastOneSuccessfulStrategy extends AbstractAuthenticationStrategy
      * is not <code>null</code>, and if either is <code>null</code>, throws an AuthenticationException to indicate
      * that none of the realms authenticated successfully.
      */
+    @Pure
+    @Impure
     public AuthenticationInfo afterAllAttempts(AuthenticationToken token, AuthenticationInfo aggregate) throws AuthenticationException {
         //we know if one or more were able to succesfully authenticate if the aggregated account object does not
         //contain null or empty data:

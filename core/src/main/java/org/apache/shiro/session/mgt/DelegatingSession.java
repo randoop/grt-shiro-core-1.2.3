@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.session.mgt;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
 
@@ -56,6 +59,8 @@ public class DelegatingSession implements Session, Serializable {
     private final transient NativeSessionManager sessionManager;
 
 
+    @SideEffectFree
+    @Impure
     public DelegatingSession(NativeSessionManager sessionManager, SessionKey key) {
         if (sessionManager == null) {
             throw new IllegalArgumentException("sessionManager argument cannot be null.");
@@ -76,6 +81,8 @@ public class DelegatingSession implements Session, Serializable {
     /**
      * @see org.apache.shiro.session.Session#getId()
      */
+    @Pure
+    @Impure
     public Serializable getId() {
         return key.getSessionId();
     }
@@ -83,6 +90,7 @@ public class DelegatingSession implements Session, Serializable {
     /**
      * @see org.apache.shiro.session.Session#getStartTimestamp()
      */
+    @Impure
     public Date getStartTimestamp() {
         if (startTimestamp == null) {
             startTimestamp = sessionManager.getStartTimestamp(key);
@@ -93,19 +101,23 @@ public class DelegatingSession implements Session, Serializable {
     /**
      * @see org.apache.shiro.session.Session#getLastAccessTime()
      */
+    @Impure
     public Date getLastAccessTime() {
         //can't cache - only business pojo knows the accurate time:
         return sessionManager.getLastAccessTime(key);
     }
 
+    @Impure
     public long getTimeout() throws InvalidSessionException {
         return sessionManager.getTimeout(key);
     }
 
+    @Impure
     public void setTimeout(long maxIdleTimeInMillis) throws InvalidSessionException {
         sessionManager.setTimeout(key, maxIdleTimeInMillis);
     }
 
+    @Impure
     public String getHost() {
         if (host == null) {
             host = sessionManager.getHost(key);
@@ -116,6 +128,7 @@ public class DelegatingSession implements Session, Serializable {
     /**
      * @see org.apache.shiro.session.Session#touch()
      */
+    @Impure
     public void touch() throws InvalidSessionException {
         sessionManager.touch(key);
     }
@@ -123,6 +136,7 @@ public class DelegatingSession implements Session, Serializable {
     /**
      * @see org.apache.shiro.session.Session#stop()
      */
+    @Impure
     public void stop() throws InvalidSessionException {
         sessionManager.stop(key);
     }
@@ -130,6 +144,7 @@ public class DelegatingSession implements Session, Serializable {
     /**
      * @see org.apache.shiro.session.Session#getAttributeKeys
      */
+    @Impure
     public Collection<Object> getAttributeKeys() throws InvalidSessionException {
         return sessionManager.getAttributeKeys(key);
     }
@@ -137,6 +152,7 @@ public class DelegatingSession implements Session, Serializable {
     /**
      * @see org.apache.shiro.session.Session#getAttribute(Object key)
      */
+    @Impure
     public Object getAttribute(Object attributeKey) throws InvalidSessionException {
         return sessionManager.getAttribute(this.key, attributeKey);
     }
@@ -144,6 +160,7 @@ public class DelegatingSession implements Session, Serializable {
     /**
      * @see Session#setAttribute(Object key, Object value)
      */
+    @Impure
     public void setAttribute(Object attributeKey, Object value) throws InvalidSessionException {
         if (value == null) {
             removeAttribute(attributeKey);
@@ -155,6 +172,7 @@ public class DelegatingSession implements Session, Serializable {
     /**
      * @see Session#removeAttribute(Object key)
      */
+    @Impure
     public Object removeAttribute(Object attributeKey) throws InvalidSessionException {
         return sessionManager.removeAttribute(this.key, attributeKey);
     }

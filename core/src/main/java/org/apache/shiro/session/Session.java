@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.session;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -46,6 +47,7 @@ public interface Session {
      *
      * @return The unique identifier assigned to the session upon creation.
      */
+    @Impure
     Serializable getId();
 
     /**
@@ -53,6 +55,7 @@ public interface Session {
      *
      * @return The time the system created the session.
      */
+    @Impure
     Date getStartTimestamp();
 
     /**
@@ -62,6 +65,7 @@ public interface Session {
      * @return The time the user last interacted with the system.
      * @see #touch()
      */
+    @Impure
     Date getLastAccessTime();
 
     /**
@@ -79,6 +83,7 @@ public interface Session {
      * @throws InvalidSessionException if the session has been stopped or expired prior to calling this method.
      * @since 0.2
      */
+    @Impure
     long getTimeout() throws InvalidSessionException;
 
     /**
@@ -97,6 +102,7 @@ public interface Session {
      * @throws InvalidSessionException if the session has been stopped or expired prior to calling this method.
      * @since 0.2
      */
+    @Impure
     void setTimeout(long maxIdleTimeInMillis) throws InvalidSessionException;
 
     /**
@@ -106,6 +112,7 @@ public interface Session {
      * @return the host name or IP string of the host that originated this session, or {@code null}
      *         if the host address is unknown.
      */
+    @Impure
     String getHost();
 
     /**
@@ -138,6 +145,7 @@ public interface Session {
      *
      * @throws InvalidSessionException if this session has stopped or expired prior to calling this method.
      */
+    @Impure
     void touch() throws InvalidSessionException;
 
     /**
@@ -157,6 +165,7 @@ public interface Session {
      *
      * @throws InvalidSessionException if this session has stopped or expired prior to calling this method.
      */
+    @Impure
     void stop() throws InvalidSessionException;
 
     /**
@@ -168,6 +177,7 @@ public interface Session {
      * @throws InvalidSessionException if this session has stopped or expired prior to calling this method.
      * @since 0.2
      */
+    @Impure
     Collection<Object> getAttributeKeys() throws InvalidSessionException;
 
     /**
@@ -180,6 +190,7 @@ public interface Session {
      * @throws InvalidSessionException if this session has stopped or expired prior to calling
      *                                 this method.
      */
+    @Impure
     Object getAttribute(Object key) throws InvalidSessionException;
 
     /**
@@ -195,6 +206,7 @@ public interface Session {
      * @throws InvalidSessionException if this session has stopped or expired prior to calling
      *                                 this method.
      */
+    @Impure
     void setAttribute(Object key, Object value) throws InvalidSessionException;
 
     /**
@@ -206,5 +218,6 @@ public interface Session {
      * @throws InvalidSessionException if this session has stopped or expired prior to calling
      *                                 this method.
      */
+    @Impure
     Object removeAttribute(Object key) throws InvalidSessionException;
 }

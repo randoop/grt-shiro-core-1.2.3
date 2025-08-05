@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.authz;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * A Permission represents the ability to perform an action or access a resource.  A Permission is the most
@@ -81,5 +83,7 @@ public interface Permission {
      * @return {@code true} if this current instance <em>implies</em> all the functionality and/or resource access
      *         described by the specified {@code Permission} argument, {@code false} otherwise.
      */
+    @Pure
+    @Impure
     boolean implies(Permission p);
 }

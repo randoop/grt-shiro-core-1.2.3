@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.realm;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.authc.LogoutAware;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.CacheManagerAware;
@@ -68,6 +70,7 @@ public abstract class CachingRealm implements Realm, Nameable, CacheManagerAware
      * Note that while in general, caching may be enabled by default, subclasses have control over
      * if specific caching is enabled.
      */
+    @Impure
     public CachingRealm() {
         this.cachingEnabled = true;
         this.name = getClass().getName() + "_" + INSTANCE_COUNT.getAndIncrement();
@@ -80,6 +83,7 @@ public abstract class CachingRealm implements Realm, Nameable, CacheManagerAware
      * @return the <tt>CacheManager</tt> used for data caching to reduce EIS round trips, or <tt>null</tt> if
      *         caching is disabled.
      */
+    @Pure
     public CacheManager getCacheManager() {
         return this.cacheManager;
     }
@@ -91,6 +95,7 @@ public abstract class CachingRealm implements Realm, Nameable, CacheManagerAware
      *
      * @param cacheManager the <tt>CacheManager</tt> to use for data caching, or <tt>null</tt> to disable caching.
      */
+    @Impure
     public void setCacheManager(CacheManager cacheManager) {
         this.cacheManager = cacheManager;
         afterCacheManagerSet();
@@ -107,6 +112,7 @@ public abstract class CachingRealm implements Realm, Nameable, CacheManagerAware
      * @return {@code true} if caching will be globally enabled if a {@link CacheManager} has been
      *         configured, {@code false} otherwise
      */
+    @Pure
     public boolean isCachingEnabled() {
         return cachingEnabled;
     }
@@ -117,14 +123,17 @@ public abstract class CachingRealm implements Realm, Nameable, CacheManagerAware
      *
      * @param cachingEnabled whether or not to globally enable caching for this realm.
      */
+    @Impure
     public void setCachingEnabled(boolean cachingEnabled) {
         this.cachingEnabled = cachingEnabled;
     }
 
+    @Pure
     public String getName() {
         return name;
     }
 
+    @Impure
     public void setName(String name) {
         this.name = name;
     }
@@ -134,6 +143,7 @@ public abstract class CachingRealm implements Realm, Nameable, CacheManagerAware
      * {@link CacheManager} instance being set on the realm instance via the
      * {@link #setCacheManager(org.apache.shiro.cache.CacheManager)} mutator.
      */
+    @Impure
     protected void afterCacheManagerSet() {
     }
 
@@ -148,6 +158,7 @@ public abstract class CachingRealm implements Realm, Nameable, CacheManagerAware
      * @see #getAvailablePrincipal(org.apache.shiro.subject.PrincipalCollection)
      * @since 1.2
      */
+    @Impure
     public void onLogout(PrincipalCollection principals) {
         clearCache(principals);
     }
@@ -161,6 +172,7 @@ public abstract class CachingRealm implements Realm, Nameable, CacheManagerAware
      * @param principals the principals of the account for which to clear any cached data.
      * @since 1.2
      */
+    @Impure
     protected void clearCache(PrincipalCollection principals) {
         if (!CollectionUtils.isEmpty(principals)) {
             doClearCache(principals);
@@ -174,6 +186,7 @@ public abstract class CachingRealm implements Realm, Nameable, CacheManagerAware
      * @param principals principals the principals of the account for which to clear any cached data.
      * @since 1.2
      */
+    @Impure
     protected void doClearCache(PrincipalCollection principals) {
     }
 
@@ -195,6 +208,7 @@ public abstract class CachingRealm implements Realm, Nameable, CacheManagerAware
      *         exists, or if not {@code null}.
      * @since 1.2
      */
+    @Impure
     protected Object getAvailablePrincipal(PrincipalCollection principals) {
         Object primary = null;
         if (!CollectionUtils.isEmpty(principals)) {

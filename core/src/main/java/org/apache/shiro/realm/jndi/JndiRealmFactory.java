@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.realm.jndi;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -49,6 +51,7 @@ public class JndiRealmFactory extends JndiLocator implements RealmFactory {
      * @see #setJndiNames(String)
      * @see #setJndiNames(Collection)
      */
+    @Pure
     public Collection<String> getJndiNames() {
         return jndiNames;
     }
@@ -64,6 +67,7 @@ public class JndiRealmFactory extends JndiLocator implements RealmFactory {
      * @param jndiNames the JNDI names that will be used to look up Realm(s) from JNDI.
      * @see #setJndiNames(String)
      */
+    @Impure
     public void setJndiNames(Collection<String> jndiNames) {
         this.jndiNames = jndiNames;
     }
@@ -77,6 +81,7 @@ public class JndiRealmFactory extends JndiLocator implements RealmFactory {
      *                       look up a corresponding jndi-bound Realm.
      * @throws IllegalStateException if the specified argument is null or the empty string.
      */
+    @Impure
     public void setJndiNames(String commaDelimited) throws IllegalStateException {
         String arg = StringUtils.clean(commaDelimited);
         if (arg == null) {
@@ -98,6 +103,7 @@ public class JndiRealmFactory extends JndiLocator implements RealmFactory {
      * @return an ordered collection of the {@link #setJndiNames(java.util.Collection) specified Realms} found in JNDI.
      * @throws IllegalStateException if any of the JNDI names fails to successfully look up a Realm instance.
      */
+    @Impure
     public Collection<Realm> getRealms() throws IllegalStateException {
         Collection<String> jndiNames = getJndiNames();
         if (jndiNames == null || jndiNames.isEmpty()) {

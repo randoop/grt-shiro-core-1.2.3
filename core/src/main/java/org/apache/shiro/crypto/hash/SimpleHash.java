@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.crypto.hash;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.codec.CodecException;
 import org.apache.shiro.codec.Hex;
@@ -89,6 +91,7 @@ public class SimpleHash extends AbstractHash {
      *                      performing the hash.
      * @see UnknownAlgorithmException
      */
+    @Impure
     public SimpleHash(String algorithmName) {
         this.algorithmName = algorithmName;
         this.iterations = DEFAULT_ITERATIONS;
@@ -112,6 +115,7 @@ public class SimpleHash extends AbstractHash {
      *                                   if the specified {@code source} cannot be converted into a byte array (byte[]).
      * @throws UnknownAlgorithmException if the {@code algorithmName} is not available.
      */
+    @Impure
     public SimpleHash(String algorithmName, Object source) throws CodecException, UnknownAlgorithmException {
         //noinspection NullableProblems
         this(algorithmName, source, null, DEFAULT_ITERATIONS);
@@ -135,6 +139,7 @@ public class SimpleHash extends AbstractHash {
      * @throws CodecException            if either constructor argument cannot be converted into a byte array.
      * @throws UnknownAlgorithmException if the {@code algorithmName} is not available.
      */
+    @Impure
     public SimpleHash(String algorithmName, Object source, Object salt) throws CodecException, UnknownAlgorithmException {
         this(algorithmName, source, salt, DEFAULT_ITERATIONS);
     }
@@ -162,6 +167,7 @@ public class SimpleHash extends AbstractHash {
      * @throws CodecException            if either Object constructor argument cannot be converted into a byte array.
      * @throws UnknownAlgorithmException if the {@code algorithmName} is not available.
      */
+    @Impure
     public SimpleHash(String algorithmName, Object source, Object salt, int hashIterations)
             throws CodecException, UnknownAlgorithmException {
         if (!StringUtils.hasText(algorithmName)) {
@@ -188,6 +194,7 @@ public class SimpleHash extends AbstractHash {
      * @return the source's bytes in the form of a {@code ByteSource} instance.
      * @since 1.2
      */
+    @Impure
     protected ByteSource convertSourceToBytes(Object source) {
         return toByteSource(source);
     }
@@ -202,6 +209,7 @@ public class SimpleHash extends AbstractHash {
      * @return the salt's bytes in the form of a {@code ByteSource} instance.
      * @since 1.2
      */
+    @Impure
     protected ByteSource convertSaltToBytes(Object salt) {
         return toByteSource(salt);
     }
@@ -213,6 +221,7 @@ public class SimpleHash extends AbstractHash {
      * @return the {@code ByteSource} representation of the specified object's bytes.
      * @since 1.2
      */
+    @Impure
     protected ByteSource toByteSource(Object o) {
         if (o == null) {
             return null;
@@ -224,6 +233,7 @@ public class SimpleHash extends AbstractHash {
         return ByteSource.Util.bytes(bytes);
     }
 
+    @Impure
     private void hash(ByteSource source, ByteSource salt, int hashIterations) throws CodecException, UnknownAlgorithmException {
         byte[] saltBytes = salt != null ? salt.getBytes() : null;
         byte[] hashedBytes = hash(source.getBytes(), saltBytes, hashIterations);
@@ -235,18 +245,22 @@ public class SimpleHash extends AbstractHash {
      *
      * @return the {@link java.security.MessageDigest MessageDigest} algorithm name to use when performing the hash.
      */
+    @Pure
     public String getAlgorithmName() {
         return this.algorithmName;
     }
 
+    @Pure
     public ByteSource getSalt() {
         return this.salt;
     }
 
+    @Pure
     public int getIterations() {
         return this.iterations;
     }
 
+    @Pure
     public byte[] getBytes() {
         return this.bytes;
     }
@@ -259,6 +273,7 @@ public class SimpleHash extends AbstractHash {
      *
      * @param alreadyHashedBytes the raw already-hashed bytes to store in this instance.
      */
+    @Impure
     public void setBytes(byte[] alreadyHashedBytes) {
         this.bytes = alreadyHashedBytes;
         this.hexEncoded = null;
@@ -274,6 +289,7 @@ public class SimpleHash extends AbstractHash {
      * @param iterations the number of hash iterations used to previously create the hash/digest.
      * @since 1.2
      */
+    @Impure
     public void setIterations(int iterations) {
         this.iterations = Math.max(DEFAULT_ITERATIONS, iterations);
     }
@@ -287,6 +303,7 @@ public class SimpleHash extends AbstractHash {
      * @param salt the salt used to previously create the hash/digest.
      * @since 1.2
      */
+    @Impure
     public void setSalt(ByteSource salt) {
         this.salt = salt;
     }
@@ -298,6 +315,7 @@ public class SimpleHash extends AbstractHash {
      * @return the MessageDigest object for the specified {@code algorithm}.
      * @throws UnknownAlgorithmException if the specified algorithm name is not available.
      */
+    @Impure
     protected MessageDigest getDigest(String algorithmName) throws UnknownAlgorithmException {
         try {
             return MessageDigest.getInstance(algorithmName);
@@ -314,6 +332,7 @@ public class SimpleHash extends AbstractHash {
      * @return the hashed bytes.
      * @throws UnknownAlgorithmException if the configured {@link #getAlgorithmName() algorithmName} is not available.
      */
+    @Impure
     protected byte[] hash(byte[] bytes) throws UnknownAlgorithmException {
         return hash(bytes, null, DEFAULT_ITERATIONS);
     }
@@ -326,6 +345,7 @@ public class SimpleHash extends AbstractHash {
      * @return the hashed bytes
      * @throws UnknownAlgorithmException if the configured {@link #getAlgorithmName() algorithmName} is not available.
      */
+    @Impure
     protected byte[] hash(byte[] bytes, byte[] salt) throws UnknownAlgorithmException {
         return hash(bytes, salt, DEFAULT_ITERATIONS);
     }
@@ -339,6 +359,7 @@ public class SimpleHash extends AbstractHash {
      * @return the hashed bytes.
      * @throws UnknownAlgorithmException if the {@link #getAlgorithmName() algorithmName} is not available.
      */
+    @Impure
     protected byte[] hash(byte[] bytes, byte[] salt, int hashIterations) throws UnknownAlgorithmException {
         MessageDigest digest = getDigest(getAlgorithmName());
         if (salt != null) {
@@ -355,6 +376,7 @@ public class SimpleHash extends AbstractHash {
         return hashed;
     }
 
+    @Pure
     public boolean isEmpty() {
         return this.bytes == null || this.bytes.length == 0;
     }
@@ -368,6 +390,7 @@ public class SimpleHash extends AbstractHash {
      *
      * @return a hex-encoded string of the underlying {@link #getBytes byte array}.
      */
+    @Impure
     public String toHex() {
         if (this.hexEncoded == null) {
             this.hexEncoded = Hex.encodeToString(getBytes());
@@ -384,6 +407,7 @@ public class SimpleHash extends AbstractHash {
      *
      * @return a Base64-encoded string of the underlying {@link #getBytes byte array}.
      */
+    @Impure
     public String toBase64() {
         if (this.base64Encoded == null) {
             //cache result in case this method is called multiple times.
@@ -397,6 +421,7 @@ public class SimpleHash extends AbstractHash {
      *
      * @return the {@link #toHex() toHex()} value.
      */
+    @Impure
     public String toString() {
         return toHex();
     }
@@ -409,6 +434,8 @@ public class SimpleHash extends AbstractHash {
      * @return {@code true} if the specified object is a Hash and its {@link #getBytes byte array} is identical to
      *         this Hash's byte array, {@code false} otherwise.
      */
+    @Pure
+    @Impure
     public boolean equals(Object o) {
         if (o instanceof Hash) {
             Hash other = (Hash) o;
@@ -422,6 +449,7 @@ public class SimpleHash extends AbstractHash {
      *
      * @return toHex().hashCode()
      */
+    @Pure
     public int hashCode() {
         if (this.bytes == null || this.bytes.length == 0) {
             return 0;

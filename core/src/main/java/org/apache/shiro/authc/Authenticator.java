@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.authc;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * An Authenticator is responsible for authenticating accounts in an application.  It
@@ -62,6 +63,7 @@ public interface Authenticator {
      * @see ConcurrentAccessException
      * @see UnknownAccountException
      */
+    @Impure
     public AuthenticationInfo authenticate(AuthenticationToken authenticationToken)
             throws AuthenticationException;
 }

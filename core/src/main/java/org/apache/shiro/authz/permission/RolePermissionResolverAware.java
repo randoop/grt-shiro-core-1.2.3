@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.authz.permission;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Interface implemented by a component that wishes to use any application-configured <tt>RolePermissionResolver</tt> that
@@ -36,5 +37,6 @@ public interface RolePermissionResolverAware {
      *
      * @param rpr the <tt>RolePermissionResolver</tt> being set.
      */
+    @Impure
     public void setRolePermissionResolver(RolePermissionResolver rpr);
 }

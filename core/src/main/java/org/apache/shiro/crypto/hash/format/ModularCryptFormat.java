@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.crypto.hash.format;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * A {@code HashFormat} that supports
@@ -38,5 +39,6 @@ public interface ModularCryptFormat extends HashFormat {
      *
      * @return the Modular Crypt Format identifier that indicates how the formatted String should be parsed.
      */
+    @Pure
     String getId();
 }

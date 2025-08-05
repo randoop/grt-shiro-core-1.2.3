@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.authz.aop;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -39,6 +41,7 @@ public class PermissionAnnotationHandler extends AuthorizingAnnotationHandler {
      * Default no-argument constructor that ensures this handler looks for
      * {@link org.apache.shiro.authz.annotation.RequiresPermissions RequiresPermissions} annotations.
      */
+    @Impure
     public PermissionAnnotationHandler() {
         super(RequiresPermissions.class);
     }
@@ -49,6 +52,8 @@ public class PermissionAnnotationHandler extends AuthorizingAnnotationHandler {
      * @param a the RequiresPermissions annotation being inspected.
      * @return the annotation's <code>value</code>, from which the Permission will be constructed.
      */
+    @Pure
+    @Impure
     protected String[] getAnnotationValue(Annotation a) {
         RequiresPermissions rpAnnotation = (RequiresPermissions) a;
         return rpAnnotation.value();
@@ -63,6 +68,7 @@ public class PermissionAnnotationHandler extends AuthorizingAnnotationHandler {
      *          if the calling <code>Subject</code> does not have the permission(s) necessary to
      *          continue access or execution.
      */
+    @Impure
     public void assertAuthorized(Annotation a) throws AuthorizationException {
         if (!(a instanceof RequiresPermissions)) return;
 

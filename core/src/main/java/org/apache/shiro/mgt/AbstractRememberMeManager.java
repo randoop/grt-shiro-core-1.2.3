@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -103,6 +106,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * Default constructor that initializes a {@link DefaultSerializer} as the {@link #getSerializer() serializer} and
      * an {@link AesCipherService} as the {@link #getCipherService() cipherService}.
      */
+    @Impure
     public AbstractRememberMeManager() {
         this.serializer = new DefaultSerializer<PrincipalCollection>();
         this.cipherService = new AesCipherService();
@@ -119,6 +123,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @return the {@code Serializer} used to serialize and deserialize {@link PrincipalCollection} instances for
      *         persistent remember me storage.
      */
+    @Pure
     public Serializer<PrincipalCollection> getSerializer() {
         return serializer;
     }
@@ -132,6 +137,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @param serializer the {@code Serializer} used to serialize and deserialize {@link PrincipalCollection} instances
      *                   for persistent remember me storage.
      */
+    @Impure
     public void setSerializer(Serializer<PrincipalCollection> serializer) {
         this.serializer = serializer;
     }
@@ -145,6 +151,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @return the {@code Cipher} to use for encrypting and decrypting serialized identity data to prevent easy
      *         inspection of Subject identity data
      */
+    @Pure
     public CipherService getCipherService() {
         return cipherService;
     }
@@ -168,6 +175,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @param cipherService the {@code CipherService} to use for encrypting and decrypting serialized identity data to
      *                      prevent easy inspection of Subject identity data.
      */
+    @Impure
     public void setCipherService(CipherService cipherService) {
         this.cipherService = cipherService;
     }
@@ -178,6 +186,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @return the cipher key to use for encryption operations.
      * @see #setCipherService for a description of the various {@code get/set*Key} methods.
      */
+    @Pure
     public byte[] getEncryptionCipherKey() {
         return encryptionCipherKey;
     }
@@ -188,6 +197,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @param encryptionCipherKey the encryption key to use for encryption operations.
      * @see #setCipherService for a description of the various {@code get/set*Key} methods.
      */
+    @Impure
     public void setEncryptionCipherKey(byte[] encryptionCipherKey) {
         this.encryptionCipherKey = encryptionCipherKey;
     }
@@ -198,6 +208,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @return the cipher key to use for decryption operations.
      * @see #setCipherService for a description of the various {@code get/set*Key} methods.
      */
+    @Pure
     public byte[] getDecryptionCipherKey() {
         return decryptionCipherKey;
     }
@@ -208,6 +219,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @param decryptionCipherKey the decryption key to use for decryption operations.
      * @see #setCipherService for a description of the various {@code get/set*Key} methods.
      */
+    @Impure
     public void setDecryptionCipherKey(byte[] decryptionCipherKey) {
         this.decryptionCipherKey = decryptionCipherKey;
     }
@@ -225,6 +237,8 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      *
      * @return the symmetric cipher key used for both encryption and decryption.
      */
+    @Pure
+    @Impure
     public byte[] getCipherKey() {
         //Since this method should only be used with symmetric ciphers
         //(where the enc and dec keys are the same), either is fine, just return one of them:
@@ -244,6 +258,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      *
      * @param cipherKey the symmetric cipher key to use for both encryption and decryption.
      */
+    @Impure
     public void setCipherKey(byte[] cipherKey) {
         //Since this method should only be used in symmetric ciphers
         //(where the enc and dec keys are the same), set it on both:
@@ -257,6 +272,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @param subject the subject instance for which identity data should be forgotten from the underlying persistence
      *                mechanism.
      */
+    @SideEffectFree
     protected abstract void forgetIdentity(Subject subject);
 
     /**
@@ -272,6 +288,8 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @param token the authentication token submitted during the successful authentication attempt.
      * @return true if remember me services should be performed as a result of the successful authentication attempt.
      */
+    @Pure
+    @Impure
     protected boolean isRememberMe(AuthenticationToken token) {
         return token != null && (token instanceof RememberMeAuthenticationToken) &&
                 ((RememberMeAuthenticationToken) token).isRememberMe();
@@ -288,6 +306,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @param token   the token that resulted in a successful authentication attempt.
      * @param info    the authentication info resulting from the successful authentication attempt.
      */
+    @Impure
     public void onSuccessfulLogin(Subject subject, AuthenticationToken token, AuthenticationInfo info) {
         //always clear any previous identity:
         forgetIdentity(subject);
@@ -316,6 +335,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @param token     the token that resulted in a successful authentication attempt.
      * @param authcInfo the authentication info resulting from the successful authentication attempt.
      */
+    @Impure
     public void rememberIdentity(Subject subject, AuthenticationToken token, AuthenticationInfo authcInfo) {
         PrincipalCollection principals = getIdentityToRemember(subject, authcInfo);
         rememberIdentity(subject, principals);
@@ -329,6 +349,8 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @param info    the authentication info resulting from the successful authentication attempt.
      * @return the {@code PrincipalCollection} to remember.
      */
+    @Pure
+    @Impure
     protected PrincipalCollection getIdentityToRemember(Subject subject, AuthenticationInfo info) {
         return info.getPrincipals();
     }
@@ -342,6 +364,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @param subject           the subject for which the principals are being remembered.
      * @param accountPrincipals the principals to remember for retrieval later.
      */
+    @Impure
     protected void rememberIdentity(Subject subject, PrincipalCollection accountPrincipals) {
         byte[] bytes = convertPrincipalsToBytes(accountPrincipals);
         rememberSerializedIdentity(subject, bytes);
@@ -356,6 +379,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @param principals the {@code PrincipalCollection} to convert to a byte array
      * @return the representative byte array to be persisted for remember me functionality.
      */
+    @Impure
     protected byte[] convertPrincipalsToBytes(PrincipalCollection principals) {
         byte[] bytes = serialize(principals);
         if (getCipherService() != null) {
@@ -371,6 +395,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @param subject    the Subject for which the identity is being serialized.
      * @param serialized the serialized bytes to be persisted.
      */
+    @SideEffectFree
     protected abstract void rememberSerializedIdentity(Subject subject, byte[] serialized);
 
     /**
@@ -387,6 +412,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      *                       is being used to construct a {@link Subject} instance.
      * @return the remembered principals or {@code null} if none could be acquired.
      */
+    @Impure
     public PrincipalCollection getRememberedPrincipals(SubjectContext subjectContext) {
         PrincipalCollection principals = null;
         try {
@@ -413,6 +439,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @return the previously persisted serialized identity, or {@code null} if there is no available data for the
      *         Subject.
      */
+    @Pure
     protected abstract byte[] getRememberedSerializedIdentity(SubjectContext subjectContext);
 
     /**
@@ -424,6 +451,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      *                       is being used to construct a {@link Subject} instance.
      * @return the de-serialized and possibly decrypted principals
      */
+    @Impure
     protected PrincipalCollection convertBytesToPrincipals(byte[] bytes, SubjectContext subjectContext) {
         if (getCipherService() != null) {
             bytes = decrypt(bytes);
@@ -448,6 +476,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      *                is being used to construct a {@link Subject} instance.
      * @return nothing - the original {@code RuntimeException} is propagated in all cases.
      */
+    @Impure
     protected PrincipalCollection onRememberedPrincipalFailure(RuntimeException e, SubjectContext context) {
         if (log.isDebugEnabled()) {
             log.debug("There was a failure while trying to retrieve remembered principals.  This could be due to a " +
@@ -466,6 +495,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @param serialized the serialized object byte array to be encrypted
      * @return an encrypted byte array returned by the configured {@link #getCipherService () cipher}.
      */
+    @Impure
     protected byte[] encrypt(byte[] serialized) {
         byte[] value = serialized;
         CipherService cipherService = getCipherService();
@@ -482,6 +512,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @param encrypted the encrypted byte array to decrypt
      * @return the decrypted byte array returned by the configured {@link #getCipherService () cipher}.
      */
+    @Impure
     protected byte[] decrypt(byte[] encrypted) {
         byte[] serialized = encrypted;
         CipherService cipherService = getCipherService();
@@ -499,6 +530,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @param principals the principal collection to serialize to a byte array
      * @return the serialized principal collection in the form of a byte array
      */
+    @Impure
     protected byte[] serialize(PrincipalCollection principals) {
         return getSerializer().serialize(principals);
     }
@@ -510,6 +542,7 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @param serializedIdentity the previously serialized {@code PrincipalCollection} as a byte array
      * @return the de-serialized (reconstituted) {@code PrincipalCollection}
      */
+    @Impure
     protected PrincipalCollection deserialize(byte[] serializedIdentity) {
         return getSerializer().deserialize(serializedIdentity);
     }
@@ -523,6 +556,8 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      * @param token   the authentication token resulting in a failed login attempt - ignored by this implementation
      * @param ae      the exception thrown as a result of the failed login attempt - ignored by this implementation
      */
+    @SideEffectFree
+    @Impure
     public void onFailedLogin(Subject subject, AuthenticationToken token, AuthenticationException ae) {
         forgetIdentity(subject);
     }
@@ -533,6 +568,8 @@ public abstract class AbstractRememberMeManager implements RememberMeManager {
      *
      * @param subject the subject logging out.
      */
+    @SideEffectFree
+    @Impure
     public void onLogout(Subject subject) {
         forgetIdentity(subject);
     }

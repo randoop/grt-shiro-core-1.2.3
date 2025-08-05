@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.session.mgt.eis;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.cache.AbstractCacheManager;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
@@ -51,8 +54,10 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class EnterpriseCacheSessionDAO extends CachingSessionDAO {
 
+    @Impure
     public EnterpriseCacheSessionDAO() {
         setCacheManager(new AbstractCacheManager() {
+            @Impure
             @Override
             protected Cache<Serializable, Session> createCache(String name) throws CacheException {
                 return new MapCache<Serializable, Session>(name, new ConcurrentHashMap<Serializable, Session>());
@@ -60,22 +65,26 @@ public class EnterpriseCacheSessionDAO extends CachingSessionDAO {
         });
     }
 
+    @Impure
     protected Serializable doCreate(Session session) {
         Serializable sessionId = generateSessionId(session);
         assignSessionId(session, sessionId);
         return sessionId;
     }
 
+    @Pure
     protected Session doReadSession(Serializable sessionId) {
         return null; //should never execute because this implementation relies on parent class to access cache, which
         //is where all sessions reside - it is the cache implementation that determines if the
         //cache is memory only or disk-persistent, etc.
     }
 
+    @SideEffectFree
     protected void doUpdate(Session session) {
         //does nothing - parent class persists to cache.
     }
 
+    @SideEffectFree
     protected void doDelete(Session session) {
         //does nothing - parent class removes from cache.
     }

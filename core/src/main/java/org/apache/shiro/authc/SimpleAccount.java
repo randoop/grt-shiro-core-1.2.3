@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.authc;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -70,6 +73,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
     /**
      * Default no-argument constructor.
      */
+    @SideEffectFree
     public SimpleAccount() {
     }
 
@@ -80,6 +84,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      * @param credentials the credentials that verify identity for the account
      * @param realmName   the name of the realm that accesses this account data
      */
+    @Impure
     public SimpleAccount(Object principal, Object credentials, String realmName) {
         this(principal instanceof PrincipalCollection ? (PrincipalCollection) principal : new SimplePrincipalCollection(principal, realmName), credentials);
     }
@@ -95,6 +100,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      * @see org.apache.shiro.authc.credential.HashedCredentialsMatcher HashedCredentialsMatcher
      * @since 1.1
      */
+    @Impure
     public SimpleAccount(Object principal, Object hashedCredentials, ByteSource credentialsSalt, String realmName) {
         this(principal instanceof PrincipalCollection ? (PrincipalCollection) principal : new SimplePrincipalCollection(principal, realmName),
                 hashedCredentials, credentialsSalt);
@@ -108,6 +114,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      * @param credentials the credentials that verify identity for the account
      * @param realmName   the name of the realm that accesses this account data
      */
+    @Impure
     public SimpleAccount(Collection principals, Object credentials, String realmName) {
         this(new SimplePrincipalCollection(principals, realmName), credentials);
     }
@@ -119,6 +126,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *                    account's 'primary' identifying attribute, for example, a user id or username.
      * @param credentials the credentials that verify identity for the account
      */
+    @Impure
     public SimpleAccount(PrincipalCollection principals, Object credentials) {
         this.authcInfo = new SimpleAuthenticationInfo(principals, credentials);
         this.authzInfo = new SimpleAuthorizationInfo();
@@ -134,6 +142,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      * @see org.apache.shiro.authc.credential.HashedCredentialsMatcher HashedCredentialsMatcher
      * @since 1.1
      */
+    @Impure
     public SimpleAccount(PrincipalCollection principals, Object hashedCredentials, ByteSource credentialsSalt) {
         this.authcInfo = new SimpleAuthenticationInfo(principals, hashedCredentials, credentialsSalt);
         this.authzInfo = new SimpleAuthorizationInfo();
@@ -147,6 +156,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      * @param credentials the credentials that verify identity for the account
      * @param roles       the names of the roles assigned to this account.
      */
+    @Impure
     public SimpleAccount(PrincipalCollection principals, Object credentials, Set<String> roles) {
         this.authcInfo = new SimpleAuthenticationInfo(principals, credentials);
         this.authzInfo = new SimpleAuthorizationInfo(roles);
@@ -162,6 +172,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      * @param roleNames   the names of the roles assigned to this account.
      * @param permissions the permissions assigned to this account directly (not those assigned to any of the realms).
      */
+    @Impure
     public SimpleAccount(Object principal, Object credentials, String realmName, Set<String> roleNames, Set<Permission> permissions) {
         this.authcInfo = new SimpleAuthenticationInfo(new SimplePrincipalCollection(principal, realmName), credentials);
         this.authzInfo = new SimpleAuthorizationInfo(roleNames);
@@ -179,6 +190,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      * @param roleNames   the names of the roles assigned to this account.
      * @param permissions the permissions assigned to this account directly (not those assigned to any of the realms).
      */
+    @Impure
     public SimpleAccount(Collection principals, Object credentials, String realmName, Set<String> roleNames, Set<Permission> permissions) {
         this.authcInfo = new SimpleAuthenticationInfo(new SimplePrincipalCollection(principals, realmName), credentials);
         this.authzInfo = new SimpleAuthorizationInfo(roleNames);
@@ -195,6 +207,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      * @param roleNames   the names of the roles assigned to this account.
      * @param permissions the permissions assigned to this account directly (not those assigned to any of the realms).
      */
+    @Impure
     public SimpleAccount(PrincipalCollection principals, Object credentials, Set<String> roleNames, Set<Permission> permissions) {
         this.authcInfo = new SimpleAuthenticationInfo(principals, credentials);
         this.authzInfo = new SimpleAuthorizationInfo(roleNames);
@@ -211,6 +224,8 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *
      * @return all the principals, aka the identifying attributes, of this Account.
      */
+    @Pure
+    @Impure
     public PrincipalCollection getPrincipals() {
         return authcInfo.getPrincipals();
     }
@@ -222,6 +237,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      * @param principals all the principals, aka the identifying attributes, of this Account.
      * @see Account#getPrincipals()
      */
+    @Impure
     public void setPrincipals(PrincipalCollection principals) {
         this.authcInfo.setPrincipals(principals);
     }
@@ -233,6 +249,8 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *
      * @return this Account's credentials.
      */
+    @Pure
+    @Impure
     public Object getCredentials() {
         return authcInfo.getCredentials();
     }
@@ -244,6 +262,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      * @param credentials the credentials associated with this Account that verify one or more of the Account principals.
      * @see org.apache.shiro.authc.Account#getCredentials()
      */
+    @Impure
     public void setCredentials(Object credentials) {
         this.authcInfo.setCredentials(credentials);
     }
@@ -256,6 +275,8 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *         was used or credentials were not hashed at all.
      * @since 1.1
      */
+    @Pure
+    @Impure
     public ByteSource getCredentialsSalt() {
         return this.authcInfo.getCredentialsSalt();
     }
@@ -268,6 +289,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *             salt is used or credentials are not hashed at all.
      * @since 1.1
      */
+    @Impure
     public void setCredentialsSalt(ByteSource salt) {
         this.authcInfo.setCredentialsSalt(salt);
     }
@@ -277,6 +299,8 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *
      * @return the Account's assigned roles.
      */
+    @Pure
+    @Impure
     public Collection<String> getRoles() {
         return authzInfo.getRoles();
     }
@@ -287,6 +311,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      * @param roles the Account's assigned roles.
      * @see Account#getRoles()
      */
+    @Impure
     public void setRoles(Set<String> roles) {
         this.authzInfo.setRoles(roles);
     }
@@ -297,6 +322,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *
      * @param role a role to assign to this Account.
      */
+    @Impure
     public void addRole(String role) {
         this.authzInfo.addRole(role);
     }
@@ -307,6 +333,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *
      * @param roles one or more roles to assign to this Account.
      */
+    @Impure
     public void addRole(Collection<String> roles) {
         this.authzInfo.addRoles(roles);
     }
@@ -317,6 +344,8 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *
      * @return all String-based permissions assigned to this Account.
      */
+    @Pure
+    @Impure
     public Collection<String> getStringPermissions() {
         return authzInfo.getStringPermissions();
     }
@@ -328,6 +357,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      * @param permissions all String-based permissions assigned to this Account.
      * @see org.apache.shiro.authc.Account#getStringPermissions()
      */
+    @Impure
     public void setStringPermissions(Set<String> permissions) {
         this.authzInfo.setStringPermissions(permissions);
     }
@@ -337,6 +367,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *
      * @param permission the String-based permission to assign.
      */
+    @Impure
     public void addStringPermission(String permission) {
         this.authzInfo.addStringPermission(permission);
     }
@@ -346,6 +377,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *
      * @param permissions one or more String-based permissions to assign.
      */
+    @Impure
     public void addStringPermissions(Collection<String> permissions) {
         this.authzInfo.addStringPermissions(permissions);
     }
@@ -355,6 +387,8 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *
      * @return all object-based permissions assigned directly to this Account (not any of its realms).
      */
+    @Pure
+    @Impure
     public Collection<Permission> getObjectPermissions() {
         return authzInfo.getObjectPermissions();
     }
@@ -364,6 +398,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *
      * @param permissions the object-based permissions to assign directly to this Account.
      */
+    @Impure
     public void setObjectPermissions(Set<Permission> permissions) {
         this.authzInfo.setObjectPermissions(permissions);
     }
@@ -373,6 +408,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *
      * @param permission the object-based permission to assign directly to this Account (not any of its realms).
      */
+    @Impure
     public void addObjectPermission(Permission permission) {
         this.authzInfo.addObjectPermission(permission);
     }
@@ -382,6 +418,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *
      * @param permissions one or more object-based permissions to assign directly to this Account (not any of its realms).
      */
+    @Impure
     public void addObjectPermissions(Collection<Permission> permissions) {
         this.authzInfo.addObjectPermissions(permissions);
     }
@@ -391,6 +428,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *
      * @return <code>true</code> if this Account is locked and thus cannot be used to login, <code>false</code> otherwise.
      */
+    @Pure
     public boolean isLocked() {
         return locked;
     }
@@ -400,6 +438,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *
      * @param locked <code>true</code> if this Account is locked and thus cannot be used to login, <code>false</code> otherwise.
      */
+    @Impure
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
@@ -410,6 +449,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *
      * @return whether or not the Account's credentials are expired.
      */
+    @Pure
     public boolean isCredentialsExpired() {
         return credentialsExpired;
     }
@@ -421,6 +461,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      * @param credentialsExpired <code>true</code> if this Account's credentials are expired and need to be changed,
      *                           <code>false</code> otherwise.
      */
+    @Impure
     public void setCredentialsExpired(boolean credentialsExpired) {
         this.credentialsExpired = credentialsExpired;
     }
@@ -435,6 +476,7 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *
      * @param info the <code>AuthenticationInfo</code> to merge into this account.
      */
+    @Impure
     public void merge(AuthenticationInfo info) {
         authcInfo.merge(info);
 
@@ -457,6 +499,8 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *
      * @return <code>principals.hashCode()</code> if they are not null, 0 (zero) otherwise.
      */
+    @Pure
+    @Impure
     public int hashCode() {
         return (getPrincipals() != null ? getPrincipals().hashCode() : 0);
     }
@@ -469,6 +513,8 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      * @return <code>true</code> if the specified object is also a {@link SimpleAccount SimpleAccount} and its
      *         {@link #getPrincipals() principals} are equal to this object's <code>principals</code>, <code>false</code> otherwise.
      */
+    @Pure
+    @Impure
     public boolean equals(Object o) {
         if (o == this) {
             return true;
@@ -487,6 +533,8 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      *
      * @return the String representation of this Account object.
      */
+    @SideEffectFree
+    @Impure
     public String toString() {
         return getPrincipals() != null ? getPrincipals().toString() : "empty";
     }

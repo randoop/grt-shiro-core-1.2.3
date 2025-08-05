@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.authc.pam;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Deterministic;
+import org.checkerframework.dataflow.qual.Impure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +53,9 @@ public class AllSuccessfulStrategy extends AbstractAuthenticationStrategy {
      * {@link UnsupportedTokenException UnsupportedTokenException} to end the authentication
      * process immediately. If the realm does support the token, the <code>info</code> argument is returned immediately.
      */
+    @Pure
+    @Deterministic
+    @Impure
     public AuthenticationInfo beforeAttempt(Realm realm, AuthenticationToken token, AuthenticationInfo info) throws AuthenticationException {
         if (!realm.supports(token)) {
             String msg = "Realm [" + realm + "] of type [" + realm.getClass().getName() + "] does not support " +
@@ -72,6 +78,7 @@ public class AllSuccessfulStrategy extends AbstractAuthenticationStrategy {
      * realm did in fact authenticate successfully</li>
      * </ol>
      */
+    @Impure
     public AuthenticationInfo afterAttempt(Realm realm, AuthenticationToken token, AuthenticationInfo info, AuthenticationInfo aggregate, Throwable t)
             throws AuthenticationException {
         if (t != null) {

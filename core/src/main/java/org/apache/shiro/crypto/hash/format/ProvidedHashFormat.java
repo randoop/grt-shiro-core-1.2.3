@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.crypto.hash.format;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * An enum representing Shiro's default provided {@link HashFormat} implementations.
@@ -42,14 +44,17 @@ public enum ProvidedHashFormat {
 
     private final Class<? extends HashFormat> clazz;
 
+    @Impure
     private ProvidedHashFormat(Class<? extends HashFormat> clazz) {
         this.clazz = clazz;
     }
 
+    @Pure
     Class<? extends HashFormat> getHashFormatClass() {
         return this.clazz;
     }
 
+    @Impure
     public static ProvidedHashFormat byId(String id) {
         if (id == null) {
             return null;

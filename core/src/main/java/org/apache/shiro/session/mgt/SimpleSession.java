@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.session.mgt;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.session.ExpiredSessionException;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.StoppedSessionException;
@@ -92,29 +95,35 @@ public class SimpleSession implements ValidatingSession, Serializable {
     private transient String host;
     private transient Map<Object, Object> attributes;
 
+    @Impure
     public SimpleSession() {
         this.timeout = DefaultSessionManager.DEFAULT_GLOBAL_SESSION_TIMEOUT; //TODO - remove concrete reference to DefaultSessionManager
         this.startTimestamp = new Date();
         this.lastAccessTime = this.startTimestamp;
     }
 
+    @Impure
     public SimpleSession(String host) {
         this();
         this.host = host;
     }
 
+    @Pure
     public Serializable getId() {
         return this.id;
     }
 
+    @Impure
     public void setId(Serializable id) {
         this.id = id;
     }
 
+    @Pure
     public Date getStartTimestamp() {
         return startTimestamp;
     }
 
+    @Impure
     public void setStartTimestamp(Date startTimestamp) {
         this.startTimestamp = startTimestamp;
     }
@@ -136,18 +145,22 @@ public class SimpleSession implements ValidatingSession, Serializable {
      * @return The time the session was stopped, or <tt>null</tt> if the session is still
      *         active.
      */
+    @Pure
     public Date getStopTimestamp() {
         return stopTimestamp;
     }
 
+    @Impure
     public void setStopTimestamp(Date stopTimestamp) {
         this.stopTimestamp = stopTimestamp;
     }
 
+    @Pure
     public Date getLastAccessTime() {
         return lastAccessTime;
     }
 
+    @Impure
     public void setLastAccessTime(Date lastAccessTime) {
         this.lastAccessTime = lastAccessTime;
     }
@@ -158,52 +171,65 @@ public class SimpleSession implements ValidatingSession, Serializable {
      *
      * @return true if this session has expired, false otherwise.
      */
+    @Pure
     public boolean isExpired() {
         return expired;
     }
 
+    @Impure
     public void setExpired(boolean expired) {
         this.expired = expired;
     }
 
+    @Pure
     public long getTimeout() {
         return timeout;
     }
 
+    @Impure
     public void setTimeout(long timeout) {
         this.timeout = timeout;
     }
 
+    @Pure
     public String getHost() {
         return host;
     }
 
+    @Impure
     public void setHost(String host) {
         this.host = host;
     }
 
+    @Pure
     public Map<Object, Object> getAttributes() {
         return attributes;
     }
 
+    @Impure
     public void setAttributes(Map<Object, Object> attributes) {
         this.attributes = attributes;
     }
 
+    @Impure
     public void touch() {
         this.lastAccessTime = new Date();
     }
 
+    @Impure
     public void stop() {
         if (this.stopTimestamp == null) {
             this.stopTimestamp = new Date();
         }
     }
 
+    @Pure
+    @Impure
     protected boolean isStopped() {
         return getStopTimestamp() != null;
     }
 
+    @Impure
     protected void expire() {
         stop();
         this.expired = true;
@@ -212,6 +238,8 @@ public class SimpleSession implements ValidatingSession, Serializable {
     /**
      * @since 0.9
      */
+    @Pure
+    @Impure
     public boolean isValid() {
         return !isStopped() && !isExpired();
     }
@@ -221,6 +249,7 @@ public class SimpleSession implements ValidatingSession, Serializable {
      *
      * @return true if the specified session has expired, false otherwise.
      */
+    @Impure
     protected boolean isTimedOut() {
 
         if (isExpired()) {
@@ -260,6 +289,7 @@ public class SimpleSession implements ValidatingSession, Serializable {
         return false;
     }
 
+    @Impure
     public void validate() throws InvalidSessionException {
         //check for stopped:
         if (isStopped()) {
@@ -293,6 +323,7 @@ public class SimpleSession implements ValidatingSession, Serializable {
         }
     }
 
+    @Impure
     private Map<Object, Object> getAttributesLazy() {
         Map<Object, Object> attributes = getAttributes();
         if (attributes == null) {
@@ -302,6 +333,8 @@ public class SimpleSession implements ValidatingSession, Serializable {
         return attributes;
     }
 
+    @SideEffectFree
+    @Impure
     public Collection<Object> getAttributeKeys() throws InvalidSessionException {
         Map<Object, Object> attributes = getAttributes();
         if (attributes == null) {
@@ -310,6 +343,8 @@ public class SimpleSession implements ValidatingSession, Serializable {
         return attributes.keySet();
     }
 
+    @Pure
+    @Impure
     public Object getAttribute(Object key) {
         Map<Object, Object> attributes = getAttributes();
         if (attributes == null) {
@@ -318,6 +353,7 @@ public class SimpleSession implements ValidatingSession, Serializable {
         return attributes.get(key);
     }
 
+    @Impure
     public void setAttribute(Object key, Object value) {
         if (value == null) {
             removeAttribute(key);
@@ -326,6 +362,7 @@ public class SimpleSession implements ValidatingSession, Serializable {
         }
     }
 
+    @Impure
     public Object removeAttribute(Object key) {
         Map<Object, Object> attributes = getAttributes();
         if (attributes == null) {
@@ -347,6 +384,8 @@ public class SimpleSession implements ValidatingSession, Serializable {
      * @param obj the object to compare with this one for equality.
      * @return {@code true} if this object is equivalent to the specified argument, {@code false} otherwise.
      */
+    @Pure
+    @Impure
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -374,6 +413,8 @@ public class SimpleSession implements ValidatingSession, Serializable {
      * @return true if all the attributes, except the id, are equal to this object's attributes.
      * @since 1.0
      */
+    @Pure
+    @Impure
     protected boolean onEquals(SimpleSession ss) {
         return (getStartTimestamp() != null ? getStartTimestamp().equals(ss.getStartTimestamp()) : ss.getStartTimestamp() == null) &&
                 (getStopTimestamp() != null ? getStopTimestamp().equals(ss.getStopTimestamp()) : ss.getStopTimestamp() == null) &&
@@ -394,6 +435,8 @@ public class SimpleSession implements ValidatingSession, Serializable {
      * @return this object's hashCode
      * @since 1.0
      */
+    @SideEffectFree
+    @Impure
     @Override
     public int hashCode() {
         Serializable id = getId();
@@ -418,6 +461,7 @@ public class SimpleSession implements ValidatingSession, Serializable {
      *         <code>getClass().getName() + &quot;,id=&quot; + getId()</code>.
      * @since 1.0
      */
+    @Impure
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -432,6 +476,7 @@ public class SimpleSession implements ValidatingSession, Serializable {
      * @throws IOException if any of this object's fields cannot be written to the stream.
      * @since 1.0
      */
+    @Impure
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
         short alteredFieldsBitMask = getAlteredFieldsBitMask();
@@ -470,6 +515,7 @@ public class SimpleSession implements ValidatingSession, Serializable {
      * @throws ClassNotFoundException if a required class needed for instantiation is not available in the present JVM
      * @since 1.0
      */
+    @Impure
     @SuppressWarnings({"unchecked"})
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
@@ -509,6 +555,8 @@ public class SimpleSession implements ValidatingSession, Serializable {
      * @return a bit mask used during serialization indicating which fields have been serialized.
      * @since 1.0
      */
+    @Pure
+    @Impure
     private short getAlteredFieldsBitMask() {
         int bitMask = 0;
         bitMask = id != null ? bitMask | ID_BIT_MASK : bitMask;
@@ -534,6 +582,7 @@ public class SimpleSession implements ValidatingSession, Serializable {
      *         serialized and therefore should be read during deserialization, {@code false} otherwise.
      * @since 1.0
      */
+    @Pure
     private static boolean isFieldPresent(short bitMask, int fieldBitMask) {
         return (bitMask & fieldBitMask) != 0;
     }

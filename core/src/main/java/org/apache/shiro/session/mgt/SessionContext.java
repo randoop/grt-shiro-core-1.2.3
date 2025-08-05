@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.session.mgt;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.Serializable;
 import java.util.Map;
 
@@ -69,6 +71,7 @@ public interface SessionContext extends Map<String, Object> {
      *             initiating the {@code Session}.
      * @since 1.0
      */
+    @Impure
     void setHost(String host);
 
     /**
@@ -82,10 +85,15 @@ public interface SessionContext extends Map<String, Object> {
      *         {@code Session}.
      * @see #setHost(String) setHost(String)
      */
+    @Pure
+    @Impure
     String getHost();
 
+    @Pure
+    @Impure
     Serializable getSessionId();
 
+    @Impure
     void setSessionId(Serializable sessionId);
 
 }

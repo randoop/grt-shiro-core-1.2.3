@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.authc;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * A {@code HostAuthenticationToken} retains the host information from where
@@ -40,5 +41,6 @@ public interface HostAuthenticationToken extends AuthenticationToken {
      *         of the client's IP address is hostname resolution is not
      *         available or disabled.
      */
+    @Pure
     String getHost();
 }

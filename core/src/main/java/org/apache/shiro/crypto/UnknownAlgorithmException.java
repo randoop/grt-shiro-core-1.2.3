@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.crypto;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Exception thrown when attempting to lookup or use a cryptographic algorithm that does not exist in the current
@@ -26,14 +28,20 @@ package org.apache.shiro.crypto;
  */
 public class UnknownAlgorithmException extends CryptoException {
 
+    @SideEffectFree
+    @Impure
     public UnknownAlgorithmException(String message) {
         super(message);
     }
 
+    @SideEffectFree
+    @Impure
     public UnknownAlgorithmException(Throwable cause) {
         super(cause);
     }
 
+    @SideEffectFree
+    @Impure
     public UnknownAlgorithmException(String message, Throwable cause) {
         super(message, cause);
     }

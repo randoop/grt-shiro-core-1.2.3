@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.util;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Shiro container-agnostic interface that indicates that this object requires a callback during destruction.
@@ -30,6 +31,7 @@ public interface Destroyable {
      *
      * @throws Exception if an exception occurs during object destruction.
      */
+    @Impure
     void destroy() throws Exception;
 
 }

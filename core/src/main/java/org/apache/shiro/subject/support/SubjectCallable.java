@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.subject.support;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ThreadState;
 
@@ -62,10 +64,12 @@ public class SubjectCallable<V> implements Callable<V> {
     protected final ThreadState threadState;
     private final Callable<V> callable;
 
+    @Impure
     public SubjectCallable(Subject subject, Callable<V> delegate) {
         this(new SubjectThreadState(subject), delegate);
     }
 
+    @SideEffectFree
     protected SubjectCallable(ThreadState threadState, Callable<V> delegate) {
         if (threadState == null) {
             throw new IllegalArgumentException("ThreadState argument cannot be null.");
@@ -77,6 +81,7 @@ public class SubjectCallable<V> implements Callable<V> {
         this.callable = delegate;
     }
 
+    @Impure
     public V call() throws Exception {
         try {
             threadState.bind();
@@ -86,6 +91,7 @@ public class SubjectCallable<V> implements Callable<V> {
         }
     }
 
+    @Impure
     protected V doCall(Callable<V> target) throws Exception {
         return target.call();
     }

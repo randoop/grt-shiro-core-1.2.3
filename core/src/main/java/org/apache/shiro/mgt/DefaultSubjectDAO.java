@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
@@ -88,6 +90,7 @@ public class DefaultSubjectDAO implements SubjectDAO {
      */
     private SessionStorageEvaluator sessionStorageEvaluator;
 
+    @Impure
     public DefaultSubjectDAO() {
         //default implementation allows enabling/disabling session usages at a global level for all subjects:
         this.sessionStorageEvaluator = new DefaultSessionStorageEvaluator();
@@ -104,6 +107,7 @@ public class DefaultSubjectDAO implements SubjectDAO {
      * @see #setSessionStorageEvaluator(SessionStorageEvaluator)
      * @see DefaultSessionStorageEvaluator
      */
+    @Impure
     protected boolean isSessionStorageEnabled(Subject subject) {
         return getSessionStorageEvaluator().isSessionStorageEnabled(subject);
     }
@@ -116,6 +120,7 @@ public class DefaultSubjectDAO implements SubjectDAO {
      *         the Subject's session.
      * @see DefaultSessionStorageEvaluator
      */
+    @Pure
     public SessionStorageEvaluator getSessionStorageEvaluator() {
         return sessionStorageEvaluator;
     }
@@ -128,6 +133,7 @@ public class DefaultSubjectDAO implements SubjectDAO {
      *                                state may be persisted in the Subject's session.
      * @see DefaultSessionStorageEvaluator
      */
+    @Impure
     public void setSessionStorageEvaluator(SessionStorageEvaluator sessionStorageEvaluator) {
         this.sessionStorageEvaluator = sessionStorageEvaluator;
     }
@@ -142,6 +148,7 @@ public class DefaultSubjectDAO implements SubjectDAO {
      * @param subject the Subject instance for which its state will be created or updated.
      * @return the same {@code Subject} passed in (a new Subject instance is not created).
      */
+    @Impure
     public Subject save(Subject subject) {
         if (isSessionStorageEnabled(subject)) {
             saveToSession(subject);
@@ -161,6 +168,7 @@ public class DefaultSubjectDAO implements SubjectDAO {
      *
      * @param subject the subject for which state will be persisted to its session.
      */
+    @Impure
     protected void saveToSession(Subject subject) {
         //performs merge logic, only updating the Subject's session if it does not match the current state:
         mergePrincipals(subject);
@@ -174,6 +182,7 @@ public class DefaultSubjectDAO implements SubjectDAO {
      *
      * @param subject the Subject for which principals will potentially be merged into the Subject's session.
      */
+    @Impure
     protected void mergePrincipals(Subject subject) {
         //merge PrincipalCollection state:
 
@@ -230,6 +239,7 @@ public class DefaultSubjectDAO implements SubjectDAO {
      *
      * @param subject the Subject for which principals will potentially be merged into the Subject's session.
      */
+    @Impure
     protected void mergeAuthenticationState(Subject subject) {
 
         Session session = subject.getSession(false);
@@ -264,6 +274,7 @@ public class DefaultSubjectDAO implements SubjectDAO {
      *
      * @param subject the subject for which any existing subject state will be removed from its session.
      */
+    @Impure
     protected void removeFromSession(Subject subject) {
         Session session = subject.getSession(false);
         if (session != null) {
@@ -277,6 +288,7 @@ public class DefaultSubjectDAO implements SubjectDAO {
      *
      * @param subject the Subject instance for which any persistent state should be deleted.
      */
+    @Impure
     public void delete(Subject subject) {
         removeFromSession(subject);
     }

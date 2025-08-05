@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.subject.support;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.session.SessionException;
 
 /**
@@ -36,6 +38,8 @@ import org.apache.shiro.session.SessionException;
  */
 public class DisabledSessionException extends SessionException {
 
+    @SideEffectFree
+    @Impure
     public DisabledSessionException(String message) {
         super(message);
     }

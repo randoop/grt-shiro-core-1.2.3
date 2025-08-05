@@ -17,6 +17,9 @@
  * under the License.
  */
 package org.apache.shiro.authc;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * <p>A simple username/password authentication token to support the most widely-used authentication mechanism.  This
@@ -80,6 +83,7 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
     /**
      * JavaBeans compatible no-arg constructor.
      */
+    @SideEffectFree
     public UsernamePasswordToken() {
     }
 
@@ -91,6 +95,8 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      * @param username the username submitted for authentication
      * @param password the password character array submitted for authentication
      */
+    @SideEffectFree
+    @Impure
     public UsernamePasswordToken(final String username, final char[] password) {
         this(username, password, false, null);
     }
@@ -107,6 +113,8 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      * @param username the username submitted for authentication
      * @param password the password string submitted for authentication
      */
+    @SideEffectFree
+    @Impure
     public UsernamePasswordToken(final String username, final String password) {
         this(username, password != null ? password.toCharArray() : null, false, null);
     }
@@ -120,6 +128,8 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      * @param host     the host name or IP string from where the attempt is occuring
      * @since 0.2
      */
+    @SideEffectFree
+    @Impure
     public UsernamePasswordToken(final String username, final char[] password, final String host) {
         this(username, password, false, host);
     }
@@ -137,6 +147,8 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      * @param host     the host name or IP string from where the attempt is occuring
      * @since 1.0
      */
+    @SideEffectFree
+    @Impure
     public UsernamePasswordToken(final String username, final String password, final String host) {
         this(username, password != null ? password.toCharArray() : null, false, host);
     }
@@ -150,6 +162,8 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      * @param rememberMe if the user wishes their identity to be remembered across sessions
      * @since 0.9
      */
+    @SideEffectFree
+    @Impure
     public UsernamePasswordToken(final String username, final char[] password, final boolean rememberMe) {
         this(username, password, rememberMe, null);
     }
@@ -167,6 +181,8 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      * @param rememberMe if the user wishes their identity to be remembered across sessions
      * @since 0.9
      */
+    @SideEffectFree
+    @Impure
     public UsernamePasswordToken(final String username, final String password, final boolean rememberMe) {
         this(username, password != null ? password.toCharArray() : null, rememberMe, null);
     }
@@ -181,6 +197,7 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      * @param host       the host name or IP string from where the attempt is occuring
      * @since 1.0
      */
+    @SideEffectFree
     public UsernamePasswordToken(final String username, final char[] password,
                                  final boolean rememberMe, final String host) {
 
@@ -205,6 +222,8 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      * @param host       the host name or IP string from where the attempt is occuring
      * @since 1.0
      */
+    @SideEffectFree
+    @Impure
     public UsernamePasswordToken(final String username, final String password,
                                  final boolean rememberMe, final String host) {
         this(username, password != null ? password.toCharArray() : null, rememberMe, host);
@@ -219,6 +238,7 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      *
      * @return the username submitted during an authentication attempt.
      */
+    @Pure
     public String getUsername() {
         return username;
     }
@@ -228,6 +248,7 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      *
      * @param username the username to be used for submission during an authentication attempt.
      */
+    @Impure
     public void setUsername(String username) {
         this.username = username;
     }
@@ -238,6 +259,7 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      *
      * @return the password submitted during an authentication attempt as a character array.
      */
+    @Pure
     public char[] getPassword() {
         return password;
     }
@@ -247,6 +269,7 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      *
      * @param password the password to be used for submission during an authentication attemp.
      */
+    @Impure
     public void setPassword(char[] password) {
         this.password = password;
     }
@@ -257,6 +280,8 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      * @return the {@link #getUsername() username}.
      * @see org.apache.shiro.authc.AuthenticationToken#getPrincipal()
      */
+    @Pure
+    @Impure
     public Object getPrincipal() {
         return getUsername();
     }
@@ -267,6 +292,8 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      * @return the {@link #getPassword() password} char array.
      * @see org.apache.shiro.authc.AuthenticationToken#getCredentials()
      */
+    @Pure
+    @Impure
     public Object getCredentials() {
         return getPassword();
     }
@@ -282,6 +309,7 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      *         explicitly omitted.
      * @since 1.0
      */
+    @Pure
     public String getHost() {
         return host;
     }
@@ -296,6 +324,7 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      * @param host the host name or IP string from where the attempt is occuring
      * @since 1.0
      */
+    @Impure
     public void setHost(String host) {
         this.host = host;
     }
@@ -308,6 +337,7 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      *         across sessions, <tt>false</tt> otherwise (<tt>false</tt> by default).
      * @since 0.9
      */
+    @Pure
     public boolean isRememberMe() {
         return rememberMe;
     }
@@ -320,6 +350,7 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      *                   sessions.
      * @since 0.9
      */
+    @Impure
     public void setRememberMe(boolean rememberMe) {
         this.rememberMe = rememberMe;
     }
@@ -332,6 +363,7 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      * Clears out (nulls) the username, password, rememberMe, and inetAddress.  The password bytes are explicitly set to
      * <tt>0x00</tt> before nulling to eliminate the possibility of memory access at a later time.
      */
+    @Impure
     public void clear() {
         this.username = null;
         this.host = null;
@@ -354,6 +386,7 @@ public class UsernamePasswordToken implements HostAuthenticationToken, RememberM
      * @return the String representation of the <tt>UsernamePasswordToken</tt>, omitting
      *         the password.
      */
+    @Impure
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getName());

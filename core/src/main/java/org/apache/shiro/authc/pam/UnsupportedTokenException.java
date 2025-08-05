@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.authc.pam;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.authc.AuthenticationException;
 
 
@@ -34,6 +36,8 @@ public class UnsupportedTokenException extends AuthenticationException {
     /**
      * Creates a new UnsupportedTokenException.
      */
+    @SideEffectFree
+    @Impure
     public UnsupportedTokenException() {
         super();
     }
@@ -43,6 +47,8 @@ public class UnsupportedTokenException extends AuthenticationException {
      *
      * @param message the reason for the exception
      */
+    @SideEffectFree
+    @Impure
     public UnsupportedTokenException(String message) {
         super(message);
     }
@@ -52,6 +58,8 @@ public class UnsupportedTokenException extends AuthenticationException {
      *
      * @param cause the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public UnsupportedTokenException(Throwable cause) {
         super(cause);
     }
@@ -62,6 +70,8 @@ public class UnsupportedTokenException extends AuthenticationException {
      * @param message the reason for the exception
      * @param cause   the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public UnsupportedTokenException(String message, Throwable cause) {
         super(message, cause);
     }

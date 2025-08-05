@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authc.credential;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 
@@ -49,6 +50,7 @@ public interface CredentialsMatcher {
      * @return {@code true} if the provided token credentials match the stored account credentials,
      *         {@code false} otherwise.
      */
+    @Impure
     boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info);
 
 }

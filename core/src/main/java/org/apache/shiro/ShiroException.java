@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Root exception for all Shiro runtime exceptions.  This class is used as the root instead
@@ -31,6 +32,7 @@ public class ShiroException extends RuntimeException {
     /**
      * Creates a new ShiroException.
      */
+    @SideEffectFree
     public ShiroException() {
         super();
     }
@@ -40,6 +42,7 @@ public class ShiroException extends RuntimeException {
      *
      * @param message the reason for the exception
      */
+    @SideEffectFree
     public ShiroException(String message) {
         super(message);
     }
@@ -49,6 +52,7 @@ public class ShiroException extends RuntimeException {
      *
      * @param cause the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
     public ShiroException(Throwable cause) {
         super(cause);
     }
@@ -59,6 +63,7 @@ public class ShiroException extends RuntimeException {
      * @param message the reason for the exception
      * @param cause   the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
     public ShiroException(String message, Throwable cause) {
         super(message, cause);
     }

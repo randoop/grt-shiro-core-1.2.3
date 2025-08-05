@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.session.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.session.Session;
 
 /**
@@ -34,6 +35,7 @@ public class SimpleSessionFactory implements SessionFactory {
      * @param initData the initialization data to be used during {@link Session} creation.
      * @return a new {@link SimpleSession SimpleSession} instance
      */
+    @Impure
     public Session createSession(SessionContext initData) {
         if (initData != null) {
             String host = initData.getHost();

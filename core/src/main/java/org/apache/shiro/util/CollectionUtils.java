@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.util;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import java.util.*;
@@ -31,6 +33,7 @@ public class CollectionUtils {
 
     //TODO - complete JavaDoc
 
+    @Impure
     public static <E> Set<E> asSet(E... elements) {
         if (elements == null || elements.length == 0) {
             return Collections.emptySet();
@@ -49,6 +52,7 @@ public class CollectionUtils {
      *         {@code false} otherwise.
      * @since 1.0
      */
+    @Pure
     public static boolean isEmpty(Collection c) {
         return c == null || c.isEmpty();
     }
@@ -62,6 +66,7 @@ public class CollectionUtils {
      *         {@code false} otherwise.
      * @since 1.0
      */
+    @Pure
     public static boolean isEmpty(Map m) {
         return m == null || m.isEmpty();
     }
@@ -73,6 +78,7 @@ public class CollectionUtils {
      * @return the size of the specified collection or {@code 0} if the collection is {@code null}.
      * @since 1.2
      */
+    @Pure
     public static int size(Collection c) {
         return c != null ? c.size() : 0;
     }
@@ -84,6 +90,7 @@ public class CollectionUtils {
      * @return the size of the specified map or {@code 0} if the map is {@code null}.
      * @since 1.2
      */
+    @Pure
     public static int size(Map m) {
         return m != null ? m.size() : 0;
     }
@@ -98,10 +105,13 @@ public class CollectionUtils {
      *         {@link PrincipalCollection#isEmpty empty}, {@code false} otherwise.
      * @since 1.0
      */
+    @Pure
+    @Impure
     public static boolean isEmpty(PrincipalCollection principals) {
         return principals == null || principals.isEmpty();
     }
 
+    @Impure
     public static <E> List<E> asList(E... elements) {
         if (elements == null || elements.length == 0) {
             return Collections.emptyList();
@@ -124,6 +134,7 @@ public class CollectionUtils {
         return deque;
     }*/
 
+    @Pure
     static int computeListCapacity(int arraySize) {
         return (int) Math.min(5L + arraySize + (arraySize / 10), Integer.MAX_VALUE);
     }

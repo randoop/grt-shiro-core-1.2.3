@@ -29,6 +29,8 @@
  */
 package org.apache.shiro.codec;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.IOException;
 
 /**
@@ -49,10 +51,13 @@ public class H64 {
 
     private static final char[] itoa64 = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
 
+    @Pure
     private static short toShort(byte b) {
         return (short) (b & 0xff);
     }
 
+    @Pure
+    @Impure
     private static int toInt(byte[] bytes, int offset, int numBytes) {
         if (numBytes < 1 || numBytes > 4) {
             throw new IllegalArgumentException("numBytes must be between 1 and 4.");
@@ -77,6 +82,7 @@ public class H64 {
      * @param buf the buffer to append to
      * @param c   the character to append.
      */
+    @Impure
     private static void append(Appendable buf, char c) {
         try {
             buf.append(c);
@@ -92,6 +98,7 @@ public class H64 {
      * @param buf      the output buffer
      * @param numChars the number of characters the value should be converted to.  3, 2 or 1.
      */
+    @Impure
     private static void encodeAndAppend(int value, Appendable buf, int numChars) {
         for (int i = 0; i < numChars; i++) {
             append(buf, itoa64[value & 0x3f]);
@@ -105,6 +112,7 @@ public class H64 {
      * @param bytes
      * @return
      */
+    @Impure
     public static String encodeToString(byte[] bytes) {
         if (bytes == null || bytes.length == 0) return null;
 

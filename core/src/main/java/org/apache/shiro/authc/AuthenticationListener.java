@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authc;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.apache.shiro.subject.PrincipalCollection;
 
 /**
@@ -33,6 +34,7 @@ public interface AuthenticationListener {
      * @param token the authentication token submitted during the {@code Subject} (user)'s authentication attempt.
      * @param info  the authentication-related account data acquired after authentication for the corresponding {@code Subject}.
      */
+    @SideEffectFree
     void onSuccess(AuthenticationToken token, AuthenticationInfo info);
 
     /**
@@ -41,6 +43,7 @@ public interface AuthenticationListener {
      * @param token the authentication token submitted during the {@code Subject} (user)'s authentication attempt.
      * @param ae    the {@code AuthenticationException} that occurred as a result of the attempt.
      */
+    @SideEffectFree
     void onFailure(AuthenticationToken token, AuthenticationException ae);
 
     /**
@@ -51,5 +54,6 @@ public interface AuthenticationListener {
      *
      * @param principals the identifying principals of the Subject logging out.
      */
+    @SideEffectFree
     void onLogout(PrincipalCollection principals);
 }

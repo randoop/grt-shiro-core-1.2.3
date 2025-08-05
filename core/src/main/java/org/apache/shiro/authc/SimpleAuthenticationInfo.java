@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.authc;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.subject.MutablePrincipalCollection;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
@@ -56,6 +59,7 @@ public class SimpleAuthenticationInfo implements MergableAuthenticationInfo, Sal
     /**
      * Default no-argument constructor.
      */
+    @SideEffectFree
     public SimpleAuthenticationInfo() {
     }
 
@@ -70,6 +74,7 @@ public class SimpleAuthenticationInfo implements MergableAuthenticationInfo, Sal
      * @param credentials the credentials that verify the given principal.
      * @param realmName   the realm from where the principal and credentials were acquired.
      */
+    @Impure
     public SimpleAuthenticationInfo(Object principal, Object credentials, String realmName) {
         this.principals = new SimplePrincipalCollection(principal, realmName);
         this.credentials = credentials;
@@ -89,6 +94,7 @@ public class SimpleAuthenticationInfo implements MergableAuthenticationInfo, Sal
      * @see org.apache.shiro.authc.credential.HashedCredentialsMatcher HashedCredentialsMatcher
      * @since 1.1
      */
+    @Impure
     public SimpleAuthenticationInfo(Object principal, Object hashedCredentials, ByteSource credentialsSalt, String realmName) {
         this.principals = new SimplePrincipalCollection(principal, realmName);
         this.credentials = hashedCredentials;
@@ -102,6 +108,7 @@ public class SimpleAuthenticationInfo implements MergableAuthenticationInfo, Sal
      * @param principals  a Realm's account's identifying principal(s)
      * @param credentials the accounts corresponding principals that verify the principals.
      */
+    @Impure
     public SimpleAuthenticationInfo(PrincipalCollection principals, Object credentials) {
         this.principals = new SimplePrincipalCollection(principals);
         this.credentials = credentials;
@@ -117,6 +124,7 @@ public class SimpleAuthenticationInfo implements MergableAuthenticationInfo, Sal
      * @see org.apache.shiro.authc.credential.HashedCredentialsMatcher HashedCredentialsMatcher
      * @since 1.1
      */
+    @Impure
     public SimpleAuthenticationInfo(PrincipalCollection principals, Object hashedCredentials, ByteSource credentialsSalt) {
         this.principals = new SimplePrincipalCollection(principals);
         this.credentials = hashedCredentials;
@@ -124,6 +132,7 @@ public class SimpleAuthenticationInfo implements MergableAuthenticationInfo, Sal
     }
 
 
+    @Pure
     public PrincipalCollection getPrincipals() {
         return principals;
     }
@@ -133,10 +142,12 @@ public class SimpleAuthenticationInfo implements MergableAuthenticationInfo, Sal
      *
      * @param principals the indentifying attributes of the corresponding Realm account.
      */
+    @Impure
     public void setPrincipals(PrincipalCollection principals) {
         this.principals = principals;
     }
 
+    @Pure
     public Object getCredentials() {
         return credentials;
     }
@@ -146,6 +157,7 @@ public class SimpleAuthenticationInfo implements MergableAuthenticationInfo, Sal
      *
      * @param credentials attribute(s) that verify the account's identity/principals, such as a password or private key.
      */
+    @Impure
     public void setCredentials(Object credentials) {
         this.credentials = credentials;
     }
@@ -163,6 +175,7 @@ public class SimpleAuthenticationInfo implements MergableAuthenticationInfo, Sal
      *         hashed at all.
      * @since 1.1
      */
+    @Pure
     public ByteSource getCredentialsSalt() {
         return credentialsSalt;
     }
@@ -180,6 +193,7 @@ public class SimpleAuthenticationInfo implements MergableAuthenticationInfo, Sal
      *             hashed at all.
      * @since 1.1
      */
+    @Impure
     public void setCredentialsSalt(ByteSource salt) {
         this.credentialsSalt = salt;
     }
@@ -189,6 +203,7 @@ public class SimpleAuthenticationInfo implements MergableAuthenticationInfo, Sal
      *
      * @param info the <code>AuthenticationInfo</code> to add into this instance.
      */
+    @Impure
     @SuppressWarnings("unchecked")
     public void merge(AuthenticationInfo info) {
         if (info == null || info.getPrincipals() == null || info.getPrincipals().isEmpty()) {
@@ -249,6 +264,7 @@ public class SimpleAuthenticationInfo implements MergableAuthenticationInfo, Sal
      * @return <code>true</code> if the Object argument is an <code>instanceof SimpleAuthenticationInfo</code> and
      *         its {@link #getPrincipals() principals} are equal to this instance's principals, <code>false</code> otherwise.
      */
+    @Pure
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof SimpleAuthenticationInfo)) return false;
@@ -266,6 +282,7 @@ public class SimpleAuthenticationInfo implements MergableAuthenticationInfo, Sal
      *
      * @return the hashcode of the internal {@link #getPrincipals() principals} instance.
      */
+    @Pure
     public int hashCode() {
         return (principals != null ? principals.hashCode() : 0);
     }
@@ -275,6 +292,7 @@ public class SimpleAuthenticationInfo implements MergableAuthenticationInfo, Sal
      *
      * @return <code>{@link #getPrincipals() principals}.toString()</code>
      */
+    @SideEffectFree
     public String toString() {
         return principals.toString();
     }

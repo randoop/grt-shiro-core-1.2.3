@@ -18,6 +18,9 @@
  */
 package org.apache.shiro.subject;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -74,6 +77,7 @@ public interface PrincipalCollection extends Iterable, Serializable {
      * @return the primary principal used to uniquely identify the owning account/Subject
      * @since 1.0
      */
+    @Impure
     Object getPrimaryPrincipal();
 
     /**
@@ -85,6 +89,7 @@ public interface PrincipalCollection extends Iterable, Serializable {
      * @param type the type of the principal that should be returned.
      * @return a principal of the specified type or {@code null} if there isn't one of the specified type.
      */
+    @Impure
     <T> T oneByType(Class<T> type);
 
     /**
@@ -97,6 +102,7 @@ public interface PrincipalCollection extends Iterable, Serializable {
      * @return a Collection of principals that are assignable from the specified type, or
      *         an empty Collection if no principals of this type are associated.
      */
+    @Impure
     <T> Collection<T> byType(Class<T> type);
 
     /**
@@ -107,6 +113,7 @@ public interface PrincipalCollection extends Iterable, Serializable {
      *
      * @return a single Subject's principals retrieved from all configured Realms as a List.
      */
+    @Impure
     List asList();
 
     /**
@@ -117,6 +124,7 @@ public interface PrincipalCollection extends Iterable, Serializable {
      *
      * @return a single Subject's principals retrieved from all configured Realms as a Set.
      */
+    @Impure
     Set asSet();
 
     /**
@@ -129,6 +137,8 @@ public interface PrincipalCollection extends Iterable, Serializable {
      * @return the Subject's principals from the specified Realm only as a Collection or an empty Collection if there
      *         are not any principals from that realm.
      */
+    @SideEffectFree
+    @Impure
     Collection fromRealm(String realmName);
 
     /**
@@ -136,6 +146,8 @@ public interface PrincipalCollection extends Iterable, Serializable {
      *
      * @return the names of realms that this collection has one or more principals for.
      */
+    @SideEffectFree
+    @Impure
     Set<String> getRealmNames();
 
     /**
@@ -143,5 +155,7 @@ public interface PrincipalCollection extends Iterable, Serializable {
      *
      * @return {@code true} if this collection is empty, {@code false} otherwise.
      */
+    @Pure
+    @Impure
     boolean isEmpty();
 }

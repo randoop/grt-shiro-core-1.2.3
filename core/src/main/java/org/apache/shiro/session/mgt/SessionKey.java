@@ -15,6 +15,7 @@
  */
 package org.apache.shiro.session.mgt;
 
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.Serializable;
 
 /**
@@ -42,5 +43,6 @@ public interface SessionKey {
      *
      * @return the id of the session to acquire.
      */
+    @Pure
     Serializable getSessionId();
 }

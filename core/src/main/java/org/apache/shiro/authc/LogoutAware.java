@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.authc;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.subject.PrincipalCollection;
 
 /**
@@ -37,5 +38,6 @@ public interface LogoutAware {
      *
      * @param principals the identifying principals of the Subject logging out.
      */
+    @Impure
     public void onLogout(PrincipalCollection principals);
 }

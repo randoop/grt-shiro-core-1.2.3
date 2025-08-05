@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.crypto;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * A {@code CipherPaddingScheme} represents well-known
@@ -147,6 +149,7 @@ public enum PaddingScheme {
 
     private final String transformationName;
 
+    @Impure
     private PaddingScheme(String transformationName) {
         this.transformationName = transformationName;
     }
@@ -159,6 +162,7 @@ public enum PaddingScheme {
      *         {@code transformation string}.
      * @see javax.crypto.Cipher#getInstance(String)
      */
+    @Pure
     public String getTransformationName() {
         return this.transformationName;
     }

@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.mgt;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.cache.CacheManagerAware;
 import org.apache.shiro.session.Session;
@@ -56,6 +58,7 @@ public abstract class SessionsSecurityManager extends AuthorizingSecurityManager
      * Default no-arg constructor, internally creates a suitable default {@link SessionManager SessionManager} delegate
      * instance.
      */
+    @Impure
     public SessionsSecurityManager() {
         super();
         this.sessionManager = new DefaultSessionManager();
@@ -75,11 +78,13 @@ public abstract class SessionsSecurityManager extends AuthorizingSecurityManager
      *
      * @param sessionManager delegate instance to use to support this manager's <tt>SessionManager</tt> method calls.
      */
+    @Impure
     public void setSessionManager(SessionManager sessionManager) {
         this.sessionManager = sessionManager;
         afterSessionManagerSet();
     }
 
+    @Impure
     protected void afterSessionManagerSet() {
         applyCacheManagerToSessionManager();
     }
@@ -90,6 +95,7 @@ public abstract class SessionsSecurityManager extends AuthorizingSecurityManager
      * @return this security manager's internal delegate {@link SessionManager SessionManager}.
      * @see #setSessionManager(org.apache.shiro.session.mgt.SessionManager) setSessionManager
      */
+    @Pure
     public SessionManager getSessionManager() {
         return this.sessionManager;
     }
@@ -99,6 +105,7 @@ public abstract class SessionsSecurityManager extends AuthorizingSecurityManager
      * {@link #applyCacheManagerToSessionManager() applyCacheManagerToSessionManager()} to ensure the
      * <code>CacheManager</code> is applied to the SessionManager as necessary.
      */
+    @Impure
     protected void afterCacheManagerSet() {
         super.afterCacheManagerSet();
         applyCacheManagerToSessionManager();
@@ -111,20 +118,24 @@ public abstract class SessionsSecurityManager extends AuthorizingSecurityManager
      * Note:  This implementation only injects the CacheManager into the SessionManager if the SessionManager
      * instance implements the {@link CacheManagerAware CacheManagerAware} interface.
      */
+    @Impure
     protected void applyCacheManagerToSessionManager() {
         if (this.sessionManager instanceof CacheManagerAware) {
             ((CacheManagerAware) this.sessionManager).setCacheManager(getCacheManager());
         }
     }
 
+    @Impure
     public Session start(SessionContext context) throws AuthorizationException {
         return this.sessionManager.start(context);
     }
 
+    @Impure
     public Session getSession(SessionKey key) throws SessionException {
         return this.sessionManager.getSession(key);
     }
 
+    @Impure
     public void destroy() {
         LifecycleUtils.destroy(getSessionManager());
         this.sessionManager = null;

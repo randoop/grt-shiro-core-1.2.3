@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.shiro.util;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * A {@code ThreadState} instance manages any state that might need to be bound and/or restored during a thread's
@@ -56,6 +57,7 @@ public interface ThreadState {
      * }
      * </pre>
      */
+    @Impure
     void bind();
 
     /**
@@ -72,6 +74,7 @@ public interface ThreadState {
      * }</b>
      * </pre>
      */
+    @Impure
     void restore();
 
     /**
@@ -79,6 +82,7 @@ public interface ThreadState {
      * only be called in special cases - it is more 'correct' to {@link #restore restore} a thread to its previous
      * state than to clear it entirely.
      */
+    @Impure
     void clear();
 
 }

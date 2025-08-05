@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.util;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.ShiroException;
 
 
@@ -33,6 +35,8 @@ public class UnavailableConstructorException extends ShiroException
     /**
      * Creates a new UnavailableConstructorException.
      */
+    @SideEffectFree
+    @Impure
     public UnavailableConstructorException() {
         super();
     }
@@ -42,6 +46,8 @@ public class UnavailableConstructorException extends ShiroException
      *
      * @param message the reason for the exception
      */
+    @SideEffectFree
+    @Impure
     public UnavailableConstructorException(String message) {
         super(message);
     }
@@ -51,6 +57,8 @@ public class UnavailableConstructorException extends ShiroException
      *
      * @param cause the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public UnavailableConstructorException(Throwable cause) {
         super(cause);
     }
@@ -61,6 +69,8 @@ public class UnavailableConstructorException extends ShiroException
      * @param message the reason for the exception
      * @param cause   the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public UnavailableConstructorException(String message, Throwable cause) {
         super(message, cause);
     }

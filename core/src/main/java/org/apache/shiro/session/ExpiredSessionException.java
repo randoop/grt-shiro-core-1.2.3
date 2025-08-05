@@ -17,6 +17,8 @@
  * under the License.
  */
 package org.apache.shiro.session;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * A special case of a StoppedSessionException.  An expired session is a session that has
@@ -30,6 +32,8 @@ public class ExpiredSessionException extends StoppedSessionException {
     /**
      * Creates a new ExpiredSessionException.
      */
+    @SideEffectFree
+    @Impure
     public ExpiredSessionException() {
         super();
     }
@@ -39,6 +43,8 @@ public class ExpiredSessionException extends StoppedSessionException {
      *
      * @param message the reason for the exception
      */
+    @SideEffectFree
+    @Impure
     public ExpiredSessionException(String message) {
         super(message);
     }
@@ -48,6 +54,8 @@ public class ExpiredSessionException extends StoppedSessionException {
      *
      * @param cause the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public ExpiredSessionException(Throwable cause) {
         super(cause);
     }
@@ -58,6 +66,8 @@ public class ExpiredSessionException extends StoppedSessionException {
      * @param message the reason for the exception
      * @param cause   the underlying Throwable that caused this exception to be thrown.
      */
+    @SideEffectFree
+    @Impure
     public ExpiredSessionException(String message, Throwable cause) {
         super(message, cause);
     }

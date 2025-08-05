@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.cache;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.util.SoftHashMap;
 
 /**
@@ -41,6 +42,7 @@ public class MemoryConstrainedCacheManager extends AbstractCacheManager {
      * @param name the name of the cache
      * @return a new {@link MapCache MapCache} instance backed by a {@link SoftHashMap}.
      */
+    @Impure
     @Override
     protected Cache createCache(String name) {
         return new MapCache<Object, Object>(name, new SoftHashMap<Object, Object>());

@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.jndi;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.apache.shiro.util.Factory;
 
 import javax.naming.NamingException;
@@ -32,6 +34,7 @@ public class JndiObjectFactory<T> extends JndiLocator implements Factory<T> {
     private String resourceName;
     private Class<? extends T> requiredType;
 
+    @Impure
     public T getInstance() {
         try {
             if(requiredType != null) {
@@ -45,18 +48,22 @@ public class JndiObjectFactory<T> extends JndiLocator implements Factory<T> {
         }
     }
 
+    @Pure
     public String getResourceName() {
         return resourceName;
     }
 
+    @Impure
     public void setResourceName(String resourceName) {
         this.resourceName = resourceName;
     }
 
+    @Pure
     public Class<? extends T> getRequiredType() {
         return requiredType;
     }
 
+    @Impure
     public void setRequiredType(Class<? extends T> requiredType) {
         this.requiredType = requiredType;
     }

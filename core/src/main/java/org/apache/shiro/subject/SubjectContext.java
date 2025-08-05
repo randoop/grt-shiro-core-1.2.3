@@ -18,6 +18,8 @@
  */
 package org.apache.shiro.subject;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.mgt.SecurityManager;
@@ -65,6 +67,8 @@ public interface SubjectContext extends Map<String, Object> {
      * @return the SecurityManager instance that should be used to back the constructed {@link Subject} instance or
      *         {@code null} if one has not yet been provided to this context.
      */
+    @Pure
+    @Impure
     SecurityManager getSecurityManager();
 
     /**
@@ -74,6 +78,7 @@ public interface SubjectContext extends Map<String, Object> {
      * @param securityManager the SecurityManager instance that should be used to back the constructed {@link Subject}
      *                        instance.
      */
+    @Impure
     void setSecurityManager(SecurityManager securityManager);
 
     /**
@@ -83,6 +88,7 @@ public interface SubjectContext extends Map<String, Object> {
      * @return the {@code SecurityManager} instance that should be used to back the constructed {@link Subject}
      *         instance
      */
+    @Impure
     SecurityManager resolveSecurityManager();
 
     /**
@@ -93,6 +99,8 @@ public interface SubjectContext extends Map<String, Object> {
      *
      * @return the session id of the session that should be associated with the constructed {@link Subject} instance.
      */
+    @Pure
+    @Impure
     Serializable getSessionId();
 
     /**
@@ -104,6 +112,7 @@ public interface SubjectContext extends Map<String, Object> {
      * @param sessionId the session id of the session that should be associated with the constructed {@link Subject}
      *                  instance.
      */
+    @Impure
     void setSessionId(Serializable sessionId);
 
     /**
@@ -118,6 +127,8 @@ public interface SubjectContext extends Map<String, Object> {
      * @return any existing {@code Subject} that may be in use at the time the new {@code Subject} instance is
      *         being created.
      */
+    @Pure
+    @Impure
     Subject getSubject();
 
     /**
@@ -132,6 +143,7 @@ public interface SubjectContext extends Map<String, Object> {
      * @param subject the existing {@code Subject} that may be in use at the time the new {@code Subject} instance is
      *                being created.
      */
+    @Impure
     void setSubject(Subject subject);
 
     /**
@@ -139,8 +151,11 @@ public interface SubjectContext extends Map<String, Object> {
      *
      * @return the principals (aka identity) that the constructed {@code Subject} should reflect.
      */
+    @Pure
+    @Impure
     PrincipalCollection getPrincipals();
 
+    @Impure
     PrincipalCollection resolvePrincipals();
 
     /**
@@ -148,6 +163,7 @@ public interface SubjectContext extends Map<String, Object> {
      *
      * @param principals the principals (aka identity) that the constructed {@code Subject} should reflect.
      */
+    @Impure
     void setPrincipals(PrincipalCollection principals);
 
     /**
@@ -157,6 +173,8 @@ public interface SubjectContext extends Map<String, Object> {
      *
      * @return the {@code Session} to use when building the {@code Subject} instance.
      */
+    @Pure
+    @Impure
     Session getSession();
 
     /**
@@ -166,8 +184,10 @@ public interface SubjectContext extends Map<String, Object> {
      *
      * @param session the {@code Session} to use when building the {@code Subject} instance.
      */
+    @Impure
     void setSession(Session session);
 
+    @Impure
     Session resolveSession();
 
     /**
@@ -178,6 +198,8 @@ public interface SubjectContext extends Map<String, Object> {
      * @return {@code true} if the constructed {@code Subject} should be considered authenticated, {@code false}
      *         otherwise.
      */
+    @Pure
+    @Impure
     boolean isAuthenticated();
 
     /**
@@ -187,6 +209,7 @@ public interface SubjectContext extends Map<String, Object> {
      *
      * @param authc whether or not the constructed {@code Subject} instance should be considered as authenticated.
      */
+    @Impure
     void setAuthenticated(boolean authc);
 
     /**
@@ -197,6 +220,8 @@ public interface SubjectContext extends Map<String, Object> {
      * otherwise.
      * @since 1.2
      */
+    @Pure
+    @Impure
     boolean isSessionCreationEnabled();
 
     /**
@@ -207,16 +232,24 @@ public interface SubjectContext extends Map<String, Object> {
      * {@code false} otherwise.
      * @since 1.2
      */
+    @Impure
     void setSessionCreationEnabled(boolean enabled);
 
+    @Impure
     boolean resolveAuthenticated();
 
+    @Pure
+    @Impure
     AuthenticationInfo getAuthenticationInfo();
 
+    @Impure
     void setAuthenticationInfo(AuthenticationInfo info);
 
+    @Pure
+    @Impure
     AuthenticationToken getAuthenticationToken();
 
+    @Impure
     void setAuthenticationToken(AuthenticationToken token);
 
     /**
@@ -224,6 +257,8 @@ public interface SubjectContext extends Map<String, Object> {
      *
      * @return the host name or IP that should reflect the constructed {@code Subject}'s originating location.
      */
+    @Pure
+    @Impure
     String getHost();
 
     /**
@@ -231,7 +266,9 @@ public interface SubjectContext extends Map<String, Object> {
      *
      * @param host the host name or IP that should reflect the constructed {@code Subject}'s originating location.
      */
+    @Impure
     void setHost(String host);
 
+    @Impure
     String resolveHost();
 }

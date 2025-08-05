@@ -18,6 +18,7 @@
  */
 package org.apache.shiro.util;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.PermissionResolver;
 
@@ -34,11 +35,13 @@ import java.util.Set;
  */
 public class PermissionUtils {
 
+    @Impure
     public static Set<Permission> resolveDelimitedPermissions(String s, PermissionResolver permissionResolver) {
         Set<String> permStrings = toPermissionStrings(s);
         return resolvePermissions(permStrings, permissionResolver);
     }
 
+    @Impure
     public static Set<String> toPermissionStrings(String permissionsString) {
         String[] tokens = StringUtils.split(permissionsString);
         if (tokens != null && tokens.length > 0) {
@@ -47,6 +50,7 @@ public class PermissionUtils {
         return null;
     }
 
+    @Impure
     public static Set<Permission> resolvePermissions(Collection<String> permissionStrings, PermissionResolver permissionResolver) {
         Set<Permission> permissions = new LinkedHashSet<Permission>(permissionStrings.size());
         for (String permissionString : permissionStrings) {
